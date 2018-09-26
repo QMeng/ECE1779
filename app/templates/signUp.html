@@ -18,6 +18,13 @@
             {% endfor %}
         </p>
         <p>
+            {{ form.password2.label }}<br>
+            {{ form.password2(size=32) }}<br>
+            {% for error in form.password2.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.email.label }}<br>
             {{ form.email(size=128) }}<br>
             {% for error in form.email.errors %}
