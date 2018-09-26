@@ -44,8 +44,6 @@ def signup():
     '''
     This is the sign up page. User will need to fill the user name, password, email fields in order to sign up.
     Identical usernames will be detected.
-
-    TODO: add salt for the password. may need to fine-tune the shit a little bit, e.g. confirm password, email input pattern matching
     '''
     form = SignUpForm()
     if form.validate_on_submit():
