@@ -1,6 +1,8 @@
+
 from app.forms import *
 from app.models import *
 from flask_login import login_user, login_required, logout_user
+
 
 
 @app.route('/')
@@ -27,7 +29,7 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/home')
 @login_required
 def home():
     '''
@@ -66,3 +68,57 @@ def signup():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    '''
+    This is the upload page. User can upload images.
+    '''
+    target = os.path.join(APP_ROOT, 'images/')
+    # target = os.path.join(APP_ROOT, 'static/')
+    print(target)
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    else:
+        print("Couldn't create upload directory: {}".format(target))
+        print(request.files.getlist("file"))
+    for upload in request.files.getlist("file"):
+
+        print(upload)
+        print("{} is the file name".format(upload.filename))
+        filename = upload.filename
+        destination = "/".join([target, filename])
+        print ("Accept incoming file:", filename)
+        print ("Save it to:", destination)
+        upload.save(destination)
+
+      ##  with Image(filename) as img:
+      ##      with img.clone() as i:
+      ##          i.resize(int(i.width * 0.25), int(i.height * 0.25))
+       ##         i.save(filename='thumbnail-{0}.png'.format(1))
+
+        new_image = ImageContents(name=filename, path=destination, thumbnail_path=0)
+        db.session.add(new_image)
+        db.session.commit()
+
+    # return send_from_directory("images", filename, as_attachment=True)
+    return render_template("complete_display_image.html", image_name=filename)
+
+
+@app.route('/upload/<filename>')
+def send_image(filename):
+    return send_from_directory("images", filename)
+
+
+@app.route('/Thumbnail')
+def get_gallery():
+
+        image_names = os.listdir(APP_ROOT + '/images')
+        print(image_names)
+        return render_template("gallery.html", image_names=image_names)
+
+
+@app.route('/Return/')
+def return_home():
+    return redirect(url_for('home'))
