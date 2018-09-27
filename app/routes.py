@@ -23,7 +23,9 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('home'))
+        response = redirect(url_for('home'))
+        response.set_cookie('userId', user.get_id())
+        return response
     return render_template('login.html', title='Sign In', form=form)
 
 
@@ -38,7 +40,8 @@ def home():
 
     TODO: do it
     '''
-    return render_template('homePage.html')
+    user = load_user(request.cookies.get('userId'))
+    return render_template('homePage.html', username=user.username)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -65,4 +68,5 @@ def signup():
 @app.route('/logout')
 def logout():
     logout_user()
+    request.cookies.clear()
     return redirect(url_for('login'))
