@@ -27,7 +27,7 @@ class User(UserMixin, db.Model):
 class ImageContents(db.Model):
     __tablename__ = "ImageInfo"
     id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
     name = db.Column(db.String(256), unique=True)
     path = db.Column(db.String(256), unique=True)
     thumbnail_path = db.Column(db.String(256), unique=True)

@@ -1,6 +1,6 @@
-
 from app.forms import *
 from app.models import *
+from app.utility import find_path, create_thumbnail
 from flask_login import login_user, login_required, logout_user
 
 
@@ -40,7 +40,13 @@ def home():
 
     TODO: do it
     '''
-    return render_template('homePage.html')
+    target = os.path.join(APP_ROOT, 'thumbnails')
+    if not os.path.isdir(target):
+         return render_template('homePage.html')
+    else:
+         image_names = os.listdir(APP_ROOT + '/thumbnails')
+         print(image_names)
+         return render_template('homePage.html', image_names=image_names)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -75,14 +81,14 @@ def upload():
     '''
     This is the upload page. User can upload images.
     '''
-    target = os.path.join(APP_ROOT, 'images/')
+    target = os.path.join(APP_ROOT, 'images')
     # target = os.path.join(APP_ROOT, 'static/')
     print(target)
     if not os.path.isdir(target):
-        os.mkdir(target)
+            os.mkdir(target)
     else:
         print("Couldn't create upload directory: {}".format(target))
-        print(request.files.getlist("file"))
+    print(request.files.getlist("file"))
     for upload in request.files.getlist("file"):
 
         print(upload)
@@ -93,12 +99,11 @@ def upload():
         print ("Save it to:", destination)
         upload.save(destination)
 
-      ##  with Image(filename) as img:
-      ##      with img.clone() as i:
-      ##          i.resize(int(i.width * 0.25), int(i.height * 0.25))
-       ##         i.save(filename='thumbnail-{0}.png'.format(1))
+        os.chdir(target)
+        t_path = find_path()
+        create_thumbnail(filename, 200, 200)
 
-        new_image = ImageContents(name=filename, path=destination, thumbnail_path=0)
+        new_image = ImageContents(name=filename, path=destination, thumbnail_path=t_path)
         db.session.add(new_image)
         db.session.commit()
 
@@ -108,15 +113,14 @@ def upload():
 
 @app.route('/upload/<filename>')
 def send_image(filename):
-    return send_from_directory("images", filename)
+    return send_from_directory("thumbnails", filename)
 
 
-@app.route('/Thumbnail')
-def get_gallery():
-
-        image_names = os.listdir(APP_ROOT + '/images')
-        print(image_names)
-        return render_template("gallery.html", image_names=image_names)
+##@app.route('/Thumbnail')
+##def get_gallery():
+##    image_names = os.listdir(APP_ROOT + '/images')
+##    print(image_names)
+##    return render_template("gallery.html", image_names=image_names)
 
 
 @app.route('/Return/')
