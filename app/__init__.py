@@ -11,4 +11,5 @@ db = SQLAlchemy(app)
 login = LoginManager(app)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
+
 from app import routes

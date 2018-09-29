@@ -7,7 +7,8 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 def build_thum_dir():
-    target = os.path.join(APP_ROOT, 'thumbnails')
+    user = request.cookies.get('userId')
+    target = os.path.join(APP_ROOT, 'thumbnails_' + user)
     # target = os.path.join(APP_ROOT, 'static/')
     print(target)
     if not os.path.isdir(target):
@@ -19,7 +20,8 @@ def build_thum_dir():
 
 
 def find_path():
-    target = os.path.join(APP_ROOT, 'thumbnails')
+    user = request.cookies.get('userId')
+    target = os.path.join(APP_ROOT, 'thumbnails_' + user)
     for upload in request.files.getlist("file"):
 
         print(upload)
@@ -38,6 +40,15 @@ def create_thumbnail(source_file, width, height):
         os.chdir(thum_path)
         img.save(filename="thumbnail_" + source_file)
 
+
+def check_duplication(upload_file):
+    thum_path = build_thum_dir()
+    os.chdir(thum_path)
+    thum_images = os.listdir(APP_ROOT + '/images_' + request.cookies.get('userId'))
+    for name in thum_images:
+        print("the file contents are:{}".format(name))
+        if name == upload_file:
+           return render_template("error_page.html")
 
 
 
