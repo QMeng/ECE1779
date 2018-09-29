@@ -23,6 +23,16 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+
+class ImageContents(db.Model):
+    __tablename__ = "ImageInfo"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    name = db.Column(db.String(256), unique=True)
+    path = db.Column(db.String(256), unique=True)
+    thumbnail_path = db.Column(db.String(256), unique=True)
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
