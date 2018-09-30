@@ -1,5 +1,4 @@
-create database ECE1779A1;
-
+create database ECE1779A2;
 
 create table ECE1779A1.UserInfo (
 	id BIGINT AUTO_INCREMENT,

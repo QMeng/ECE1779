@@ -33,7 +33,6 @@ class ImageContents(db.Model):
     thumbnail_path = db.Column(db.String(256), unique=True)
 
 
-
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

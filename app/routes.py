@@ -1,6 +1,6 @@
 from app.forms import *
 from app.models import *
-from app.utility import find_path, create_thumbnail, check_duplication, build_thum_dir
+from app.utilities import *
 from flask_login import login_user, login_required, logout_user
 
 
@@ -30,7 +30,7 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
     '''
@@ -42,13 +42,13 @@ def home():
     TODO: do it
     '''
     user = load_user(request.cookies.get('userId'))
-    target = os.path.join(APP_ROOT, 'thumbnails_' + request.cookies.get('userId'))
-    if not os.path.isdir(target):
-         return render_template('homePage.html', username=user.username)
+    user_id = request.cookies.get('userId')
+    if not os.path.isdir(THUMBNAIL_FOLDER + user_id):
+        return render_template('homePage.html', username=user.username)
     else:
-         image_names = os.listdir(APP_ROOT + '/thumbnails_' + request.cookies.get('userId'))
-         print(image_names)
-         return render_template('homePage.html', image_names=image_names, username=user.username)
+        image_names = os.listdir(THUMBNAIL_FOLDER + user_id)
+        return render_template('homePage.html', image_names=image_names, username=user.username)
+
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -75,8 +75,36 @@ def signup():
 @app.route('/logout')
 def logout():
     logout_user()
-    request.cookies.clear()
-    return redirect(url_for('login'))
+    response = redirect(url_for('login'))
+    response.set_cookie('userId', '', expires=0)
+    return response
+
+
+@app.route('/test/FileUpload', methods=['POST'])
+def testFileUpload():
+    '''/test/FileUpload uri endpoint for easy uploading thru api calls'''
+    username = request.form['userID']
+    password = request.form['password']
+    files = request.files.getlist('uploadedFile')
+
+    user = User.query.filter_by(username=username).first()
+    if (not user.check_password(password)):
+        return "User not authenticated"
+
+    createImageFolder()
+    createThumbnailFolder()
+    for image in files:
+        user_id = request.cookies.get('userId')
+        fileName = image.filename
+        destination = "/".join([IMAGE_FOLDER + user_id, fileName])
+        image.save(destination)
+        thumbnailDestination = create_thumbnail(fileName)
+        newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination, thumbnail_path=thumbnailDestination)
+        db.session.add(newImage)
+        db.session.commit()
+
+    return "Success"
+
 
 
 @app.route("/upload", methods=["POST"])
@@ -84,38 +112,27 @@ def upload():
     '''
     This is the upload page. User can upload images.
     '''
-    user = request.cookies.get('userId')
-    target = os.path.join(APP_ROOT, 'images_' + user)
-    print(target)
-    if not os.path.isdir(target):
-            os.mkdir(target)
-    else:
-        print("Couldn't create upload directory: {}".format(target))
-    print(request.files.getlist("file"))
+    createImageFolder()
     for upload in request.files.getlist("file"):
-
+        user_id = request.cookies.get('userId')
         print(upload)
         print("{} is the file name".format(upload.filename))
         filename = upload.filename
-
     ## check uploading duplications.
-        thum_path = build_thum_dir()
-        os.chdir(thum_path)
-        thum_images = os.listdir(APP_ROOT + '/images_' + request.cookies.get('userId'))
-        for name in thum_images:
-            if name == os.path.basename(upload.filename):
+        createThumbnailFolder()
+        images = os.listdir(IMAGE_FOLDER + user_id)
+        for item in images:
+            if item == os.path.basename(upload.filename):
                 return render_template("error_page.html")
     ## save uploading files
-        destination = "/".join([target, filename])
         print ("Accept incoming file:", filename)
-        print ("Save it to:", destination)
+        target = os.path.join(ROOT, 'images' + user_id)
+        destination = "/".join([target, filename])
         upload.save(destination)
-
-        os.chdir(target)
-        t_path = find_path()
-        create_thumbnail(filename, 200, 200)
-
-        new_image = ImageContents(user_id=user, name=filename, path=destination, thumbnail_path=t_path)
+    ## Create thumbanils related to uploaded image.
+        create_thumbnail(filename)
+        thumbnailDestination = create_thumbnail(filename)
+        new_image = ImageContents(user_id=user_id, name=filename, path=IMAGE_FOLDER + user_id + filename, thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
 
@@ -124,8 +141,8 @@ def upload():
 
 @app.route('/upload/<filename>')
 def send_image(filename):
-    user = request.cookies.get('userId')
-    return send_from_directory("thumbnails_" + user, filename)
+    user_id = request.cookies.get('userId')
+    return send_from_directory("thumbnails" + user_id, filename)
 
 
 @app.route('/Return/')
