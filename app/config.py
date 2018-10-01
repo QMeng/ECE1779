@@ -1,6 +1,7 @@
 import os
 
 class Config(object):
+    '''This class stores the configurations for this app'''
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     MYSQL_DATABASE_HOST = "localhost"
     MYSQL_DATABASE_USER = "root"

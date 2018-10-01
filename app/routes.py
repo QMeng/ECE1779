@@ -68,6 +68,8 @@ def signup():
 
 @app.route('/logout')
 def logout():
+    '''this method logs out current user and removes the user's cookie from the brower by setting its expire time to now
+    '''
     logout_user()
     response = redirect(url_for('login'))
     response.set_cookie('userId', '', expires=0)
