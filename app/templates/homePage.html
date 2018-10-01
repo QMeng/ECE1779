@@ -23,7 +23,7 @@
 
     <hr>
      {% for image_name in image_names %}
-         <img src=" {{url_for('send_image', filename=image_name)}}">
+         <img src="{{ image_name }}">
      {% endfor %}
 
 </body>
@@ -54,5 +54,4 @@
     } );
 
 </script>
-
 {% endblock %}

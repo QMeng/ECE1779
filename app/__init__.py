@@ -8,9 +8,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 login = LoginManager(app)
 ROOT = os.path.dirname(os.path.abspath('imageUploader.py'))
-
 IMAGE_FOLDER = os.path.join(ROOT, 'images')
-THUMBNAIL_FOLDER = os.path.join(ROOT, 'thumbnails' )
-
+THUMBNAIL_FOLDER = os.path.join(ROOT, 'thumbnails')
 
 from app import routes
