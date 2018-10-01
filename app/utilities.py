@@ -7,6 +7,8 @@ def createImageFolder(userID):
     '''create folder to store images uploaded by the user
         the location should be [project dir]/images
     '''
+    if not os.path.isdir(IMAGE_FOLDER):
+        os.mkdir(IMAGE_FOLDER)
     if not os.path.isdir(IMAGE_FOLDER + "/" + userID):
         os.mkdir(IMAGE_FOLDER + "/" + userID)
 
@@ -15,8 +17,10 @@ def createThumbnailFolder(userID):
     '''create folder to store thumbnails of the images uploaded by the user
         the location should be [project dir]/thumbnails
     '''
-    if not os.path.isdir(THUMBNAIL_FOLDER+ "/" + userID):
-        os.mkdir(THUMBNAIL_FOLDER+ "/" + userID)
+    if not os.path.isdir(THUMBNAIL_FOLDER):
+        os.mkdir(THUMBNAIL_FOLDER)
+    if not os.path.isdir(THUMBNAIL_FOLDER + "/" + userID):
+        os.mkdir(THUMBNAIL_FOLDER + "/" + userID)
 
 
 def create_thumbnail(source_file, userID):
