@@ -84,7 +84,8 @@ def testFileUpload():
 
     user = User.query.filter_by(username=username).first()
     if (not user.check_password(password)):
-        return "User not authenticated"
+        error = InvalidUsage("User not authenticated")
+        return handle_invalid_usage(error)
 
     createImageFolder(user.get_id())
     createThumbnailFolder(user.get_id())
