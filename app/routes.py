@@ -94,7 +94,7 @@ def testFileUpload():
             error = InvalidUsage("The image you tried to upload already exists. Please try another file")
             return handle_invalid_usage(error)
 
-        destination = "/".join([IMAGE_FOLDER, user.get_id(), fileName])
+        destination = os.path.join(IMAGE_FOLDER, user.get_id(), fileName)
         image.save(destination)
         thumbnailDestination = create_thumbnail(fileName, user.get_id())
         newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination, thumbnail_path=thumbnailDestination)

@@ -9,8 +9,8 @@ def createImageFolder(userID):
     '''
     if not os.path.isdir(IMAGE_FOLDER):
         os.mkdir(IMAGE_FOLDER)
-    if not os.path.isdir(IMAGE_FOLDER + "/" + userID):
-        os.mkdir(IMAGE_FOLDER + "/" + userID)
+    if not os.path.isdir(os.path.join(IMAGE_FOLDER, userID)):
+        os.mkdir(os.path.join(IMAGE_FOLDER, userID))
 
 
 def createThumbnailFolder(userID):
@@ -19,17 +19,17 @@ def createThumbnailFolder(userID):
     '''
     if not os.path.isdir(THUMBNAIL_FOLDER):
         os.mkdir(THUMBNAIL_FOLDER)
-    if not os.path.isdir(THUMBNAIL_FOLDER + "/" + userID):
-        os.mkdir(THUMBNAIL_FOLDER + "/" + userID)
+    if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, userID)):
+        os.mkdir(os.path.join(THUMBNAIL_FOLDER, userID))
 
 
 def create_thumbnail(source_file, userID):
     '''create thumbnail for the image uploaded by user'''
-    with Image(filename=IMAGE_FOLDER + '/' + userID + "/" + source_file) as img:
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, source_file)) as img:
         new_width = img.width / (img.height / 50)
         img.resize(round(new_width), 50)
-        img.save(filename=THUMBNAIL_FOLDER + "/" + userID + "/thumbnail_" + source_file)
-    return THUMBNAIL_FOLDER + "/" + userID + "/thumbnail_" + source_file
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, source_file))
+    return os.path.join(THUMBNAIL_FOLDER, userID, "/thumbnail_", source_file)
 
 
 def check_dup(imageName, userID):
