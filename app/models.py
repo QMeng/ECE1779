@@ -32,6 +32,27 @@ class ImageContents(db.Model):
     path = db.Column(db.String(256), unique=True)
     thumbnail_path = db.Column(db.String(256), unique=True)
 
+    def __init__(self, user_id, name, path, thumbnail_path):
+        self.user_id = user_id
+        self.name = name
+        self.path = path
+        self.thumbnail_path = thumbnail_path
+
+
+class InvalidUsage(Exception):
+    status_code = 400
+
+    def __init__(self, message, status_code=None, payload=None):
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv
 
 @login.user_loader
 def load_user(id):

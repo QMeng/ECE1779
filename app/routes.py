@@ -84,15 +84,26 @@ def testFileUpload():
     if (not user.check_password(password)):
         return "User not authenticated"
 
-    createImageFolder()
-    createThumbnailFolder()
+    createImageFolder(user.get_id())
+    createThumbnailFolder(user.get_id())
     for image in files:
         fileName = image.filename
-        destination = "/".join([IMAGE_FOLDER, fileName])
+        if (check_dup(fileName, user.get_id())):
+            error = InvalidUsage("The image you tried to upload already exists. Please try another file")
+            return handle_invalid_usage(error)
+
+        destination = "/".join([IMAGE_FOLDER, user.get_id(), fileName])
         image.save(destination)
-        thumbnailDestination = create_thumbnail(fileName)
+        thumbnailDestination = create_thumbnail(fileName, user.get_id())
         newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination, thumbnail_path=thumbnailDestination)
         db.session.add(newImage)
         db.session.commit()
 
     return "Success"
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    '''handle the invalid usage of this app.'''
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
