@@ -1,5 +1,6 @@
 from app.forms import *
 from app.models import *
+from app.utilities import *
 from flask_login import login_user, login_required, logout_user
 
 
@@ -68,5 +69,41 @@ def signup():
 @app.route('/logout')
 def logout():
     logout_user()
-    request.cookies.clear()
-    return redirect(url_for('login'))
+    response = redirect(url_for('login'))
+    response.set_cookie('userId', '', expires=0)
+    return response
+
+@app.route('/test/FileUpload', methods=['POST'])
+def testFileUpload():
+    '''/test/FileUpload uri endpoint for easy uploading thru api calls'''
+    username = request.form['userID']
+    password = request.form['password']
+    files = request.files.getlist('uploadedFile')
+
+    user = User.query.filter_by(username=username).first()
+    if (not user.check_password(password)):
+        return "User not authenticated"
+
+    createImageFolder(user.get_id())
+    createThumbnailFolder(user.get_id())
+    for image in files:
+        fileName = image.filename
+        if (check_dup(fileName, user.get_id())):
+            error = InvalidUsage("The image you tried to upload already exists. Please try another file")
+            return handle_invalid_usage(error)
+
+        destination = "/".join([IMAGE_FOLDER, user.get_id(), fileName])
+        image.save(destination)
+        thumbnailDestination = create_thumbnail(fileName, user.get_id())
+        newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination, thumbnail_path=thumbnailDestination)
+        db.session.add(newImage)
+        db.session.commit()
+
+    return "Success"
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    '''handle the invalid usage of this app.'''
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
