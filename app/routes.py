@@ -40,7 +40,8 @@ def home():
     the rendered page of current user's home
     '''
     user = load_user(request.cookies.get('userId'))
-    images = ImageContents.query.filter_by(user.get_id()).all()
+
+    images = ImageContents.query.filter_by(user_id=user.get_id()).all()
     image_names = []
     for image in images:
         image_names.append(image.thumbnail_path)

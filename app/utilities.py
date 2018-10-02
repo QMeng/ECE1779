@@ -29,7 +29,7 @@ def create_thumbnail(source_file, userID):
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, source_file)) as img:
         new_width = img.width / (img.height / 50)
         img.resize(round(new_width), 50)
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, source_file))
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, "thumbnail_" + source_file))
     return os.path.join(THUMBNAIL_FOLDER, userID, "thumbnail_" + source_file)
 
 
