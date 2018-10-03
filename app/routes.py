@@ -2,6 +2,7 @@ from app.forms import *
 from app.models import *
 from app.utilities import *
 from flask_login import login_user, login_required, logout_user
+from io import BytesIO
 
 
 @app.route('/')
@@ -40,12 +41,12 @@ def home():
     the rendered page of current user's home
     '''
     user = load_user(request.cookies.get('userId'))
-
-    images = ImageContents.query.filter_by(user_id=user.get_id()).all()
-    image_names = []
-    for image in images:
-        image_names.append(image.thumbnail_path)
-    return render_template('homePage.html', image_names=image_names, username=user.username)
+    user_id = request.cookies.get('userId')
+    if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, user_id)):
+        return render_template('homePage.html',  username=user.username)
+    else:
+        image_names = os.listdir(os.path.join(THUMBNAIL_FOLDER, user_id))
+        return render_template('homePage.html', image_names=image_names, username=user.username)
 
 
 
