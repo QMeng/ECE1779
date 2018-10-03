@@ -2,7 +2,8 @@ from app.forms import *
 from app.models import *
 from app.utilities import *
 from flask_login import login_user, login_required, logout_user
-from io import BytesIO
+from werkzeug.utils import secure_filename
+
 
 
 @app.route('/')
@@ -40,13 +41,14 @@ def home():
     :return:
     the rendered page of current user's home
     '''
+    form=FileForm()
     user = load_user(request.cookies.get('userId'))
     user_id = request.cookies.get('userId')
     if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, user_id)):
-        return render_template('homePage.html',  username=user.username)
+        return render_template('homePage.html',  username=user.username,form=form)
     else:
         image_names = os.listdir(os.path.join(THUMBNAIL_FOLDER, user_id))
-        return render_template('homePage.html', image_names=image_names, username=user.username)
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
 
 
@@ -117,29 +119,33 @@ def upload():
     '''
     This is the upload page. User can upload images.
     '''
-    user_id = request.cookies.get("userId")
-    createImageFolder(user_id)
-    createThumbnailFolder(user_id)
+    form =FileForm()
+    if form.validate_on_submit():
+       f = form.file.data
+       filename = secure_filename(f.filename)
+       user_id = request.cookies.get("userId")
+       createImageFolder(user_id)
+       createThumbnailFolder(user_id)
 
-    for upload in request.files.getlist("file"):
-        print(upload)
-        print("{} is the file name".format(upload.filename))
-        filename = upload.filename
+      # for upload in request.files.getlist("file"):
+       #filename = upload.filename
     ## check uploading duplications.
-        if check_dup(filename, user_id):
+       if check_dup(filename, user_id):
             return render_template("error_page.html")
     ## save uploading files
-        print ("Accept incoming file:", filename)
-        destination = os.path.join(IMAGE_FOLDER, user_id, filename)
-        upload.save(destination)
+       destination = os.path.join(IMAGE_FOLDER, user_id, filename)
+       f.save(destination)
     ## Create thumbanils related to uploaded image.
-        thumbnailDestination = create_thumbnail(filename, user_id)
-        new_image = ImageContents(user_id=user_id, name=filename, path=destination, thumbnail_path=thumbnailDestination)
-        db.session.add(new_image)
-        db.session.commit()
-
-        return render_template("complete_display_image.html", image_name=filename)
-
+       thumbnailDestination = create_thumbnail(filename, user_id)
+       new_image = ImageContents(user_id=user_id, name=filename, path=destination, thumbnail_path=thumbnailDestination)
+       db.session.add(new_image)
+       db.session.commit()
+       return render_template("complete_display_image.html", image_name=filename)
+    else:
+        user = load_user(request.cookies.get('userId'))
+        user_id = request.cookies.get('userId')
+        image_names = os.listdir(os.path.join(THUMBNAIL_FOLDER, user_id))
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
 @app.route('/upload/<filename>')
 def send_image(filename):

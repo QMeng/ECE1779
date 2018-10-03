@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Email
+
+
 
 from app.models import User
 
@@ -33,3 +36,9 @@ class SignUpForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+
+class FileForm(FlaskForm):
+    '''File form, this form is used in upload page'''
+    ##file = FileField(validators=[FileRequired()])
+    file= FileField('image', validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')])
