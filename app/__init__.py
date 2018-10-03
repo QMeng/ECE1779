@@ -10,7 +10,8 @@ login = LoginManager(app)
 ROOT = os.path.dirname(os.path.abspath('imageUploader.py'))
 
 IMAGE_FOLDER = os.path.join(ROOT, 'images')
-THUMBNAIL_FOLDER = os.path.join(ROOT, 'thumbnails' )
-
+THUMBNAIL_FOLDER = os.path.join(ROOT, 'thumbnails')
+TRANSFORM_FOLDER = os.path.join(ROOT, 'transformation')
+TRANS_THUMB_FOLDER = os.path.join(ROOT, 'trans_thumb')
 
 from app import routes

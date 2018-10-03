@@ -43,12 +43,15 @@ def home():
     '''
     user = load_user(request.cookies.get('userId'))
     user_id = request.cookies.get('userId')
+    createTransformationFolder()
     if not os.path.isdir(THUMBNAIL_FOLDER + user_id):
         return render_template('homePage.html', username=user.username)
     else:
-        image_names = os.listdir(THUMBNAIL_FOLDER + user_id)
-        return render_template('homePage.html', image_names=image_names, username=user.username)
-
+        image_names = os.listdir(THUMBNAIL_FOLDER + user_id)#thumbnail的名字
+        full_image_names = os.listdir(IMAGE_FOLDER + user_id)
+        all_transthumb_names = os.listdir(TRANS_THUMB_FOLDER + user_id)#仅仅是母文件夹
+        all_trans_names = os.listdir(TRANSFORM_FOLDER + user_id)
+        return render_template('homePage.html', image_names=image_names, username=user.username, full_image_names=full_image_names, all_transthumb_names=all_transthumb_names, all_trans_names=all_trans_names)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -113,36 +116,70 @@ def upload():
     This is the upload page. User can upload images.
     '''
     createImageFolder()
+    createThumbnailFolder()
+    createTransformationFolder()
+    createTransThumbnailFolder()
     for upload in request.files.getlist("file"):
         user_id = request.cookies.get('userId')
         print(upload)
         print("{} is the file name".format(upload.filename))
         filename = upload.filename
-    ## check uploading duplications.
-        createThumbnailFolder()
+    # check uploading duplications.
         images = os.listdir(IMAGE_FOLDER + user_id)
         for item in images:
             if item == os.path.basename(upload.filename):
                 return render_template("error_page.html")
-    ## save uploading files
+    # save uploading files
         print ("Accept incoming file:", filename)
         target = os.path.join(ROOT, 'images' + user_id)
         destination = "/".join([target, filename])
         upload.save(destination)
-    ## Create thumbanils related to uploaded image.
+    # create 2 transformation images in tranform folder, with a full-size image
+        create_transform1(filename)
+        create_transform2(filename)
+        # create full-size image need to be done
+    # Create thumbanils related to uploaded image.
         create_thumbnail(filename)
         thumbnailDestination = create_thumbnail(filename)
         new_image = ImageContents(user_id=user_id, name=filename, path=IMAGE_FOLDER + user_id + filename, thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
-
+    # Create two transformed images related to uploaded image.
+        trans1_filename = "trans1" + filename
+        trans2_filename = "trans2" + filename
+        #print('this is the trans1 filename: {}'.format(trans1_filename))
+        #print('this is the trans2 filename: {}'.format(trans2_filename))
+        createPictureTransThumbFolder(filename)
+        create_trans_thumbnail(trans1_filename, filename)
+        create_trans_thumbnail(trans2_filename, filename)
         return render_template("complete_display_image.html", image_name=filename)
 
 
 @app.route('/upload/<filename>')
 def send_image(filename):
+    #file name is the original name, like 0910.jpg
     user_id = request.cookies.get('userId')
-    return send_from_directory("thumbnails" + user_id, filename)
+    return send_from_directory(THUMBNAIL_FOLDER + user_id, filename)
+
+@app.route('/upload/thumbnail<filename>/full')
+def send_full_image(filename):
+    #file name is the original name, like 0910.jpg
+    user_id = request.cookies.get('userId')
+    return send_from_directory(IMAGE_FOLDER + user_id, filename)
+
+@app.route('/upload/<filename>/trans/full')
+def send_full_image_trans(filename):
+    user_id = request.cookies.get('userId')
+    return send_from_directory(TRANSFORM_FOLDER + user_id, filename)
+
+@app.route('/upload/<filename>/trans')
+def send_image_trans(filename):
+    #filename should be transformed picture's name
+    user_id = request.cookies.get('userId')
+    without_ext = os.path.splitext(filename)[0]
+    pic_name = without_ext[6:]
+    return send_from_directory(TRANS_THUMB_FOLDER + user_id + "/" + pic_name, "thumbnail"+filename)
+
 
 
 @app.route('/Return/')

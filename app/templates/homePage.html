@@ -9,6 +9,108 @@
 <head>
 <title>Upload</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<style>
+    /* 触发弹窗图片的样式（写成文件） */
+    .thumbnails{
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .thumbnails:hover {opacity: 0.7;}
+
+    /* 弹窗背景 */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
+
+    /* 图片 */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    /* 文本内容 */
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    /* 添加动画 */
+    .modal-content, #caption {
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @-webkit-keyframes zoom {
+        from {-webkit-transform:scale(0)}
+        to {-webkit-transform:scale(1)}
+    }
+
+    @keyframes zoom {
+        from {transform:scale(0)}
+        to {transform:scale(1)}
+    }
+
+    /* 关闭按钮 */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* 小屏幕中图片宽度为 100% */
+    @media only screen and (max-width: 700px){
+        .modal-content {
+            width: 100%;
+        }
+    }
+    /* slides部分 */
+    .mySlides {display:none}
+    .demo {border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .demo:hover{opacity: 0.7;}
+    /* 图片局中 */
+    .mySlides{
+    margin-left: auto;
+    margin-right:auto;
+    }
+    .w3-row-padding w3-section{
+        margin:0 auto;
+    }
+</style>
 </head>
 <body>
 <h1>Hi, {{ username }}!</h1>
@@ -20,11 +122,38 @@
     <div id="msg"></div>
     <input type="submit" value="Upload!" id="upload-button">
 </form>
-
     <hr>
      {% for image_name in image_names %}
-         <img src=" {{url_for('send_image', filename=image_name)}}">
+         <img id="{{image_name}}" class="thumbnails" src="{{url_for('send_image', filename=image_name)}}">
      {% endfor %}
+
+    <!-- 弹窗 -->
+    <div id="myModal" class="modal">
+
+      <!-- 关闭按钮 -->
+      <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+
+      <!-- 弹窗内容 -->
+      <!-- slides 模板 -->
+    <!-- 从这里开始 -->
+    <!-- read all the full-size picture here from route/home, including origin and transform -->
+      <div class="w3-content">
+      <img id="img01" class="mySlides" src="img01" style="height:70%">
+      <img id="img02" class="mySlides" src="img02" style="height:70%">
+      <img id="img03" class="mySlides" src="img03" style="height:70%">
+    <!-- 弹窗略缩图从这里开始 -->
+    <!-- read all the thumbnail picture from one picture from route/home, including origin and transform -->
+      <div class="w3-row-padding w3-section">
+          <img id="thumb_img01" class="demo w3-opacity w3-hover-opacity-off" src="thumb.jpg" onclick="currentDiv(1)">
+          <img id="thumb_img02" class="demo w3-opacity w3-hover-opacity-off" src="thumb.jpg" onclick="currentDiv(2)">
+          <img id="thumb_img03" class="demo w3-opacity w3-hover-opacity-off" src="thumb.jpg" onclick="currentDiv(3)">
+      </div>
+  </div>
+    </div>
+
+      <!-- 文本描述 -->
+      <div id="caption"></div>
+    </div>
 
 </body>
 <script>
@@ -53,6 +182,68 @@
 
     } );
 
+    // 获取弹窗
+    var modal = document.getElementById('myModal');
+    // 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容
+    var img_list = document.getElementsByClassName('mySlides');
+    var modalImg1 = document.getElementById("img01");
+    var modalImg2 = document.getElementById("img02");
+    var modalImg3 = document.getElementById("img03");
+    var modalImg4 = document.getElementById("thumb_img01");
+    var modalImg5 = document.getElementById("thumb_img02");
+    var modalImg6 = document.getElementById("thumb_img03");
+    var captionText = document.getElementById("caption");
+    var modal_thumbnail = document.getElementById("modal_thumbnail");
+
+    for(var i=0; i <= document.getElementsByClassName("thumbnails").length; i++){
+        temp1 =  document.getElementsByClassName("thumbnails")[i];
+        temp1.onclick = function(){
+        modal.style.display = "block";
+        modalImg2.src = this.src+"/full";
+        modalImg1.src = (this.src+"/trans/full").replace("thumbnail","trans1");
+        modalImg3.src = (this.src+"/trans/full").replace("thumbnail","trans2");
+        //thumbnails
+        modalImg5.src = this.src;
+        modalImg4.src = (this.src+"/trans").replace("thumbnail","trans1");
+        modalImg6.src = (this.src+"/trans").replace("thumbnail","trans2");
+        captionText.innerHTML = this.alt;
+        modal_thumbnail.src = this.src
+        }
+
+    }
+    // 获取 <span> 元素，设置关闭按钮
+    var span = document.getElementsByClassName("close")[0];
+
+    // 当点击 (x), 关闭弹窗
+    span.onclick = function() {
+      modal.style.display = "none";
+    };
+    var slideIndex = 1;
+    showDivs(slideIndex);
+
+    function plusDivs(n) {
+      showDivs(slideIndex += n);
+    }
+
+    function currentDiv(n) {
+      showDivs(slideIndex = n);
+    }
+
+    function showDivs(n) {
+      var i;
+      var x = document.getElementsByClassName("mySlides");
+      var dots = document.getElementsByClassName("demo");
+      if (n > x.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = x.length}
+      for (i = 0; i < x.length; i++) {
+         x[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+         dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+      }
+      x[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " w3-opacity-off";
+    }
 </script>
 
 {% endblock %}
