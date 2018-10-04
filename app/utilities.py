@@ -26,11 +26,16 @@ def createThumbnailFolder(userID):
 
 def create_thumbnail(source_file, userID):
     '''create thumbnail for the image uploaded by user'''
+    nameAndType = source_file.split('.')
+    fileName = "".join(nameAndType[:-1])
+    fileType = nameAndType[-1]
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, source_file)) as img:
-        new_width = img.width / (img.height / 50)
-        img.resize(round(new_width), 50)
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, "thumbnail_" + source_file))
-    return os.path.join(THUMBNAIL_FOLDER, userID, "thumbnail_" + source_file)
+        # resize the image to produce the thumbnail
+        new_width = img.width / (img.height / 100)
+        img.resize(round(new_width), 100)
+        thumbnailName = "thumbnail_" + fileName + "-1." + fileType
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
+    return os.path.join(THUMBNAIL_FOLDER, userID)
 
 
 def check_dup(imageName, userID):

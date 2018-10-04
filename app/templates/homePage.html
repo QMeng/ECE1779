@@ -14,14 +14,12 @@
     {{ form.hidden_tag() }} <br>
     {{ form.file }} <br>
     {% for error in form.file.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
+        <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
     <input type="submit" value="Upload!" id="upload-button">
 </form>
-
     <hr>
-     {% for image_name in image_names %}
-         <img src="{{url_for('send_image', filename=image_name)}}">
-     {% endfor %}
-
+    {% for image_name in image_names %}
+        <img src="{{url_for('send_thumbnail', filename=image_name)}}">
+    {% endfor %}
 {% endblock %}

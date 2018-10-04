@@ -70,6 +70,7 @@ class InvalidUsage(Exception):
         rv['message'] = self.message
         return rv
 
+
 @login.user_loader
 def load_user(id):
     '''method to load user'''

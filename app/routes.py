@@ -3,7 +3,7 @@ from app.models import *
 from app.utilities import *
 from flask_login import login_user, login_required, logout_user
 from werkzeug.utils import secure_filename
-
+import glob
 
 
 @app.route('/')
@@ -41,15 +41,14 @@ def home():
     :return:
     the rendered page of current user's home
     '''
-    form=FileForm()
+    form = FileForm()
     user = load_user(request.cookies.get('userId'))
     user_id = request.cookies.get('userId')
     if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, user_id)):
-        return render_template('homePage.html',  username=user.username,form=form)
+        return render_template('homePage.html', username=user.username, form=form)
     else:
-        image_names = os.listdir(os.path.join(THUMBNAIL_FOLDER, user_id))
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user_id), "*-1*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
-
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -97,8 +96,10 @@ def testFileUpload():
 
     createImageFolder(user.get_id())
     createThumbnailFolder(user.get_id())
+
     for image in files:
         fileName = image.filename
+
         if (check_dup(fileName, user.get_id())):
             error = InvalidUsage("The image you tried to upload already exists. Please try another file")
             return handle_invalid_usage(error)
@@ -106,12 +107,12 @@ def testFileUpload():
         destination = os.path.join(IMAGE_FOLDER, user.get_id(), fileName)
         image.save(destination)
         thumbnailDestination = create_thumbnail(fileName, user.get_id())
-        newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination, thumbnail_path=thumbnailDestination)
+        newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination,
+                                 thumbnail_path=thumbnailDestination)
         db.session.add(newImage)
         db.session.commit()
 
     return "Success"
-
 
 
 @app.route("/upload", methods=["POST"])
@@ -119,36 +120,42 @@ def upload():
     '''
     This is the upload page. User can upload images.
     '''
-    form =FileForm()
+    form = FileForm()
     if form.validate_on_submit():
-       f = form.file.data
-       filename = secure_filename(f.filename)
-       user_id = request.cookies.get("userId")
-       createImageFolder(user_id)
-       createThumbnailFolder(user_id)
+        f = form.file.data
+        filename = secure_filename(f.filename)
+        user_id = request.cookies.get("userId")
 
-      # for upload in request.files.getlist("file"):
-       #filename = upload.filename
-    ## check uploading duplications.
-       if check_dup(filename, user_id):
+        createImageFolder(user_id)
+        createThumbnailFolder(user_id)
+
+        # check uploading duplications.
+        if check_dup(filename, user_id):
             return render_template("error_page.html")
-    ## save uploading files
-       destination = os.path.join(IMAGE_FOLDER, user_id, filename)
-       f.save(destination)
-    ## Create thumbanils related to uploaded image.
-       thumbnailDestination = create_thumbnail(filename, user_id)
-       new_image = ImageContents(user_id=user_id, name=filename, path=destination, thumbnail_path=thumbnailDestination)
-       db.session.add(new_image)
-       db.session.commit()
-       return render_template("complete_display_image.html", image_name=filename)
+
+        # save uploading files
+        destination = os.path.join(IMAGE_FOLDER, user_id, filename)
+        f.save(destination)
+
+        # Create thumbanil related to uploaded image.
+        thumbnailDestination = create_thumbnail(filename, user_id)
+
+        # save the image info in DB
+        new_image = ImageContents(user_id=user_id, name=filename, path=destination, thumbnail_path=thumbnailDestination)
+        db.session.add(new_image)
+        db.session.commit()
+        return render_template("complete_display_image.html", image_name=filename)
+
     else:
         user = load_user(request.cookies.get('userId'))
         user_id = request.cookies.get('userId')
-        image_names = os.listdir(os.path.join(THUMBNAIL_FOLDER, user_id))
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user_id), "*-1*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
+
 @app.route('/upload/<filename>')
-def send_image(filename):
+def send_thumbnail(filename):
+    '''send the thumbnail image to the web page'''
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(THUMBNAIL_FOLDER, user_id), filename)
 
