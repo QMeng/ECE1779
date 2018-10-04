@@ -2,6 +2,7 @@ from app.forms import *
 from app.models import *
 from app.utilities import *
 from flask_login import login_user, login_required, logout_user
+from io import BytesIO
 
 
 @app.route('/')
@@ -38,8 +39,6 @@ def home():
     images uploaded by the user
     :return:
     the rendered page of current user's home
-
-    TODO: do it
     '''
     user = load_user(request.cookies.get('userId'))
     user_id = request.cookies.get('userId')
@@ -51,7 +50,7 @@ def home():
         full_image_names = os.listdir(IMAGE_FOLDER + user_id)
         all_transthumb_names = os.listdir(TRANS_THUMB_FOLDER + user_id)#仅仅是母文件夹
         all_trans_names = os.listdir(TRANSFORM_FOLDER + user_id)
-        return render_template('homePage.html', image_names=image_names, username=user.username, full_image_names=full_image_names, all_transthumb_names=all_transthumb_names, all_trans_names=all_trans_names)
+        return render_template('homePage.html', image_names=image_names, username=user.username, full_image_names=full_image_names,    all_transthumb_names=all_transthumb_names, all_trans_names=all_trans_names)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -77,6 +76,8 @@ def signup():
 
 @app.route('/logout')
 def logout():
+    '''this method logs out current user and removes the user's cookie from the brower by setting its expire time to now
+    '''
     logout_user()
     response = redirect(url_for('login'))
     response.set_cookie('userId', '', expires=0)
@@ -92,16 +93,20 @@ def testFileUpload():
 
     user = User.query.filter_by(username=username).first()
     if (not user.check_password(password)):
-        return "User not authenticated"
+        error = InvalidUsage("User not authenticated")
+        return handle_invalid_usage(error)
 
-    createImageFolder()
-    createThumbnailFolder()
+    createImageFolder(user.get_id())
+    createThumbnailFolder(user.get_id())
     for image in files:
-        user_id = request.cookies.get('userId')
         fileName = image.filename
-        destination = "/".join([IMAGE_FOLDER + user_id, fileName])
+        if (check_dup(fileName, user.get_id())):
+            error = InvalidUsage("The image you tried to upload already exists. Please try another file")
+            return handle_invalid_usage(error)
+
+        destination = os.path.join(IMAGE_FOLDER, user.get_id(), fileName)
         image.save(destination)
-        thumbnailDestination = create_thumbnail(fileName)
+        thumbnailDestination = create_thumbnail(fileName, user.get_id())
         newImage = ImageContents(user_id=user.get_id(), name=fileName, path=destination, thumbnail_path=thumbnailDestination)
         db.session.add(newImage)
         db.session.commit()
@@ -115,12 +120,13 @@ def upload():
     '''
     This is the upload page. User can upload images.
     '''
-    createImageFolder()
-    createThumbnailFolder()
+    user_id = request.cookies.get("userId")
+    createImageFolder(user_id)
+    createThumbnailFolder(user_id)
     createTransformationFolder()
     createTransThumbnailFolder()
+
     for upload in request.files.getlist("file"):
-        user_id = request.cookies.get('userId')
         print(upload)
         print("{} is the file name".format(upload.filename))
         filename = upload.filename
@@ -131,8 +137,7 @@ def upload():
                 return render_template("error_page.html")
     # save uploading files
         print ("Accept incoming file:", filename)
-        target = os.path.join(ROOT, 'images' + user_id)
-        destination = "/".join([target, filename])
+        destination = os.path.join(IMAGE_FOLDER, user_id, filename)
         upload.save(destination)
     # create 2 transformation images in tranform folder, with a full-size image
         create_transform1(filename)
@@ -142,6 +147,7 @@ def upload():
         create_thumbnail(filename)
         thumbnailDestination = create_thumbnail(filename)
         new_image = ImageContents(user_id=user_id, name=filename, path=IMAGE_FOLDER + user_id + filename, thumbnail_path=thumbnailDestination)
+
         db.session.add(new_image)
         db.session.commit()
     # Create two transformed images related to uploaded image.
@@ -181,7 +187,14 @@ def send_image_trans(filename):
     return send_from_directory(TRANS_THUMB_FOLDER + user_id + "/" + pic_name, "thumbnail"+filename)
 
 
-
 @app.route('/Return/')
 def return_home():
     return redirect(url_for('home'))
+
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    '''handle the invalid usage of this app.'''
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
