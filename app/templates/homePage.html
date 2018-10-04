@@ -1,11 +1,27 @@
 {% extends "base.html" %}
-
 {% block links %}
     <a href="/home">Home</a>
     <a href="/logout">Log Out</a>
 {% endblock %}
 
+
 {% block content %}
-    <h1>Hi, {{ username }}!</h1>
-    <div><p><b>temp</b></p></div>
+<h1>Hi, {{ username }}!</h1>
+<form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+    <h1>Upload images</h1>
+    <hr>
+    <strong>Images:</strong><br>
+    {{ form.hidden_tag() }} <br>
+    {{ form.file }} <br>
+    {% for error in form.file.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+    <input type="submit" value="Upload!" id="upload-button">
+</form>
+
+    <hr>
+     {% for image_name in image_names %}
+         <img src="{{url_for('send_image', filename=image_name)}}">
+     {% endfor %}
+
 {% endblock %}
