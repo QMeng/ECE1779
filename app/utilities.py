@@ -23,6 +23,15 @@ def createThumbnailFolder(userID):
     if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, userID)):
         os.mkdir(os.path.join(THUMBNAIL_FOLDER, userID))
 
+def createTransforamtionFolder(userID):
+    '''create folder to store thumbnails of the images uploaded by the user
+        the location should be [project dir]/transformations
+    '''
+    if not os.path.isdir(TRANS_FOLDER):
+        os.mkdir(TRANS_FOLDER)
+    if not os.path.isdir(os.path.join(TRANS_FOLDER, userID)):
+        os.mkdir(os.path.join(TRANS_FOLDER, userID))
+
 
 def create_thumbnail(source_file, userID):
     '''create thumbnail for the image uploaded by user'''
@@ -33,9 +42,43 @@ def create_thumbnail(source_file, userID):
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 100)
         img.resize(round(new_width), 100)
-        thumbnailName = "thumbnail_" + fileName + "-1." + fileType
+        #thumbnailName = "thumbnail_" + fileName + "-1." + fileType
+        thumbnailName = "thumbnail_" + source_file
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
     return os.path.join(THUMBNAIL_FOLDER, userID)
+
+def create_level(source_file, userID):
+    '''create a level transformation for the image uploaded by user'''
+    #source_file name should be loaded from nameAndType instead of saveName
+    nameAndType = source_file.split('.')
+    fileName = "".join(nameAndType[:-1])
+    fileType = nameAndType[-1]
+    pictureName = fileName + '-1.' + fileType
+    print(fileName)
+    print(fileType)
+    print(pictureName)
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
+        # create a leveled image
+        img.level(black=0.5, white=0.5, gamma=0.5)
+        save_name = "trans_" + fileName + "-2." + fileType
+        img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
+    return os.path.join(IMAGE_FOLDER, userID)
+
+def create_leftshift(source_file, userID):
+    '''create a left shift transformation for the image uploaded by user'''
+    # source_file name should be loaded from nameAndType instead of saveName
+    nameAndType = source_file.split('.')
+    fileName = "".join(nameAndType[:-1])
+    fileType = nameAndType[-1]
+    pictureName = fileName + '-1.' + fileType
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
+        # create a leftshift image
+        img.evaluate(operator='leftshift', value=1, channel='red')
+        save_name = "trans_" + fileName + "-3." + fileType
+        img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
+    return os.path.join(IMAGE_FOLDER, userID)
+
+
 
 
 def check_dup(imageName, userID):

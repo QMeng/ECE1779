@@ -123,33 +123,45 @@ def upload():
     form = FileForm()
     if form.validate_on_submit():
         f = form.file.data
-        filename = secure_filename(f.filename)
+        #将filename变为了nameAndType
+        nameAndType = secure_filename(f.filename)#0910-4.png
+        nameAndTypeList = nameAndType.split('.')#[0910-4, .png]
+        fileName = "".join(nameAndTypeList[:-1])
+        fileType = nameAndTypeList[-1]
+        saveName = fileName + '-1.' + fileType
+        #filename = secure_filename(f.filename)
         user_id = request.cookies.get("userId")
 
         createImageFolder(user_id)
         createThumbnailFolder(user_id)
 
         # check uploading duplications.
-        if check_dup(filename, user_id):
+        if check_dup(saveName, user_id):
             return render_template("error_page.html")
 
         # save uploading files
-        destination = os.path.join(IMAGE_FOLDER, user_id, filename)
+
+        destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
         f.save(destination)
 
         # Create thumbanil related to uploaded image.
-        thumbnailDestination = create_thumbnail(filename, user_id)
+        thumbnailDestination = create_thumbnail(saveName, user_id)
+
+        # Create transformation related to uploaded image.
+        levelDestination = create_level(nameAndType, user_id)
+        leftshiftDestination = create_leftshift(nameAndType, user_id)
+        #暂时不动数据库
 
         # save the image info in DB
-        new_image = ImageContents(user_id=user_id, name=filename, path=destination, thumbnail_path=thumbnailDestination)
+        new_image = ImageContents(user_id=user_id, name=nameAndType, path=destination, thumbnail_path=thumbnailDestination)#不确定是否为saveName
         db.session.add(new_image)
         db.session.commit()
-        return render_template("complete_display_image.html", image_name=filename)
+        return render_template("complete_display_image.html", image_name=nameAndType)
 
     else:
         user = load_user(request.cookies.get('userId'))
         user_id = request.cookies.get('userId')
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user_id), "*-1*")
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user_id), "*-1*")#不确定
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
 
@@ -158,6 +170,12 @@ def send_thumbnail(filename):
     '''send the thumbnail image to the web page'''
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(THUMBNAIL_FOLDER, user_id), filename)
+
+@app.route('/upload/<filename>/full')
+def send_full(filename):
+    '''send the full-size image to the web page'''
+    user_id = request.cookies.get('userId')
+    return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
 
 @app.route('/Return/')

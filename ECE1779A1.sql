@@ -1,4 +1,4 @@
-create database ECE1779A2;
+create database ECE1779A1;
 
 drop table ECE1779A1.ImageInfo;
 drop table ECE1779A1.UserInfo;
