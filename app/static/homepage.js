@@ -16,7 +16,7 @@ for(var i=0; i<img_list.length; i++){
         origin_url = this.src;
         changed_url01 = origin_url.replace("-1.","-2.");
         changed_url03 = origin_url.replace("-1.","-3.");
-        slidesleft.src = changed_url01;
+        slidesleft.src = changed_url01;//原来是left
         slidesright.src = changed_url03;
         //change the slides full-size src
         picleft = document.getElementById("pic01");
@@ -60,3 +60,5 @@ function showDivs(n) {
   x[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " w3-opacity-off";
 }
+
+

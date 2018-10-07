@@ -21,15 +21,20 @@
     background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
 }
 
+
+
 /* 图片 */
-.modal-content {
+.modal-content, .mySlides{
     margin: auto;
-    display: block;
+    display: inline-block;
+    vertical-align:middle;
     width: 80%;
     max-width: 700px;
+
 }
+
 /* 添加动画 */
-.modal-content, #caption {
+.modal-content, .mySlides{
     -webkit-animation-name: zoom;
     -webkit-animation-duration: 0.6s;
     animation-name: zoom;
@@ -64,3 +69,5 @@
 }
 .mySlides {display:none}
 .demo {cursor:pointer}
+
+

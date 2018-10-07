@@ -125,13 +125,11 @@ def upload():
     form = FileForm()
     if form.validate_on_submit():
         f = form.file.data
-        #将filename变为了nameAndType
-        nameAndType = secure_filename(f.filename)#0910-4.png
-        nameAndTypeList = nameAndType.split('.')#[0910-4, .png]
+        nameAndType = secure_filename(f.filename)
+        nameAndTypeList = nameAndType.split('.')
         fileName = "".join(nameAndTypeList[:-1])
         fileType = nameAndTypeList[-1]
         saveName = fileName + '-1.' + fileType
-        #filename = secure_filename(f.filename)
         user_id = request.cookies.get("userId")
 
         createImageFolder(user_id)

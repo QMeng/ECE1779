@@ -26,38 +26,31 @@ def createThumbnailFolder(userID):
 
 def create_thumbnail(source_file, userID):
     '''create thumbnail for the image uploaded by user'''
-    nameAndType = source_file.split('.')
-    fileName = "".join(nameAndType[:-1])
-    fileType = nameAndType[-1]
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, source_file)) as img:
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 100)
         img.resize(round(new_width), 100)
-        #thumbnailName = "thumbnail_" + fileName + "-1." + fileType
         thumbnailName = "thumbnail_" + source_file
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
     return os.path.join(THUMBNAIL_FOLDER, userID)
 
+
 def create_rightshift(source_file, userID):
     '''create a level transformation for the image uploaded by user'''
-    #source_file name should be loaded from nameAndType instead of saveName
     nameAndType = source_file.split('.')
     fileName = "".join(nameAndType[:-1])
     fileType = nameAndType[-1]
     pictureName = fileName + '-1.' + fileType
-    print(fileName)
-    print(fileType)
-    print(pictureName)
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
-        # create a leveled image
+        # create a rightshift image
         img.evaluate(operator='rightshift', value=1, channel='blue')
-        save_name = fileName + "-2." + fileType ##"trans_"
+        save_name = fileName + "-2." + fileType
         img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
     return os.path.join(IMAGE_FOLDER, userID)
 
+
 def create_leftshift(source_file, userID):
     '''create a left shift transformation for the image uploaded by user'''
-    # source_file name should be loaded from nameAndType instead of saveName
     nameAndType = source_file.split('.')
     fileName = "".join(nameAndType[:-1])
     fileType = nameAndType[-1]
@@ -65,11 +58,9 @@ def create_leftshift(source_file, userID):
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         # create a leftshift image
         img.evaluate(operator='leftshift', value=1, channel='red')
-        save_name = fileName + "-3." + fileType  ##"trans_"
+        save_name = fileName + "-3." + fileType
         img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
     return os.path.join(IMAGE_FOLDER, userID)
-
-
 
 
 def check_dup(imageName, userID):
