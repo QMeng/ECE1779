@@ -4,7 +4,7 @@
     <a href="/logout">Log Out</a>
 {% endblock %}
 
-<!-- <link rel="stylesheet" href="/homepage.css"> -->
+{% block content %}
 <style>
 /* 触发弹窗图片的样式 */
 .originThumbnails{
@@ -86,9 +86,8 @@
 }
 .mySlides {display:none}
 .demo {cursor:pointer}
-</style>
 
-{% block content %}
+</style>
 <h1>Hi, {{ username }}!</h1>
 <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
     <h1>Upload images</h1>
@@ -124,7 +123,6 @@
               </div>
             </div>
     </div>
-<!-- <script src="/homepage.js"></script> -->
 <script>
  // 获取弹窗
 var modal = document.getElementById('myModal');
@@ -153,13 +151,14 @@ for(var i=0; i<img_list.length; i++){
         picright.src = changed_url03 + "/full";
     }
 }
-
 // 获取 <span> 元素，设置关闭按钮
 var span = document.getElementsByClassName("close")[0];
+
 // 当点击 (x), 关闭弹窗
 span.onclick = function() {
   modal.style.display = "none";
 }
+
 
 var slideIndex = 1;
 showDivs(slideIndex);
