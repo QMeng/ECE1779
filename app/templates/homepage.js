@@ -1,12 +1,7 @@
-// 获取弹窗
-var modal = document.getElementById('myModal');
 
-// 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容
-var img = document.getElementById('myImg');
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
+ // 获取弹窗
+var modal = document.getElementById('myModal');
 var img_list = document.getElementsByClassName('originThumbnails');
-var slides_list = document.getElementsByClassName("demo w3-opacity w3-hover-opacity-off")
 for(var i=0; i<img_list.length; i++){
     temp = img_list[i];
     temp.onclick = function(){
@@ -14,7 +9,6 @@ for(var i=0; i<img_list.length; i++){
         modal.style.display = "block";
         picmiddle = document.getElementById("pic02");
         picmiddle.src = this.src+"/full";
-        captionText.innerHTML = this.alt;
         //change the slides thumbnail src
         slidesmiddle = document.getElementById("slide02");
         slidesleft = document.getElementById("slide01");
