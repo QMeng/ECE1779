@@ -23,15 +23,6 @@ def createThumbnailFolder(userID):
     if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, userID)):
         os.mkdir(os.path.join(THUMBNAIL_FOLDER, userID))
 
-def createTransforamtionFolder(userID):
-    '''create folder to store thumbnails of the images uploaded by the user
-        the location should be [project dir]/transformations
-    '''
-    if not os.path.isdir(TRANS_FOLDER):
-        os.mkdir(TRANS_FOLDER)
-    if not os.path.isdir(os.path.join(TRANS_FOLDER, userID)):
-        os.mkdir(os.path.join(TRANS_FOLDER, userID))
-
 
 def create_thumbnail(source_file, userID):
     '''create thumbnail for the image uploaded by user'''
@@ -47,7 +38,7 @@ def create_thumbnail(source_file, userID):
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
     return os.path.join(THUMBNAIL_FOLDER, userID)
 
-def create_level(source_file, userID):
+def create_rightshift(source_file, userID):
     '''create a level transformation for the image uploaded by user'''
     #source_file name should be loaded from nameAndType instead of saveName
     nameAndType = source_file.split('.')
@@ -59,8 +50,8 @@ def create_level(source_file, userID):
     print(pictureName)
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         # create a leveled image
-        img.level(black=0.5, white=0.5, gamma=0.5)
-        save_name = "trans_" + fileName + "-2." + fileType
+        img.evaluate(operator='rightshift', value=1, channel='blue')
+        save_name = fileName + "-2." + fileType ##"trans_"
         img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
     return os.path.join(IMAGE_FOLDER, userID)
 
@@ -74,7 +65,7 @@ def create_leftshift(source_file, userID):
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         # create a leftshift image
         img.evaluate(operator='leftshift', value=1, channel='red')
-        save_name = "trans_" + fileName + "-3." + fileType
+        save_name = fileName + "-3." + fileType  ##"trans_"
         img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
     return os.path.join(IMAGE_FOLDER, userID)
 
