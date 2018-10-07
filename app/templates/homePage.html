@@ -3,91 +3,11 @@
     <a href="/home">Home</a>
     <a href="/logout">Log Out</a>
 {% endblock %}
-
 {% block content %}
-<style>
-/* 触发弹窗图片的样式 */
-.originThumbnails{
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.originThumbnails:hover {opacity: 0.7;}
+<head>
+<link rel="stylesheet" type="text/css" href="../static/homepage.css">
+</head>
 
-/* 弹窗背景 */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-}
-
-/* 图片 */
-.modal-content {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-}
-
-/* 文本内容 */
-#caption {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-    text-align: center;
-    color: #ccc;
-    padding: 10px 0;
-    height: 150px;
-}
-
-/* 添加动画 */
-.modal-content, #caption {
-    -webkit-animation-name: zoom;
-    -webkit-animation-duration: 0.6s;
-    animation-name: zoom;
-    animation-duration: 0.6s;
-}
-
-@-webkit-keyframes zoom {
-    from {-webkit-transform:scale(0)}
-    to {-webkit-transform:scale(1)}
-}
-
-@keyframes zoom {
-    from {transform:scale(0)}
-    to {transform:scale(1)}
-}
-
-/* 关闭按钮 */
-.close {
-    position: absolute;
-    top: 15px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.close:hover,
-.close:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
-}
-.mySlides {display:none}
-.demo {cursor:pointer}
-
-</style>
 <h1>Hi, {{ username }}!</h1>
 <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
     <h1>Upload images</h1>
@@ -113,9 +33,9 @@
         <img class="modal-content" id="img01">
             <!-- 在此加入slides部分 -->
             <div class="w3-content">
-              <img id="pic01" class="mySlides" src="img01.jpg" style="width:70%">
-              <img id="pic02" class="mySlides" src="img01.jpg" style="width:70%">
-              <img id="pic03" class="mySlides" src="img01.jpg" style="width:70%">
+              <img id="pic01" class="mySlides" src="img01.jpg" style="width:60%">
+              <img id="pic02" class="mySlides" src="img01.jpg" style="width:60%">
+              <img id="pic03" class="mySlides" src="img01.jpg" style="width:60%">
               <div class="w3-row-padding w3-section">
                   <img id="slide01" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(1)">
                   <img id="slide02" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(2)">
@@ -123,69 +43,6 @@
               </div>
             </div>
     </div>
-<script>
- // 获取弹窗
-var modal = document.getElementById('myModal');
-var img_list = document.getElementsByClassName('originThumbnails');
-for(var i=0; i<img_list.length; i++){
-    temp = img_list[i];
-    temp.onclick = function(){
-        //change the pic src
-        modal.style.display = "block";
-        picmiddle = document.getElementById("pic02");
-        picmiddle.src = this.src+"/full";
-        //change the slides thumbnail src
-        slidesmiddle = document.getElementById("slide02");
-        slidesleft = document.getElementById("slide01");
-        slidesright = document.getElementById("slide03");
-        slidesmiddle.src = this.src;
-        origin_url = this.src;
-        changed_url01 = origin_url.replace("-1.","-2.");
-        changed_url03 = origin_url.replace("-1.","-3.");
-        slidesleft.src = changed_url01;
-        slidesright.src = changed_url03;
-        //change the slides full-size src
-        picleft = document.getElementById("pic01");
-        picright = document.getElementById("pic03");
-        picleft.src = changed_url01 + "/full";
-        picright.src = changed_url03 + "/full";
-    }
-}
-// 获取 <span> 元素，设置关闭按钮
-var span = document.getElementsByClassName("close")[0];
-
-// 当点击 (x), 关闭弹窗
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-
-var slideIndex = 1;
-showDivs(slideIndex);
-
-function plusDivs(n) {
-  showDivs(slideIndex += n);
-}
-
-function currentDiv(n) {
-  showDivs(slideIndex = n);
-}
-
-function showDivs(n) {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("demo");
-  if (n > x.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = x.length}
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) {
-     dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
-  }
-  x[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " w3-opacity-off";
-}
-</script>
+<script src="../static/homepage.js" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
