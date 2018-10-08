@@ -1,4 +1,4 @@
- // 获取弹窗
+//modal settings
 var modal = document.getElementById('myModal');
 var img_list = document.getElementsByClassName('originThumbnails');
 for(var i=0; i<img_list.length; i++){
@@ -6,29 +6,37 @@ for(var i=0; i<img_list.length; i++){
     temp.onclick = function(){
         //change the pic src
         modal.style.display = "block";
-        picmiddle = document.getElementById("pic02");
-        picmiddle.src = this.src+"/full";
+        pic4 = document.getElementById("pic04");
+        pic3 = document.getElementById("pic03");
+        pic2 = document.getElementById("pic02");
+        pic1 = document.getElementById("pic01");
+
         //change the slides thumbnail src
-        slidesmiddle = document.getElementById("slide02");
-        slidesleft = document.getElementById("slide01");
-        slidesright = document.getElementById("slide03");
-        slidesmiddle.src = this.src;
+        slides2 = document.getElementById("slide02");
+        slides1 = document.getElementById("slide01");
+        slides3 = document.getElementById("slide03");
+        slides4 = document.getElementById("slide04");
         origin_url = this.src;
         changed_url01 = origin_url.replace("-1.","-2.");
         changed_url03 = origin_url.replace("-1.","-3.");
-        slidesleft.src = changed_url01;//原来是left
-        slidesright.src = changed_url03;
+        changed_url04 = origin_url.replace("-1.","-4.");
+
+        slides1.src = this.src;
+        slides2.src = changed_url01;
+        slides3.src = changed_url03;
+        slides4.src = changed_url04;
+
         //change the slides full-size src
-        picleft = document.getElementById("pic01");
-        picright = document.getElementById("pic03");
-        picleft.src = changed_url01 + "/full";
-        picright.src = changed_url03 + "/full";
+        pic1.src = this.src+"/full";
+        pic2.src = changed_url01 + "/full";
+        pic3.src = changed_url03 + "/full";
+        pic4.src = changed_url04 + "/full";
     }
 }
-// 获取 <span> 元素，设置关闭按钮
+// get <span> element to set close button
 var span = document.getElementsByClassName("close")[0];
 
-// 当点击 (x), 关闭弹窗
+// click (x) to close modal
 span.onclick = function() {
   modal.style.display = "none";
 }

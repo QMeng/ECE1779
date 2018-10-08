@@ -21,26 +21,27 @@
     <input type="submit" value="Upload!" id="upload-button">
 </form>
     <hr>
-    <!-- 触发弹窗 - 图片改为你的图片地址 -->
     {% for image_name in image_names %}
         <img class="originThumbnails" src="{{url_for('send_thumbnail', filename=image_name)}}">
     {% endfor %}
-        <!-- 弹窗 -->
+        <!-- modals -->
         <div id="myModal" class="modal">
-        <!-- 关闭按钮 -->
+        <!-- close button -->
         <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
-        <!-- 弹窗内容 -->
+        <!-- modal block -->
         <img class="modal-content" id="img01">
-            <!-- 在此加入slides部分 -->
+            <!-- slides block -->
             <div class="w3-content">
               <img id="pic01" class="mySlides" src="img01.jpg" style="height:65%">
               <img id="pic02" class="mySlides" src="img01.jpg" style="height:65%">
               <img id="pic03" class="mySlides" src="img01.jpg" style="height:65%">
+              <img id="pic04" class="mySlides" src="img01.jpg" style="height:65%">
               <div class="w3-row-padding w3-section">
                   <div></div>
                   <img id="slide01" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(1)">
                   <img id="slide02" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(2)">
                   <img id="slide03" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(3)">
+                  <img id="slide04" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(4)">
               </div>
             </div>
     </div>

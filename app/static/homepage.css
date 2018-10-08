@@ -1,12 +1,12 @@
-/* 触发弹窗图片的样式 */
-.originThumbnails{
+/* modal pictures */
+.originThumbnails, demo w3-opacity w3-hover-opacity-off{
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
 }
-.originThumbnails:hover {opacity: 0.7;}
+.originThumbnails, demo w3-opacity w3-hover-opacity-off:hover {opacity: 0.7;}
 
-/* 弹窗背景 */
+/* modal background settings */
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -20,38 +20,34 @@
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
 }
-
-
-
-/* 图片 */
-.modal-content, .mySlides{
+/* pictures */
+.modal-content, .mySlides,.w3-section{
     margin: auto;
     display: inline-block;
     vertical-align:middle;
-    width: 80%;
-    max-width: 700px;
-
+    max-width: 1000px;
 }
 
-/* 添加动画 */
+/* add animation */
 .modal-content, .mySlides{
-    -webkit-animation-name: zoom;
+    -webkit-animation-name: fadeIn;
     -webkit-animation-duration: 0.6s;
-    animation-name: zoom;
+    animation-name: fadeIn;
     animation-duration: 0.6s;
 }
 
-@-webkit-keyframes zoom {
+
+@-webkit-keyframes fadeIn {
     from {-webkit-transform:scale(0)}
     to {-webkit-transform:scale(1)}
 }
 
-@keyframes zoom {
+@keyframes fade {
     from {transform:scale(0)}
     to {transform:scale(1)}
 }
 
-/* 关闭按钮 */
+/* close button */
 .close {
     position: absolute;
     top: 15px;

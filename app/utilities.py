@@ -62,6 +62,19 @@ def create_leftshift(source_file, userID):
         img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
     return os.path.join(IMAGE_FOLDER, userID)
 
+def create_multishift(source_file, userID):
+    '''create a left shift transformation for the image uploaded by user'''
+    nameAndType = source_file.split('.')
+    fileName = "".join(nameAndType[:-1])
+    fileType = nameAndType[-1]
+    pictureName = fileName + '-1.' + fileType
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
+        # create a multishift image
+        img.evaluate(operator='leftshift', value=1, channel='blue')
+        save_name = fileName + "-4." + fileType
+        img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
+    return os.path.join(IMAGE_FOLDER, userID)
+
 
 def check_dup(imageName, userID):
     '''check to see if there are image belong to the user in database that has the same name'''

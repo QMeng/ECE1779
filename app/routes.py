@@ -48,7 +48,6 @@ def home():
         return render_template('homePage.html', username=user.username, form=form)
     else:
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user_id), "*-1.*")
-        #加入弹窗中的两个变量
 
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
@@ -150,11 +149,14 @@ def upload():
         # Create transformation related to uploaded image.
         rightshiftDestination = create_rightshift(nameAndType, user_id)
         leftshiftDestination = create_leftshift(nameAndType, user_id)
-        #暂时不动数据库
+        multishiftDestination = create_multishift(nameAndType, user_id)
+
         saveName2= fileName + '-2.' + fileType
         saveName3= fileName + '-3.' + fileType
+        saveName4= fileName + '-4.' + fileType
         thumbnail_leftshift = create_thumbnail(saveName2, user_id)
         thumbnail_rightshift = create_thumbnail(saveName3, user_id)
+        thumbnail_multishift = create_thumbnail(saveName4, user_id)
 
         # save the image info in DB
         new_image = ImageContents(user_id=user_id, name=nameAndType, path=destination, thumbnail_path=thumbnailDestination)#不确定是否为saveName
