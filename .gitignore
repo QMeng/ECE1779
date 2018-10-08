@@ -70,3 +70,4 @@ app/thumbnails/
 images/
 thumbnails/
 .idea/workspace.xml
+venv/*
