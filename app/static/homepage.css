@@ -1,10 +1,10 @@
 /* modal pictures */
-.originThumbnails, demo w3-opacity w3-hover-opacity-off{
+.originThumbnails{
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
 }
-.originThumbnails, demo w3-opacity w3-hover-opacity-off:hover {opacity: 0.7;}
+.originThumbnails:hover{opacity: 0.7;}
 
 /* modal background settings */
 .modal {
@@ -21,30 +21,43 @@
     background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
 }
 /* pictures */
-.modal-content, .mySlides,.w3-section{
+.modal-content, .mySlides{
     margin: auto;
     display: inline-block;
     vertical-align:middle;
     max-width: 1000px;
 }
 
+.w3-section{
+    margin: auto;
+    display: inline-block;
+    vertical-align:middle;
+}
+
 /* add animation */
 .modal-content, .mySlides{
     -webkit-animation-name: fadeIn;
-    -webkit-animation-duration: 0.6s;
+    -webkit-animation-duration: 0.1s;
     animation-name: fadeIn;
-    animation-duration: 0.6s;
+    animation-duration: 0.1s;
 }
-
 
 @-webkit-keyframes fadeIn {
-    from {-webkit-transform:scale(0)}
-    to {-webkit-transform:scale(1)}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-@keyframes fade {
-    from {transform:scale(0)}
-    to {transform:scale(1)}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* close button */
@@ -64,6 +77,10 @@
     cursor: pointer;
 }
 .mySlides {display:none}
-.demo {cursor:pointer}
+.demo{
+    cursor: pointer;
+    transition: 0.3s;
+}
+.demo:hover{opacity: 0.7;}
 
 
