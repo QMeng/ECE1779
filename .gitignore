@@ -69,5 +69,5 @@ app/images/
 app/thumbnails/
 images/
 thumbnails/
-.idea/workspace.xml
+.idea/*
 venv/*
