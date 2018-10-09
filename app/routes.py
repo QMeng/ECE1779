@@ -20,6 +20,7 @@ def login():
     User home page if user is authenticated. Error messages otherwise
     '''
     form = LoginForm()
+    form1 = SignUpForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
@@ -29,7 +30,19 @@ def login():
         response = redirect(url_for('home'))
         response.set_cookie('userId', user.get_id())
         return response
-    return render_template('login.html', title='Sign In', form=form)
+    if form1.validate_on_submit():
+        user = User.query.filter_by(username=form1.username.data).first()
+        if (user is None):
+            user = User(form1.username.data, form1.email.data)
+            user.set_password(form1.password.data)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        else:
+            flash("User already signed up!")
+            return redirect(url_for('signup'))
+    return render_template('login.html', title='Sign In', form=form, form1=form1)
+
 
 
 @app.route('/home', methods=['GET', 'POST'])
@@ -183,6 +196,10 @@ def send_full(filename):
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
+@app.route('/login/background')
+def get_background():
+    '''send the full-size image to the web page'''
+    return send_from_directory(ROOT,'background-home.jpg')
 
 @app.route('/Return/')
 def return_home():

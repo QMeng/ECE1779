@@ -5,24 +5,90 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+<head>
+<link rel="stylesheet" type="text/css" href="../static/login.css">
+</head>
+    <div class="welcome">
+    <h1 style="filter:alpha(opacity=80);color:whitesmoke; font-size:62px;opacity:0.90;">Welcome to Image Uploader</h1>
+    <button hidden onclick="document.getElementById('id01').style.display='block'" style="width:auto;font-size:15px;">Sign In</button>
+    <button hidden onclick="document.getElementById('id02').style.display='block'" style="width:auto;font-size:15px;">Sign Up</button>
+    </div>
+<div id="id01" class="modal">
+    <form class="modal-content animate" action="" method="post">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <!--<img src="img_avatar2.png" alt="Login" class="avatar">-->
+      <h2>Sign In</h2>
+    </div>
+        <div class="container">
+        <form id="loginform" action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                <b>{{ form.username.label }}</b><br>
+                {{ form.username(class="username",type="text", placeholder="Enter Username",size=32) }}<br>
+                {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                <b>{{ form.password.label }}</b><br>
+                {{ form.password(class="password", type="password", placeholder="Enter Password", size=32) }}<br>
+                {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            <p>{{ form.submit(class="button", style="font-size:15px")}}</p>
+        </form>
+        </div>
     </form>
+</div>
+
+<div id="id02" class="modal">
+    <form class="modal-content animate" action="{{ url_for('signup') }}" method="post">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <!--<img src="img_avatar2.png" alt="Sign Up" class="avatar">-->
+      <h2>Sign Up</h2>
+    </div>
+        <div class="container">
+        <form action="{{ url_for('signup') }}" method="post">
+        {{ form1.hidden_tag() }}
+        <p>
+            {{ form1.username.label }}<br>
+            {{ form1.username(size=32) }}<br>
+            {% for error in form1.username.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form1.password.label }}<br>
+            {{ form1.password(size=32) }}<br>
+            {% for error in form1.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form1.password2.label }}<br>
+            {{ form1.password2(size=32) }}<br>
+            {% for error in form1.password2.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form1.email.label }}<br>
+            {{ form1.email(size=128) }}<br>
+            {% for error in form1.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form1.submit(class="button", style="font-size:15px") }}</p>
+    </form>
+        </div>
+    </form>
+</div>
+
+<script src="../static/login.js" type="text/javascript" charset="utf-8"></script>
+
 {% endblock %}
+
