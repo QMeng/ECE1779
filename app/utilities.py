@@ -1,7 +1,9 @@
+import ctypes
 from builtins import round
 
 from app.models import *
 from wand.image import Image
+from wand.api import library
 
 
 def createImageFolder(userID):
@@ -26,53 +28,71 @@ def createThumbnailFolder(userID):
 
 def create_thumbnail(source_file, userID):
     '''create thumbnail for the image uploaded by user'''
-    with Image(filename=os.path.join(IMAGE_FOLDER, userID, source_file)) as img:
+
+    pictureName = computeFileName(source_file, '-1.')
+    rightshiftName = computeFileName(source_file, '-2.')
+    blackAndWhiteName = computeFileName(source_file, '-3.')
+    sepiaName = computeFileName(source_file, '-4.')
+
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 100)
         img.resize(round(new_width), 100)
-        thumbnailName = "thumbnail_" + source_file
+        thumbnailName = "thumbnail_" + pictureName
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
+
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, rightshiftName)) as img:
+        # resize the image to produce the thumbnail
+        new_width = img.width / (img.height / 100)
+        img.resize(round(new_width), 100)
+        thumbnailName = "thumbnail_" + rightshiftName
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
+
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, blackAndWhiteName)) as img:
+        # resize the image to produce the thumbnail
+        new_width = img.width / (img.height / 100)
+        img.resize(round(new_width), 100)
+        thumbnailName = "thumbnail_" + blackAndWhiteName
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
+
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, sepiaName)) as img:
+        # resize the image to produce the thumbnail
+        new_width = img.width / (img.height / 100)
+        img.resize(round(new_width), 100)
+        thumbnailName = "thumbnail_" + sepiaName
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
+
     return os.path.join(THUMBNAIL_FOLDER, userID)
 
 
-def create_rightshift(source_file, userID):
-    '''create a level transformation for the image uploaded by user'''
-    nameAndType = source_file.split('.')
-    fileName = "".join(nameAndType[:-1])
-    fileType = nameAndType[-1]
-    pictureName = fileName + '-1.' + fileType
+def create_transformations(source_file, userID):
+    '''
+    This methods creates ans saves 3 transformations of the source file: multishift of red and blue, black and white, sepia
+    :param source_file:
+    :param userID:
+    :return: image folder path
+    '''
+    pictureName = computeFileName(source_file, '-1.')
+    rightshiftName = computeFileName(source_file, '-2.')
+    blackAndWhiteName = computeFileName(source_file, '-3.')
+    sepiaName = computeFileName(source_file, '-4.')
+
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
-        # create a rightshift image
         img.evaluate(operator='rightshift', value=1, channel='blue')
-        save_name = fileName + "-2." + fileType
-        img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
-    return os.path.join(IMAGE_FOLDER, userID)
-
-
-def create_leftshift(source_file, userID):
-    '''create a left shift transformation for the image uploaded by user'''
-    nameAndType = source_file.split('.')
-    fileName = "".join(nameAndType[:-1])
-    fileType = nameAndType[-1]
-    pictureName = fileName + '-1.' + fileType
-    with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
-        # create a leftshift image
         img.evaluate(operator='leftshift', value=1, channel='red')
-        save_name = fileName + "-3." + fileType
-        img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
-    return os.path.join(IMAGE_FOLDER, userID)
+        img.save(filename=os.path.join(IMAGE_FOLDER, userID, rightshiftName))
 
-def create_multishift(source_file, userID):
-    '''create a left shift transformation for the image uploaded by user'''
-    nameAndType = source_file.split('.')
-    fileName = "".join(nameAndType[:-1])
-    fileType = nameAndType[-1]
-    pictureName = fileName + '-1.' + fileType
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
-        # create a multishift image
-        img.evaluate(operator='leftshift', value=1, channel='blue')
-        save_name = fileName + "-4." + fileType
-        img.save(filename=os.path.join(IMAGE_FOLDER, userID, save_name))
+        img.type = 'grayscale';
+        img.save(filename=os.path.join(IMAGE_FOLDER, userID, blackAndWhiteName))
+
+    with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
+        library.MagickSepiaToneImage.argtypes = [ctypes.c_void_p, ctypes.c_double]
+        library.MagickSepiaToneImage.restype = None
+        threshold = img.quantum_range * 0.8
+        library.MagickSepiaToneImage(img.wand, threshold)
+        img.save(filename=os.path.join(IMAGE_FOLDER, userID, sepiaName))
+
     return os.path.join(IMAGE_FOLDER, userID)
 
 
@@ -83,3 +103,14 @@ def check_dup(imageName, userID):
         if (image.name == imageName):
             return True
     return False
+
+def computeFileName(imageName, trail):
+    '''
+    this method computes the correct actual file name of the image we are looking for.
+    trail as 4 values: '-1.', '-2.', '-3.', '-4.', each representing the original, multishift, black and white, sepia
+    '''
+    nameAndType = imageName.split('.')
+    fileName = "".join(nameAndType[:-1])
+    fileType = nameAndType[-1]
+    pictureName = fileName + trail + fileType
+    return pictureName
