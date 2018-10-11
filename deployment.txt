@@ -1,21 +1,26 @@
 AWS credentials:
-Username: damon.q.meng@gmail.com
-Password: submarine41
+    Username:   damon.q.meng@gmail.com
+    Password:   submarine41
 
 AWS instance:
-Location: us-east-1, N.Virginia
-Name: 'ece1779a1 QM LSH REMI'
-ID: i-0d44096bf7b7cd2a3
+    Location:   us-east-1, N.Virginia
+    Name:       ece1779a1 QM LSH REMI
+    ID:         i-0d44096bf7b7cd2a3
 
 Deployment instructions:
-0. login into AWS management console with the provided credentials. Download the key 'ece1779a1_instance', store the
-    in the .ssh folder of your computer.
-1. start the aws instance, wait for it to fully start, grab the public ip address (<IP>).
-2. open up a terminal. type: ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP> -L 5901:localhost:5901
-3. cd Desktop/ECE1779A1
-4. type: . run.sh
+    0.  login into AWS management console with the provided credentials. Download the key 'ece1779a1_instance', store
+        the in the .ssh folder of your computer.
+    1.  start the aws instance, wait for it to fully start, grab the public ip address (<IP>).
+    2.  open up a terminal. type: ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP> -L 5901:localhost:5901
+    3.  cd Desktop/ECE1779A1
+    4.  type: . run.sh
 
 To stop the web app:
-1. stop the process by press ctrl + C at the same time, or kill the process.
-2. exit the ssh session
-3. stop the AWS instance (Please do not forget to stop the aws instance :) )
+    1.  stop the process by press ctrl + C at the same time, or kill the process.
+    2.  exit the ssh session
+    3.  stop the AWS instance (Please do not forget to stop the aws instance :) )
+
+How to access the web application (after deployment):
+    Port 8080 of the AWS instance is opened for HTTP access.
+    1. From the AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
+    2. From your computer, open any type of browser, type 'http//<public ip of aws instance>:8080/' in the address bar.
