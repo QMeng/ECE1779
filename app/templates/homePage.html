@@ -1,50 +1,78 @@
 {% extends "base.html" %}
 {% block links %}
-    <a href="/home">Home</a>
-    <a href="/logout">Log Out</a>
+<ul>
+  <li><a class="active" href="/home">Home</a></li>
+  <li><a href="/logout">Logout</a></li>
+</ul>
 {% endblock %}
+
 {% block content %}
 <head>
 <link rel="stylesheet" type="text/css" href="../static/homepage.css">
-</head>
 
-<h1>Hi, {{ username }}!</h1>
-<form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <h1>Upload images</h1>
-    <hr>
-    <strong>Images:</strong><br>
-    {{ form.hidden_tag() }} <br>
-    {{ form.file }} <br>
-    {% for error in form.file.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-    {% endfor %}
-    <input type="submit" value="Upload!" id="upload-button">
-</form>
-    <hr>
-    {% for image_name in image_names %}
-        <img class="originThumbnails" src="{{url_for('send_thumbnail', filename=image_name)}}">
-    {% endfor %}
-        <!-- modals -->
-        <div id="myModal" class="modal">
+</head>
+<div id="firstblock" class="transparentLayer">
+    <br>
+    <br>
+    <div class="homePage_banner transparentLayer">
+        <div class="greetings">
+        <h1>Hi, {{ username }}!</h1>
+            <div class="intro-text">
+            <p>Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.
+            </p>
+            </div>
+        </div>
+        <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="upload-widgets">
+                {{ form.file.label(id="viewFile") }}
+                {{ form.file() }}
+                {% for error in form.file.errors %}
+                    <span style="color: white;">[{{ error }}]</span>
+                {% endfor %}
+                <input type="submit" value="upload" id="upload-button">
+            </div>
+        </form>
+    <!--p-->
+    </div>
+</div>
+
+<!-- thumbnails showing part -->
+<div class="thumbnails-block">
+    <div class="thumbnail-container">
+        <div class="row">
+            {% for image_name in image_names %}
+                <div class="col">
+                    <div class="thumbnail-block">
+                        <img class="originThumbnails" src="{{url_for('send_thumbnail', filename=image_name)}}">
+                         <p class="descriptions">{{ image_name }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- modals -->
+<div id="myModal" class="modal">
         <!-- close button -->
         <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
         <!-- modal block -->
         <img class="modal-content" id="img01">
             <!-- slides block -->
             <div class="w3-content">
-              <img id="pic01" class="mySlides" src="img01.jpg" style="height:65%">
-              <img id="pic02" class="mySlides" src="img01.jpg" style="height:65%">
-              <img id="pic03" class="mySlides" src="img01.jpg" style="height:65%">
-              <img id="pic04" class="mySlides" src="img01.jpg" style="height:65%">
+              <img id="pic01" class="mySlides" src="img01.jpg">
+              <img id="pic02" class="mySlides" src="img01.jpg">
+              <img id="pic03" class="mySlides" src="img01.jpg">
+              <img id="pic04" class="mySlides" src="img01.jpg">
               <div class="w3-row-padding w3-section">
-                  <div></div>
                   <img id="slide01" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(1)">
                   <img id="slide02" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(2)">
                   <img id="slide03" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(3)">
                   <img id="slide04" class="demo w3-opacity w3-hover-opacity-off" src="img02.jpg" style="width:10%" onclick="currentDiv(4)">
               </div>
             </div>
-    </div>
+</div>
 <script src="../static/homepage.js" type="text/javascript" charset="utf-8"></script>
+
 {% endblock %}
 

@@ -59,7 +59,7 @@ def home():
     if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, user.get_id())):
         return render_template('homePage.html', username=user.username, form=form)
     else:
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1*")
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
 
@@ -185,10 +185,10 @@ def send_full(filename):
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
-@app.route('/login/background')
-def get_background():
+@app.route('/login/background/<filename>')
+def get_background(filename):
     '''send the full-size image to the web page'''
-    return send_from_directory(ROOT,'background-home.jpg')
+    return send_from_directory(ROOT, filename)
 
 @app.route('/Return/')
 def return_home():

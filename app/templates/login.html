@@ -1,18 +1,23 @@
 {% extends "base.html" %}
 
 {% block links %}
-    <a href="/signup">New user? Sign up here!</a>
+    <a hidden href="/signup" style="color:white;">New user? Sign up here!</a>
 {% endblock %}
 
 {% block content %}
 <head>
 <link rel="stylesheet" type="text/css" href="../static/login.css">
 </head>
-    <div class="welcome">
-    <h1 style="filter:alpha(opacity=80);color:whitesmoke; font-size:62px;opacity:0.90;">Welcome to Image Uploader</h1>
-    <button hidden onclick="document.getElementById('id01').style.display='block'" style="width:auto;font-size:15px;">Sign In</button>
-    <button hidden onclick="document.getElementById('id02').style.display='block'" style="width:auto;font-size:15px;">Sign Up</button>
+    <div class="welcome-block">
+    <h1 id="welcome-words">Welcome to Image Uploader</h1>
+    <div class="buttons">
+    <button class="home-button" onclick="document.getElementById('id01').style.display='block'" style="font-size:15px;">Sign In</button>
+    <button class="home-button" onclick="document.getElementById('id02').style.display='block'" style="font-size:15px;">Sign Up</button>
     </div>
+    </div>
+
+
+
 <div id="id01" class="modal">
     <form class="modal-content animate" action="" method="post">
     <div class="imgcontainer">
@@ -23,21 +28,21 @@
         <div class="container">
         <form id="loginform" action="" method="post">
             {{ form.hidden_tag() }}
-            <p>
-                <b>{{ form.username.label }}</b><br>
-                {{ form.username(class="username",type="text", placeholder="Enter Username",size=32) }}<br>
+            <div>
+                {{ form.username(class="username",type="text", placeholder="Username",size=32) }}<br>
                 {% for error in form.username.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
-            </p>
-            <p>
-                <b>{{ form.password.label }}</b><br>
-                {{ form.password(class="password", type="password", placeholder="Enter Password", size=32) }}<br>
+            </div>
+            <hr style="color:lightgrey;">
+            <div>
+                {{ form.password(class="password", type="password", placeholder="Password", size=32) }}<br>
                 {% for error in form.password.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
-            </p>
-            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            </div>
+            <hr style="color:lightgrey;">
+            <p>{{ form.remember_me() }} {{ form.remember_me.label(style="color:gray") }}</p>
             <p>{{ form.submit(class="button", style="font-size:15px")}}</p>
         </form>
         </div>
@@ -54,35 +59,35 @@
         <div class="container">
         <form action="{{ url_for('signup') }}" method="post">
         {{ form1.hidden_tag() }}
-        <p>
-            {{ form1.username.label }}<br>
-            {{ form1.username(size=32) }}<br>
+        <div>
+            {{ form1.username(placeholder="Username",size=32) }}<br>
             {% for error in form1.username.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form1.password.label }}<br>
-            {{ form1.password(size=32) }}<br>
+        </div>
+        <hr style="color:lightgrey;">
+        <div>
+            {{ form1.password(placeholder="Password",size=32) }}<br>
             {% for error in form1.password.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form1.password2.label }}<br>
-            {{ form1.password2(size=32) }}<br>
+        </div>
+        <hr style="color:lightgrey;">
+        <div>
+            {{ form1.password2(placeholder="Repeat Password",size=32) }}<br>
             {% for error in form1.password2.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form1.email.label }}<br>
-            {{ form1.email(size=128) }}<br>
+        </div>
+        <hr style="color:lightgrey;">
+        <div>
+            {{ form1.email(placeholder="Email", size=128) }}<br>
             {% for error in form1.email.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>{{ form1.submit(class="button", style="font-size:15px") }}</p>
+        </div>
+        <hr style="color:lightgrey;">
+        <div>{{ form1.submit(class="button", style="font-size:15px") }}</div>
     </form>
         </div>
     </form>

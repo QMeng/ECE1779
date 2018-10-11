@@ -69,4 +69,13 @@ function showDivs(n) {
   dots[slideIndex-1].className += " w3-opacity-off";
 }
 
-
+//  注意：要在图片加载完之后才能获取到图片对象
+    window.onload = function() {
+        var box = document.getElementById("box");
+        var imgs = box.getElementsByTagName('img');
+        for (let i = 0; i < imgs.length; i++) {
+        var w = imgs[i].offsetWidth,
+        h = imgs[i].offsetHeight
+    w > h ? imgs[i].style.width = '100%' : imgs[i].style.height = '100%'
+    }
+};
