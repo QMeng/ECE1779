@@ -1,0 +1,14 @@
+user document
+
+1.welcome page.
+The start page is a welcome page for the image uploader website where users are able to login in or sign up.
+2.Sign up.
+For those who are new to this website, they have to create a new account by clicking sign up button at the welcome page.  After that, the sign up window will pop up and users should fill the username, password, repeat password and email address to finish signing up to this system.
+3.Sign in.
+For those who has already signed up from this system, they can directly login in their accounts by clicking the sign in button at the welcome page.
+4.logout.
+Users can logout at the home page after they sign in and they will be directed to welcome page after they logout.
+5.Upload files at home page.
+After signing in from the welcome page, users will be directed to home page where they can upload images to the server. In order to upload desired images, users should click select image button to select the image they expect to upload and click open to return home page. Then, click upload button at the home page to upload the selected image and there will be a website to show if it is successful to be uploaded. There will be errors when users try to upload the image which has same name as they uploaded before.  One thing should be noticed is that only jpg and png images can be uploaded and users can only upload one image each time.
+6. Thumbnails and three related transformations.
+After uploading the image, a thumbnail of uploaded image will created at the bottom of the home page and users can browse thumbnails of their uploaded photos. Moreover, users can see the full resolution version of uploaded picture by clicking the thumbnail on a  popping up window and three transformations will show on that window as well. Users can return to home page by clicking the close icon at the right corn while browsing the full resolution version of uploaded picture and related transformations.
