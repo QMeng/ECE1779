@@ -9,8 +9,8 @@ Zou Ming,       zouming2,   1003495611
 
 Project introduction:
     This project builds a image uploading web application using flask, mysql, imagemagick, werkzeug.
-    This web application lets registered users upload images into their accounts/pages, and creates 3 transformations
-    for the uploaded images. For new users, there is option for sign up as well.
+    This web application lets registered users upload images into their accounts/pages, and creates 3 transformations 
+    (MultiShift, Black & White, Sepia) for the uploaded images. For new users, there is option for sign up as well.
     The web application is deployed on an AWS instance created with provided AMI. Deployment instructions and AWS
     credentials are stored in deployment.txt.
 
@@ -22,9 +22,9 @@ How to access the web application (after deployment):
 Project structure layout:
     ECE1779A1
         -> imageUploader.py
-        -> venv
-        -> images (will be created after web app started running)
-        -> thumbnails (will be created after web app started running)
+        -> venv/
+        -> images/ (will be created after web app started running)
+        -> thumbnails/ (will be created after web app started running)
         -> run.sh
         -> ECE1779A1.sql
         -> app
