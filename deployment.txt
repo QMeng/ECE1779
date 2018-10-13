@@ -11,9 +11,11 @@ Deployment instructions:
     0.  login into AWS management console with the provided credentials. Download the key 'ece1779a1_instance', store
         the in the .ssh folder of your computer.
     1.  start the aws instance, wait for it to fully start, grab the public ip address (<IP>).
-    2.  open up a terminal. type: ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP> -L 5901:localhost:5901
+    2.  open up a terminal. command: 
+            ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP> -L 5901:localhost:5901
     3.  cd Desktop/ECE1779A1
-    4.  type: . run.sh
+    4.  kick off the application. command: 
+            . run.sh
 
 To stop the web app:
     1.  stop the process by press ctrl + C at the same time, or kill the process.
