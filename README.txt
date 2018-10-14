@@ -71,6 +71,17 @@ Detailed project structure:
         by API client (for example, Postman).
     14. app/utilities.py contains utility functions like creating thumbnails, creating transformations for images, etc.
 
+/test/FileUpload URI:
+    This is the URI for automatic image uploading. This URI was implemented exactly according to the requirements listed
+    on the project page.
+
+    relative URL = /test/FileUpload
+    enctype = multipart/form-data
+    method = post
+    field1 name = userID type = string
+    field2 name = password type = string
+    field2 name = uploadedfile type = file
+
 Database table schema:
     2 tables were created and used in this project. UserInfo is used for storing user information. ImageInfo is used
     for storing image information.
