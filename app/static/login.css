@@ -7,20 +7,41 @@ html{
 
 /* welcome lies in center */
 .welcome-block{
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            -moz-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            -o-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
+    position: absolute;
+    top: 32%;
+    width: 100%;
+    vertical-align: center;
+    text-align: center;
         }
+
 /* welcome words */
-#welcome-words{
+#welcome-text{
     color:whitesmoke;
     font-size:62px;
     opacity:0.90;
+}
+
+/* set buttons' position */
+.buttons{
+    margin-left: auto;
+    margin-right: auto;
+    width: 9%;
+
+}
+/* button style */
+button[class="home-button"]{
+    border-radius: 8px;
+    width:100%;
+    border: 3px solid white; /* white */
+    background-color:rgba(0,0,0,0);
+    opacity:0.90;
+    font-size:15px;
+    margin-top:30px;
+}
+
+/* style of modal rim radius */
+.modal-content{
+    border-radius: 8px;
 }
 
 /* textline focus animation */
@@ -30,31 +51,6 @@ input:focus{
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 }
-
-/* set buttons' position */
-.buttons{
-    position: absolute;
-    top:140%;
-    border-radius:8px;
-    left:40%;
-}
-/* button style */
-.home-button{
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    width:100%;
-    margin-top: 40px;
-    margin-bottom: 0px;
-    border: 3px solid white; /* white */
-    background-color:rgba(0,0,0,0);
-    opacity:0.90;
-}
-.modal-content{
-    border-radius: 8px;
-}
-
-
 
 /* Full-width input fields */
 input[type=text], input[type=password] {
@@ -81,7 +77,7 @@ button, .button{
 }
 
 button:hover {
-    opacity: 0.8;
+    opacity: 0.65;
 }
 
 /* Extra styles for the cancel button */
@@ -177,4 +173,16 @@ span.psw {
        width: 100%;
     }
 }
-/* a tryout of showing better thumbnails */
+/* a tryout of showing better error messages */
+#errorMessages-block{
+    width:100%;
+}
+#errorMessage{
+color: white;
+opacity: 0.9;
+background-color: rgba(0,0,0,0);
+text-align: center;
+display: inline;
+width: 100%;
+margin-top: 60px;
+}

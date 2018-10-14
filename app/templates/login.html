@@ -8,14 +8,40 @@
 <head>
 <link rel="stylesheet" type="text/css" href="../static/login.css">
 </head>
-    <div class="welcome-block">
-    <h1 id="welcome-words">Welcome to Image Uploader</h1>
-    <div class="buttons">
-    <button class="home-button" onclick="document.getElementById('id01').style.display='block'" style="font-size:15px;">Sign In</button>
-    <button class="home-button" onclick="document.getElementById('id02').style.display='block'" style="font-size:15px;">Sign Up</button>
-    </div>
-    </div>
 
+
+<div class="welcome-block">
+        <h1 id="welcome-text">Welcome to Image Uploader</h1>
+        <div class="buttons">
+        <button class="home-button" onclick="document.getElementById('id01').style.display='block'">Sign In</button>
+        <button class="home-button" onclick="document.getElementById('id02').style.display='block'">Sign Up</button>
+        </div>
+        <div id="errorMessages-block">
+        <!-- sign in errors -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul style="background-color: rgba(0,0,0,0)">
+                    {% for message in messages %}
+                        <li id="errorMessage">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- sign up errors -->
+            {% for error in form1.username.errors %}
+                <p style="color: white;">[{{ error }}]</p>
+            {% endfor %}
+            {% for error in form1.password.errors %}
+                <span style="color: white;">[{{ error }}]</span>
+            {% endfor %}
+            {% for error in form1.password2.errors %}
+                <span style="color: white;">[{{ error }}]</span>
+            {% endfor %}
+            {% for error in form1.email.errors %}
+                <p style="color: white;">[{{ error }}]</p>
+            {% endfor %}
+        </div>
+    </div>
 
 
 <div id="id01" class="modal">
@@ -43,51 +69,39 @@
             </div>
             <hr style="color:lightgrey;">
             <p>{{ form.remember_me() }} {{ form.remember_me.label(style="color:gray") }}</p>
-            <p>{{ form.submit(class="button", style="font-size:15px")}}</p>
+            <p>{{ form.submit1(class="button", style="font-size:15px")}}</p>
         </form>
         </div>
     </form>
 </div>
 
 <div id="id02" class="modal">
-    <form class="modal-content animate" action="{{ url_for('signup') }}" method="post">
+    <form class="modal-content animate" action="{{ url_for('login') }}" method="post">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
       <!--<img src="img_avatar2.png" alt="Sign Up" class="avatar">-->
       <h2>Sign Up</h2>
     </div>
         <div class="container">
-        <form action="{{ url_for('signup') }}" method="post">
+        <form id="signupform" action="{{ url_for('login') }}" method="post">
         {{ form1.hidden_tag() }}
         <div>
             {{ form1.username(placeholder="Username",size=32) }}<br>
-            {% for error in form1.username.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
         </div>
         <hr style="color:lightgrey;">
         <div>
             {{ form1.password(placeholder="Password",size=32) }}<br>
-            {% for error in form1.password.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
         </div>
         <hr style="color:lightgrey;">
         <div>
             {{ form1.password2(placeholder="Repeat Password",size=32) }}<br>
-            {% for error in form1.password2.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
         </div>
         <hr style="color:lightgrey;">
         <div>
             {{ form1.email(placeholder="Email", size=128) }}<br>
-            {% for error in form1.email.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
         </div>
         <hr style="color:lightgrey;">
-        <div>{{ form1.submit(class="button", style="font-size:15px") }}</div>
+        <div>{{ form1.submit2(class="button", style="font-size:15px") }}</div>
     </form>
         </div>
     </form>

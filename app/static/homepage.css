@@ -2,10 +2,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 /* background photo of first picture */
 #firstblock{
     background:url(http://0.0.0.0:8080/login/background/background-home.jpeg) no-repeat center;
-    background-size:100% 100%;
     width:100%;
     height:40%;
     min-height: 360px;
+    background-size: auto 100%;
 }
 
 .transparentLayer{
@@ -40,6 +40,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 input[type=file]{
 display:none;
+font-size:0px;
 }
 
 #viewFile:before{
@@ -101,10 +102,25 @@ display:none;
     background-color: #fff;
     background-clip: border-box;
 }
-.col{
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
+.row{
+        /* this is the latest codes */
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        background-color: rgba(0,0,0,0);
 }
+
+.row div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 暂时取消colomn */
+.col{
+
+}
+
 .thumbnail-block{
     text-align: center;
     position: relative;
@@ -115,8 +131,14 @@ display:none;
     word-wrap: break-word;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
+    width:388px;
+    height:252.5px;
+    overflow: hidden;
+
 }
+
 .descriptions{
+    display: none;
     max-width: 100%;
     text-align:center;
 }
@@ -126,9 +148,7 @@ display:none;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
-    height:200px;
     box-sizing: border-box;
-
 }
 .originThumbnails:hover{opacity: 0.7;}
 
@@ -215,3 +235,60 @@ display:none;
 }
 .demo:hover{opacity: 0.7;}
 
+
+.upload_block {
+
+    -moz-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    -moz-transition-delay: 0s;
+    transition-delay: 0s;
+    opacity: 1;
+    visibility: visible;
+    border: 1px solid #ccc;
+
+}
+
+#wrap {
+    bottom:24px;
+    right:24px;
+    position:fixed;
+    text-align:center;
+    height: 105px;
+    display: none;
+    opacity: 0;
+    transition: all 0.4s linear;
+    background-color: white;
+
+}
+
+.upload_files_info{
+    background-color: #fff;
+    overflow: auto;
+    /*position: relative;*/
+    width: 360px;
+    margin-top: 60px;
+    height: 45px;
+}
+
+.upload_title{
+    width: 362px;
+    height: 54px;
+    background: rgb(32, 33, 36);
+    top: 0px;
+    position: absolute;
+}
+
+#close_button{
+    top: 8px;
+    font-size: 36px;
+    right: 24px;
+    transition: 0.3s;
+    font-weight: normal;
+}
+
+#upload-filename{
+    position: absolute;
+    bottom: 4px;
+    left: 40px;
+    font-size: 13px;
+}

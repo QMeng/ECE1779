@@ -1,7 +1,7 @@
 //modal settings
 var modal = document.getElementById('myModal');
 var img_list = document.getElementsByClassName('originThumbnails');
-for(var i=0; i<img_list.length; i++){
+for(let i=0; i<img_list.length; i++){
     temp = img_list[i];
     temp.onclick = function(){
         //change the pic src
@@ -39,15 +39,10 @@ var span = document.getElementsByClassName("close")[0];
 // click (x) to close modal
 span.onclick = function() {
   modal.style.display = "none";
-}
-
+};
 
 var slideIndex = 1;
 showDivs(slideIndex);
-
-function plusDivs(n) {
-  showDivs(slideIndex += n);
-}
 
 function currentDiv(n) {
   showDivs(slideIndex = n);
@@ -69,13 +64,51 @@ function showDivs(n) {
   dots[slideIndex-1].className += " w3-opacity-off";
 }
 
-//  注意：要在图片加载完之后才能获取到图片对象
-    window.onload = function() {
-        var box = document.getElementById("box");
-        var imgs = box.getElementsByTagName('img');
-        for (let i = 0; i < imgs.length; i++) {
-        var w = imgs[i].offsetWidth,
-        h = imgs[i].offsetHeight
-    w > h ? imgs[i].style.width = '100%' : imgs[i].style.height = '100%'
+window.onload = function() {
+    var box = document.getElementById("box");
+    var imgs = box.getElementsByTagName('img');
+    for (let i = 0; i < imgs.length; i++) {
+        var w = imgs[i].offsetWidth,h = imgs[i].offsetHeight;
+            w > h ? imgs[i].style.width = '100%' : imgs[i].style.height = '100%'
     }
 };
+
+
+//just a test
+var upload_banner = document.getElementById("wrap");
+var tester = document.getElementById("upload-filename").innerHTML;
+
+
+//if (tester != ''){
+
+//}
+function showing(){//定时器
+    if (!(tester === '')){
+        upload_banner.style.display = 'block';
+}
+
+}
+function hiding(){//定时器
+
+    upload_banner.style.display = 'none';
+
+}
+
+
+upload_banner.onclick = hiding;
+showing();
+setTimeout(function(){//定时器
+    //upload_banner.css.fadeOut();
+    upload_banner.style.opacity = 1.0;
+},14);
+
+setTimeout(function(){//定时器
+    //upload_banner.css.fadeOut();
+    //upload_banner.style.opcaity = 0;
+    //hiding();
+}, 6000);
+
+
+
+
+

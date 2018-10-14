@@ -9,8 +9,9 @@
 {% block content %}
 <head>
 <link rel="stylesheet" type="text/css" href="../static/homepage.css">
-
 </head>
+
+
 <div id="firstblock" class="transparentLayer">
     <br>
     <br>
@@ -26,11 +27,12 @@
             {{ form.hidden_tag() }}
             <div class="upload-widgets">
                 {{ form.file.label(id="viewFile") }}
+            <div><p id="upload-info"></p></div>
                 {{ form.file() }}
                 {% for error in form.file.errors %}
-                    <span style="color: white;">[{{ error }}]</span>
+                        <span style="color: white; margin-left: 20px;">[{{ error }}]</span>
                 {% endfor %}
-                <input type="submit" value="upload" id="upload-button">
+                    <input type="submit" value="upload" id="upload-button">
             </div>
         </form>
     <!--p-->
@@ -39,8 +41,8 @@
 
 <!-- thumbnails showing part -->
 <div class="thumbnails-block">
-    <div class="thumbnail-container">
-        <div class="row">
+    <div class="thumbnail-container" >
+        <div class="row" id="box">
             {% for image_name in image_names %}
                 <div class="col">
                     <div class="thumbnail-block">
@@ -51,6 +53,15 @@
             {% endfor %}
         </div>
     </div>
+    <div id='wrap' class="upload_block">
+        <div class="upload_title">
+            <span id="close_button" class="close">&times;</span>
+            <p style="color:white;top: 3px;position: absolute;left: 36px;">1 upload complete</p>
+        </div>
+        <div class="upload_files_info">
+            <p id="upload-filename">{{ form.file.data.filename }}</p>
+        </div>
+</div>
 </div>
 <!-- modals -->
 <div id="myModal" class="modal">

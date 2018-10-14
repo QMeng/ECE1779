@@ -21,7 +21,7 @@ def login():
     '''
     form = LoginForm()
     form1 = SignUpForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.submit1.data:
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
@@ -30,7 +30,7 @@ def login():
         response = redirect(url_for('home'))
         response.set_cookie('userId', user.get_id())
         return response
-    if form1.validate_on_submit():
+    if form1.validate_on_submit() and form1.submit2.data:
         user = User.query.filter_by(username=form1.username.data).first()
         if (user is None):
             user = User(form1.username.data, form1.email.data)
@@ -61,28 +61,6 @@ def home():
     else:
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    '''
-    This is the sign up page. User will need to fill the user name, password, email fields in order to sign up.
-    Identical usernames will be detected.
-    '''
-    form = SignUpForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if (user is None):
-            user = User(form.username.data, form.email.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('login'))
-        else:
-            flash("User already signed up!")
-            return redirect(url_for('signup'))
-    return render_template('signUp.html', title='Sign Up', form=form)
-
 
 @app.route('/logout')
 def logout():
@@ -146,7 +124,10 @@ def upload():
 
         # check uploading duplications.
         if check_dup(imageName, user_id):
-            return render_template("error_page.html")
+            user = load_user(request.cookies.get('userId'))
+            image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
+            upload_failure = '1 upload incomplete'
+            return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=upload_failure)
 
         # save uploading files
 
@@ -164,11 +145,14 @@ def upload():
                                   thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
-        return render_template("complete_display_image.html", image_name=imageName)
+        #return render_template("complete_display_image.html", image_name=imageName, form=form)
+        user = load_user(request.cookies.get('userId'))
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
     else:
         user = load_user(request.cookies.get('userId'))
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1*")
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
 
