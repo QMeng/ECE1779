@@ -31,16 +31,18 @@ for(let i=0; i<img_list.length; i++){
         pic2.src = changed_url01 + "/full";
         pic3.src = changed_url03 + "/full";
         pic4.src = changed_url04 + "/full";
+        slides1.click();
     }
 }
 // get <span> element to set close button
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementById("modalclose");
 
 // click (x) to close modal
 span.onclick = function() {
   modal.style.display = "none";
 };
 
+// slides part
 var slideIndex = 1;
 showDivs(slideIndex);
 
@@ -77,25 +79,30 @@ window.onload = function() {
 //just a test
 var upload_banner = document.getElementById("wrap");
 var tester = document.getElementById("upload-filename").innerHTML;
+document.getElementById("uploadTitle").innerHTML;
+var fail_text = document.getElementById("check").innerHTML;
+var upload_close = document.getElementById("close_button");
 
-
-//if (tester != ''){
-
-//}
 function showing(){//定时器
     if (!(tester === '')){
+        if(!(fail_text === ''))
+        {
+        document.getElementById("uploadTitle").innerHTML = fail_text;
+        }
+        else{
+        document.getElementById("uploadTitle").innerHTML = '1 upload complete';
+        }
         upload_banner.style.display = 'block';
 }
 
 }
 function hiding(){//定时器
-
     upload_banner.style.display = 'none';
-
 }
 
 
-upload_banner.onclick = hiding;
+upload_close.onclick = hiding;
+//document.getElementById("uploadTitle").innerHTML = fail_text;
 showing();
 setTimeout(function(){//定时器
     //upload_banner.css.fadeOut();

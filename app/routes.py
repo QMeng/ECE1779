@@ -113,6 +113,7 @@ def upload():
     This is the upload page. User can upload images.
     '''
     form = FileForm()
+    upload_failure = '1 upload failed: '
     if form.validate_on_submit():
         f = form.file.data
         imageName = secure_filename(f.filename)
@@ -126,8 +127,8 @@ def upload():
         if check_dup(imageName, user_id):
             user = load_user(request.cookies.get('userId'))
             image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-            upload_failure = '1 upload incomplete'
-            return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=upload_failure)
+            duplicate_err = 'file already existed'
+            return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=duplicate_err)
 
         # save uploading files
 
@@ -151,9 +152,11 @@ def upload():
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
     else:
+        print('here')
+        format_err = upload_failure + 'file type unsupported'
         user = load_user(request.cookies.get('userId'))
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=format_err)
 
 
 @app.route('/upload/<filename>')

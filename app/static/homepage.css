@@ -209,8 +209,8 @@ font-size:0px;
   }
 }
 
-/* close button */
-.close {
+/* modalclose button */
+#modalclose {
     position: absolute;
     top: 15px;
     right: 35px;
@@ -219,8 +219,8 @@ font-size:0px;
     font-weight: bold;
     transition: 0.3s;
 }
-.close:hover,
-.close:focus {
+#modalclose:hover,
+#modalclose:focus {
     color: #bbb;
     text-decoration: none;
     cursor: pointer;
@@ -279,11 +279,20 @@ font-size:0px;
 }
 
 #close_button{
-    top: 8px;
+    top: 7px;
     font-size: 36px;
     right: 24px;
     transition: 0.3s;
     font-weight: normal;
+    position: absolute;
+    color: #f1f1f1;
+}
+#close_button:focus{
+    cursor: pointer;
+}
+#close_button:hover{
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 #upload-filename{

@@ -19,7 +19,7 @@
         <div class="greetings">
         <h1>Hi, {{ username }}!</h1>
             <div class="intro-text">
-            <p>Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.
+            <p>Upload photographs here to create an album of your own
             </p>
             </div>
         </div>
@@ -29,9 +29,6 @@
                 {{ form.file.label(id="viewFile") }}
             <div><p id="upload-info"></p></div>
                 {{ form.file() }}
-                {% for error in form.file.errors %}
-                        <span style="color: white; margin-left: 20px;">[{{ error }}]</span>
-                {% endfor %}
                     <input type="submit" value="upload" id="upload-button">
             </div>
         </form>
@@ -55,8 +52,9 @@
     </div>
     <div id='wrap' class="upload_block">
         <div class="upload_title">
-            <span id="close_button" class="close">&times;</span>
-            <p style="color:white;top: 3px;position: absolute;left: 36px;">1 upload complete</p>
+            <span id="close_button">&times;</span>
+            <p id="uploadTitle" style="color:white;top: 3px;position: absolute;left: 36px;">1 upload complete</p>
+            <p id="check" style="color:white;display:none;">{{ check }}</p>
         </div>
         <div class="upload_files_info">
             <p id="upload-filename">{{ form.file.data.filename }}</p>
@@ -66,7 +64,7 @@
 <!-- modals -->
 <div id="myModal" class="modal">
         <!-- close button -->
-        <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+        <span id="modalclose" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
         <!-- modal block -->
         <img class="modal-content" id="img01">
             <!-- slides block -->
