@@ -170,10 +170,10 @@ def send_full(filename):
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
-@app.route('/login/background/<filename>')
-def get_background(filename):
-    '''send the full-size image to the web page'''
-    return send_from_directory(os.path.join(ROOT, "app", "static"), filename)
+#@app.route('/login/background/<filename>')
+#def get_background(filename):
+#    '''send the full-size image to the web page'''
+#    return send_from_directory(os.path.join(ROOT, "app", "static"), filename)
 
 @app.route('/Return/')
 def return_home():
