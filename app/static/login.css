@@ -1,0 +1,183 @@
+body {font-family: Arial, Helvetica, sans-serif;}
+/* background */
+html{
+  background: url(http://0.0.0.0:8080/login/background/background-home02.jpeg) no-repeat center fixed;
+  background-size: cover;
+}
+
+/* welcome lies in center */
+.welcome-block{
+    position: absolute;
+    top: 32%;
+    width: 99%;
+    vertical-align: center;
+    text-align: center;
+        }
+
+/* welcome words */
+#welcome-text{
+    color:whitesmoke;
+    font-size:62px;
+    opacity:0.90;
+}
+
+/* set buttons' position */
+.buttons{
+    margin-left: auto;
+    margin-right: auto;
+    width: 9%;
+
+}
+/* button style */
+button[class="home-button"]{
+    border-radius: 8px;
+    width:100%;
+    border: 3px solid white; /* white */
+    background-color:rgba(0,0,0,0);
+    opacity:0.90;
+    font-size:15px;
+    margin-top:30px;
+}
+
+/* style of modal rim radius */
+.modal-content{
+    border-radius: 8px;
+}
+
+/* textline focus animation */
+input:focus{
+     border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 0px 0; /*previous 8px*/
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius:8px;
+    border: rgba(0,0,0,0);
+}
+
+/* Set a style for all buttons */
+button, .button{
+    background-color: #153441;/*#4CAF50 */
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 8px;
+}
+
+button:hover {
+    opacity: 0.65;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #999999;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+.container{
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.3s;
+    animation: animatezoom 0.3s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+/* a tryout of showing better error messages */
+#errorMessages-block{
+    width:100%;
+}
+#errorMessage{
+color: white;
+opacity: 0.9;
+background-color: rgba(0,0,0,0);
+text-align: center;
+display: inline;
+width: 100%;
+margin-top: 60px;
+}

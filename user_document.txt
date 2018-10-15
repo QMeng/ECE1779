@@ -1,0 +1,48 @@
+User Manual
+  This file is used to guide users to be familiar with image uploader website.
+
+Structures
+  Welcome page
+    -> Sign Up
+    -> Sign In
+  Home page
+    -> logout
+    -> select image
+    -> upload button
+    -> thumbnails
+  Image Detail PopUp
+    -> Original Image
+    -> Transformations: MultiShift, Black & White, Sepia
+  Successful upload page
+    -> return home
+  Error page
+    -> return home
+
+Detailed explanations:
+  1. Welcome page.
+    The landing page is a welcome page for the image uploader website where users are able to login in or sign up.
+  2. Sign up.
+    For those who are new to this website, they have to create a new account by clicking sign up button at the welcome
+    page. After that, the sign up window will pop up and users should fill the username, password, repeat password and
+    email address to finish signing up to this system. Please note there is a validation on the inputted values in 
+    password and repeat password field, they must match each other. 
+  3. Sign in.
+    For those who has already signed up from this system, they can directly login in their accounts by clicking the sign
+    in button at the welcome page. Password will be validated. 
+  4.logout.
+    Users can logout at the home page after they sign in and they will be directed to welcome page after they logout.
+  5. Upload files at home page.
+    After signing in on the welcome page, users will be directed to home page where they can upload images to the server.
+    Also, previous uploaded images' thumbnails will be displayed on the home page (below the image upload sections) as well.
+    In order to upload desired images, users should click select image button to select the image they want to upload. 
+    Then, click upload button to upload the selected image and there will be a webpage to show if it is successfull
+    uploaded. There will be errors when users try to upload the image which has same name as they uploaded before. 
+    One thing should be noticed is that only jpg and png images can be uploaded and users can only upload one image
+    each time.
+  6. Thumbnails and three related transformations.
+    After uploading the image, a thumbnail of uploaded image will created at the bottom of the home page and users can
+    browse thumbnails of their uploaded photos. Moreover, users can see the full resolution version of uploaded picture
+    by clicking the thumbnail of the image. A popup window will be displayed and three transformations (MultiShift, 
+    Black & White, Sepia) will showed on that window as well. Each transformation will be displayed by simply clicking
+    the thumbnails of them on the pop up window. Users can return to home page by clicking the close icon at the upper 
+    right corner.

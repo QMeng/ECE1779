@@ -20,7 +20,8 @@ def login():
     User home page if user is authenticated. Error messages otherwise
     '''
     form = LoginForm()
-    if form.validate_on_submit():
+    form1 = SignUpForm()
+    if form.validate_on_submit() and form.submit1.data:
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
@@ -29,7 +30,19 @@ def login():
         response = redirect(url_for('home'))
         response.set_cookie('userId', user.get_id())
         return response
-    return render_template('login.html', title='Sign In', form=form)
+    if form1.validate_on_submit() and form1.submit2.data:
+        user = User.query.filter_by(username=form1.username.data).first()
+        if (user is None):
+            user = User(form1.username.data, form1.email.data)
+            user.set_password(form1.password.data)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        else:
+            flash("User already signed up!")
+            return redirect(url_for('signup'))
+    return render_template('login.html', title='Sign In', form=form, form1=form1)
+
 
 
 @app.route('/home', methods=['GET', 'POST'])
@@ -46,30 +59,8 @@ def home():
     if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, user.get_id())):
         return render_template('homePage.html', username=user.username, form=form)
     else:
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1*")
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    '''
-    This is the sign up page. User will need to fill the user name, password, email fields in order to sign up.
-    Identical usernames will be detected.
-    '''
-    form = SignUpForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if (user is None):
-            user = User(form.username.data, form.email.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('login'))
-        else:
-            flash("User already signed up!")
-            return redirect(url_for('signup'))
-    return render_template('signUp.html', title='Sign Up', form=form)
-
 
 @app.route('/logout')
 def logout():
@@ -122,6 +113,7 @@ def upload():
     This is the upload page. User can upload images.
     '''
     form = FileForm()
+    upload_failure = '1 upload failed: '
     if form.validate_on_submit():
         f = form.file.data
         imageName = secure_filename(f.filename)
@@ -133,10 +125,12 @@ def upload():
 
         # check uploading duplications.
         if check_dup(imageName, user_id):
-            return render_template("error_page.html")
+            user = load_user(request.cookies.get('userId'))
+            image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
+            duplicate_err = 'file already existed'
+            return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=duplicate_err)
 
         # save uploading files
-
         destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
         f.save(destination)
 
@@ -151,12 +145,16 @@ def upload():
                                   thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
-        return render_template("complete_display_image.html", image_name=imageName)
+        user = load_user(request.cookies.get('userId'))
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
     else:
+        print('here')
+        format_err = upload_failure + 'file type unsupported'
         user = load_user(request.cookies.get('userId'))
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
+        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=format_err)
 
 
 @app.route('/upload/<filename>')
@@ -172,6 +170,10 @@ def send_full(filename):
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
+@app.route('/login/background/<filename>')
+def get_background(filename):
+    '''send the full-size image to the web page'''
+    return send_from_directory(ROOT, filename)
 
 @app.route('/Return/')
 def return_home():

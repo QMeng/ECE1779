@@ -1,7 +1,7 @@
 //modal settings
 var modal = document.getElementById('myModal');
 var img_list = document.getElementsByClassName('originThumbnails');
-for(var i=0; i<img_list.length; i++){
+for(let i=0; i<img_list.length; i++){
     temp = img_list[i];
     temp.onclick = function(){
         //change the pic src
@@ -31,23 +31,22 @@ for(var i=0; i<img_list.length; i++){
         pic2.src = changed_url01 + "/full";
         pic3.src = changed_url03 + "/full";
         pic4.src = changed_url04 + "/full";
+        slides1.click();
     }
 }
+
+
 // get <span> element to set close button
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementById("modalclose");
 
 // click (x) to close modal
 span.onclick = function() {
   modal.style.display = "none";
-}
+};
 
-
+// slides showing part
 var slideIndex = 1;
 showDivs(slideIndex);
-
-function plusDivs(n) {
-  showDivs(slideIndex += n);
-}
 
 function currentDiv(n) {
   showDivs(slideIndex = n);
@@ -68,5 +67,53 @@ function showDivs(n) {
   x[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " w3-opacity-off";
 }
+
+window.onload = function() {
+    var box = document.getElementById("box");
+    var imgs = box.getElementsByTagName('img');
+    for (let i = 0; i < imgs.length; i++) {
+        var w = imgs[i].offsetWidth,h = imgs[i].offsetHeight;
+            w > h ? imgs[i].style.width = '100%' : imgs[i].style.height = '100%'
+    }
+};
+
+
+//function of showing upload messages
+var upload_banner = document.getElementById("wrap");
+var tester = document.getElementById("upload-filename").innerHTML;
+document.getElementById("uploadTitle").innerHTML;
+var fail_text = document.getElementById("check").innerHTML;
+var upload_close = document.getElementById("close_button");
+
+//if there's an upload, showing the message
+function showing(){
+    if (!(tester === '')){
+        if(!(fail_text === ''))
+        {
+        document.getElementById("uploadTitle").innerHTML = fail_text;
+        }
+        else{
+        document.getElementById("uploadTitle").innerHTML = '1 upload complete';
+        }
+        upload_banner.style.display = 'block';
+}
+
+}
+function hiding(){
+    upload_banner.style.display = 'none';
+}
+
+upload_close.onclick = hiding;
+showing();
+setTimeout(function(){//fade in animation
+    upload_banner.style.opacity = 1.0;
+},14);
+
+setTimeout(function(){//uploading modal hide after 6.000s
+    hiding();
+}, 6000);
+
+
+
 
 

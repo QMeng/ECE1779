@@ -5,21 +5,12 @@
     {% else %}
         <title>Welcome to ImageUploader</title>
     {% endif %}
+<link rel="stylesheet" type="text/css" href="../static/nav.css">
 </head>
 <body>
-<div>Navigation:
+<div>
     {% block links %}{% endblock %}
 </div>
-<hr>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
 {% block content %}{% endblock %}
 </body>
 </html>
