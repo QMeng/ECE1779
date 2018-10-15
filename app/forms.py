@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
-    submit1 = SubmitField('Sign In')
+    submitLoginInfo = SubmitField('Sign In')
 
 
 class SignUpForm(FlaskForm):
@@ -21,7 +21,7 @@ class SignUpForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit2 = SubmitField('Sign Up')
+    submitSignUpInfo = SubmitField('Sign Up')
 
     def validate_username(self, username):
         '''this method validates the inputted username is meeting the standard'''

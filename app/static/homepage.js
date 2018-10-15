@@ -84,34 +84,56 @@ var tester = document.getElementById("upload-filename").innerHTML;
 document.getElementById("uploadTitle").innerHTML;
 var fail_text = document.getElementById("check").innerHTML;
 var upload_close = document.getElementById("close_button");
+var file_name = document.getElementById("upload-filename");
 
-//if there's an upload, showing the message
 function showing(){
-    if (!(tester === '')){
-        if(!(fail_text === ''))
-        {
-        document.getElementById("uploadTitle").innerHTML = fail_text;
+    upload_banner.style.display = 'block';
+    setTimeout(function () {//fade in animation
+        upload_banner.style.opacity = 1.0;
+    }, 14);
+    }
+
+
+function auto_hiding(){
+    setTimeout(function(){//uploading modal hide after 6.000s
+        upload_banner.style.display = 'none';
+    }, 6000);
+}
+
+
+function finish_upload(){
+    if (!(tester === '')) {
+        if (!(fail_text === '')) {
+            document.getElementById("uploadTitle").innerHTML = fail_text;
         }
-        else{
-        document.getElementById("uploadTitle").innerHTML = '1 upload complete';
+
+        else {
+            document.getElementById("uploadTitle").innerHTML = '1 upload complete';
         }
-        upload_banner.style.display = 'block';
+        showing();
+        auto_hiding();
+    }
 }
 
-}
-function hiding(){
-    upload_banner.style.display = 'none';
+/* get the selected file name */
+function showSelectedFile(){
+    document.getElementById('file').onchange = function () {
+    //alert('Selected file: ' + this.value);
+    if (this.value == ""){
+        upload_banner.style.display = 'none';
+    }
+    else{
+        document.getElementById("uploadTitle").innerHTML = "1 upload selected";
+        file_name.innerHTML = this.value.replace(/.*[\/\\]/, '');
+        showing();
+    }
+};
 }
 
-upload_close.onclick = hiding;
-showing();
-setTimeout(function(){//fade in animation
-    upload_banner.style.opacity = 1.0;
-},14);
 
-setTimeout(function(){//uploading modal hide after 6.000s
-    hiding();
-}, 6000);
+upload_close.onclick = function(){upload_banner.style.display = 'none';}; //close the upload modal using 'x' button
+showSelectedFile();
+finish_upload();
 
 
 
