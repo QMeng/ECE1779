@@ -19,29 +19,29 @@ def login():
     :return:
     User home page if user is authenticated. Error messages otherwise
     '''
-    form = LoginForm()
-    form1 = SignUpForm()
-    if form.validate_on_submit() and form.submit1.data:
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+    loginForm = LoginForm()
+    signupForm = SignUpForm()
+    if loginForm.validate_on_submit() and loginForm.submitLoginInfo.data:
+        user = User.query.filter_by(username=loginForm.username.data).first()
+        if user is None or not user.check_password(loginForm.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=loginForm.remember_me.data)
         response = redirect(url_for('home'))
         response.set_cookie('userId', user.get_id())
         return response
-    if form1.validate_on_submit() and form1.submit2.data:
-        user = User.query.filter_by(username=form1.username.data).first()
+    if signupForm.validate_on_submit() and signupForm.submitSignUpInfo.data:
+        user = User.query.filter_by(username=signupForm.username.data).first()
         if (user is None):
-            user = User(form1.username.data, form1.email.data)
-            user.set_password(form1.password.data)
+            user = User(signupForm.username.data, signupForm.email.data)
+            user.set_password(signupForm.password.data)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
         else:
             flash("User already signed up!")
             return redirect(url_for('signup'))
-    return render_template('login.html', title='Sign In', form=form, form1=form1)
+    return render_template('login.html', title='Sign In', loginForm=loginForm, signupForm=signupForm)
 
 
 
@@ -173,7 +173,8 @@ def send_full(filename):
 @app.route('/login/background/<filename>')
 def get_background(filename):
     '''send the full-size image to the web page'''
-    return send_from_directory(ROOT, filename)
+    filedir = ROOT + '/app/static/'
+    return send_from_directory(filedir, filename)
 
 @app.route('/Return/')
 def return_home():

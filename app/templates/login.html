@@ -13,8 +13,8 @@
 <div class="welcome-block">
         <h1 id="welcome-text">Welcome to Image Uploader</h1>
         <div class="buttons">
-        <button class="home-button" onclick="document.getElementById('id01').style.display='block'">Sign In</button>
-        <button class="home-button" onclick="document.getElementById('id02').style.display='block'">Sign Up</button>
+        <button class="home-button" onclick="document.getElementById('loginModal').style.display='block'">Sign In</button>
+        <button class="home-button" onclick="document.getElementById('signupModal').style.display='block'">Sign Up</button>
         </div>
         <div id="errorMessages-block">
         <!-- sign in errors -->
@@ -28,78 +28,78 @@
             {% endif %}
         {% endwith %}
         <!-- sign up errors -->
-            {% for error in form1.username.errors %}
+            {% for error in signupForm.username.errors %}
                 <p style="color: white;">[{{ error }}]</p>
             {% endfor %}
-            {% for error in form1.password.errors %}
+            {% for error in signupForm.password.errors %}
                 <span style="color: white;">[{{ error }}]</span>
             {% endfor %}
-            {% for error in form1.password2.errors %}
+            {% for error in signupForm.password2.errors %}
                 <span style="color: white;">[{{ error }}]</span>
             {% endfor %}
-            {% for error in form1.email.errors %}
+            {% for error in signupForm.email.errors %}
                 <p style="color: white;">[{{ error }}]</p>
             {% endfor %}
         </div>
     </div>
 
 
-<div id="id01" class="modal">
+<div id="loginModal" class="modal">
     <form class="modal-content animate" action="" method="post">
     <div class="imgcontainer">
-      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <span onclick="document.getElementById('loginModal').style.display='none'" class="close" title="Close Modal">&times;</span>
       <h2>Sign In</h2>
     </div>
         <div class="container">
         <form id="loginform" action="" method="post">
-            {{ form.hidden_tag() }}
+            {{ loginForm.hidden_tag() }}
             <div>
-                {{ form.username(class="username",type="text", placeholder="Username",size=32) }}<br>
-                {% for error in form.username.errors %}
+                {{ loginForm.username(class="username",type="text", placeholder="Username",size=32) }}<br>
+                {% for error in loginForm.username.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
             <hr style="color:lightgrey;">
             <div>
-                {{ form.password(class="password", type="password", placeholder="Password", size=32) }}<br>
-                {% for error in form.password.errors %}
+                {{ loginForm.password(class="password", type="password", placeholder="Password", size=32) }}<br>
+                {% for error in loginForm.password.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
             <hr style="color:lightgrey;">
-            <p>{{ form.remember_me() }} {{ form.remember_me.label(style="color:gray") }}</p>
-            <p>{{ form.submit1(class="button", style="font-size:15px")}}</p>
+            <p>{{ loginForm.remember_me() }} {{ loginForm.remember_me.label(style="color:gray") }}</p>
+            <p>{{ loginForm.submitLoginInfo(class="button", style="font-size:15px")}}</p>
         </form>
         </div>
     </form>
 </div>
 
-<div id="id02" class="modal">
+<div id="signupModal" class="modal">
     <form class="modal-content animate" action="{{ url_for('login') }}" method="post">
     <div class="imgcontainer">
-      <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <span onclick="document.getElementById('signupModal').style.display='none'" class="close" title="Close Modal">&times;</span>
       <h2>Sign Up</h2>
     </div>
         <div class="container">
         <form id="signupform" action="{{ url_for('login') }}" method="post">
-        {{ form1.hidden_tag() }}
+        {{ signupForm.hidden_tag() }}
         <div>
-            {{ form1.username(placeholder="Username",size=32) }}<br>
+            {{ signupForm.username(placeholder="Username",size=32) }}<br>
         </div>
         <hr style="color:lightgrey;">
         <div>
-            {{ form1.password(placeholder="Password",size=32) }}<br>
+            {{ signupForm.password(placeholder="Password",size=32) }}<br>
         </div>
         <hr style="color:lightgrey;">
         <div>
-            {{ form1.password2(placeholder="Repeat Password",size=32) }}<br>
+            {{ signupForm.password2(placeholder="Repeat Password",size=32) }}<br>
         </div>
         <hr style="color:lightgrey;">
         <div>
-            {{ form1.email(placeholder="Email", size=128) }}<br>
+            {{ signupForm.email(placeholder="Email", size=128) }}<br>
         </div>
         <hr style="color:lightgrey;">
-        <div>{{ form1.submit2(class="button", style="font-size:15px") }}</div>
+        <div>{{ signupForm.submitSignUpInfo(class="button", style="font-size:15px") }}</div>
     </form>
         </div>
     </form>
