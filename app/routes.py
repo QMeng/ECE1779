@@ -173,8 +173,7 @@ def send_full(filename):
 @app.route('/login/background/<filename>')
 def get_background(filename):
     '''send the full-size image to the web page'''
-    filedir = ROOT + '/app/static/'
-    return send_from_directory(filedir, filename)
+    return send_from_directory(os.path.join(ROOT, "app", "static"), filename)
 
 @app.route('/Return/')
 def return_home():
