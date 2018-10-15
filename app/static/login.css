@@ -1,55 +1,59 @@
-body {font-family: Arial, Helvetica, sans-serif;}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* background */
-html{
-  background: url(background-home02.jpeg) no-repeat center fixed;
-  background-size: cover;
+html {
+    background: url(background-home02.jpeg) no-repeat center fixed;
+    background-size: cover;
 }
 
 /* welcome lies in center */
-.welcome-block{
+.welcome-block {
     position: absolute;
     top: 32%;
     width: 99%;
     vertical-align: center;
     text-align: center;
-        }
+}
 
 /* welcome words */
-#welcome-text{
-    color:whitesmoke;
-    font-size:62px;
-    opacity:0.90;
+#welcome-text {
+    color: whitesmoke;
+    font-size: 62px;
+    opacity: 0.90;
 }
 
 /* set buttons' position */
-.buttons{
+.buttons {
     margin-left: auto;
     margin-right: auto;
     width: 9%;
 
 }
+
 /* button style */
-button[class="home-button"]{
+button[class="home-button"] {
     border-radius: 8px;
-    width:100%;
+    width: 100%;
     border: 3px solid white; /* white */
-    background-color:rgba(0,0,0,0);
-    opacity:0.90;
-    font-size:15px;
-    margin-top:30px;
+    background-color: rgba(0, 0, 0, 0);
+    opacity: 0.90;
+    font-size: 15px;
+    margin-top: 30px;
 }
 
 /* style of modal rim radius */
-.modal-content{
+.modal-content {
     border-radius: 8px;
 }
 
 /* textline focus animation */
-input:focus{
-     border-color: #66afe9;
+input:focus {
+    border-color: #66afe9;
     outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
 /* Full-width input fields */
@@ -60,13 +64,13 @@ input[type=text], input[type=password] {
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    border-radius:8px;
-    border: rgba(0,0,0,0);
+    border-radius: 8px;
+    border: rgba(0, 0, 0, 0);
 }
 
 /* Set a style for all buttons */
-button, .button{
-    background-color: #153441;/*#4CAF50 */
+button, .button {
+    background-color: #153441; /*#4CAF50 */
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -94,7 +98,7 @@ button:hover {
     position: relative;
 }
 
-.container{
+.container {
     padding: 16px;
 }
 
@@ -113,8 +117,8 @@ span.psw {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
     padding-top: 60px;
 }
 
@@ -149,35 +153,46 @@ span.psw {
 }
 
 @-webkit-keyframes animatezoom {
-    from {-webkit-transform: scale(0)}
-    to {-webkit-transform: scale(1)}
+    from {
+        -webkit-transform: scale(0)
+    }
+    to {
+        -webkit-transform: scale(1)
+    }
 }
 
 @keyframes animatezoom {
-    from {transform: scale(0)}
-    to {transform: scale(1)}
+    from {
+        transform: scale(0)
+    }
+    to {
+        transform: scale(1)
+    }
 }
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
     span.psw {
-       display: block;
-       float: none;
+        display: block;
+        float: none;
     }
+
     .cancelbtn {
-       width: 100%;
+        width: 100%;
     }
 }
+
 /* a tryout of showing better error messages */
-#errorMessages-block{
-    width:100%;
+#errorMessages-block {
+    width: 100%;
 }
-#errorMessage{
-color: white;
-opacity: 0.9;
-background-color: rgba(0,0,0,0);
-text-align: center;
-display: inline;
-width: 100%;
-margin-top: 60px;
+
+#errorMessage {
+    color: white;
+    opacity: 0.9;
+    background-color: rgba(0, 0, 0, 0);
+    text-align: center;
+    display: inline;
+    width: 100%;
+    margin-top: 60px;
 }

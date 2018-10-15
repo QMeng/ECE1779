@@ -44,7 +44,6 @@ def login():
     return render_template('login.html', title='Sign In', loginForm=loginForm, signupForm=signupForm)
 
 
-
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -61,6 +60,7 @@ def home():
     else:
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
+
 
 @app.route('/logout')
 def logout():
@@ -128,7 +128,8 @@ def upload():
             user = load_user(request.cookies.get('userId'))
             image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
             duplicate_err = 'file already existed'
-            return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=duplicate_err)
+            return render_template('homePage.html', image_names=image_names, username=user.username, form=form,
+                                   check=duplicate_err)
 
         # save uploading files
         destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
@@ -154,7 +155,8 @@ def upload():
         format_err = upload_failure + 'file type unsupported'
         user = load_user(request.cookies.get('userId'))
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=format_err)
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form,
+                               check=format_err)
 
 
 @app.route('/upload/<filename>')
@@ -182,6 +184,7 @@ def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+
 
 @app.route('/favicon.ico')
 def favicon():
