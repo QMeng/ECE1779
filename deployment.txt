@@ -1,15 +1,5 @@
-AWS credentials:
-    Username:   damon.q.meng@gmail.com
-    Password:   submarine41
-
-AWS instance:
-    Location:   us-east-1, N.Virginia
-    Name:       ece1779a1 QM LSH REMI
-    ID:         i-0d44096bf7b7cd2a3
-
 Deployment instructions:
-    0.  login into AWS management console with the provided credentials. Download the key 'ece1779a1_instance', store
-        the in the .ssh folder of your computer.
+    0.  login into AWS management console with the provided credentials.
     1.  start the aws instance, wait for it to fully start, grab the public ip address (<IP>).
     2.  open up a terminal. command: 
             ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP> -L 5901:localhost:5901
