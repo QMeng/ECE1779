@@ -36,29 +36,29 @@ def create_thumbnail(source_file, userID):
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 200)
-        img.resize(round(new_width), 200)
+        new_width = img.width / (img.height / 250)
+        img.resize(round(new_width), 250)
         thumbnailName = "thumbnail_" + pictureName
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, rightshiftName)) as img:
         # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 200)
-        img.resize(round(new_width), 200)
+        new_width = img.width / (img.height / 250)
+        img.resize(round(new_width), 250)
         thumbnailName = "thumbnail_" + rightshiftName
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, blackAndWhiteName)) as img:
         # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 200)
-        img.resize(round(new_width), 200)
+        new_width = img.width / (img.height / 250)
+        img.resize(round(new_width), 250)
         thumbnailName = "thumbnail_" + blackAndWhiteName
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, sepiaName)) as img:
         # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 200)
-        img.resize(round(new_width), 200)
+        new_width = img.width / (img.height / 250)
+        img.resize(round(new_width), 250)
         thumbnailName = "thumbnail_" + sepiaName
         img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
 

@@ -131,7 +131,6 @@ def upload():
             return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=duplicate_err)
 
         # save uploading files
-
         destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
         f.save(destination)
 
@@ -146,7 +145,6 @@ def upload():
                                   thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
-        #return render_template("complete_display_image.html", image_name=imageName, form=form)
         user = load_user(request.cookies.get('userId'))
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)

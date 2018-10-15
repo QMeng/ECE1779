@@ -8,6 +8,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     background-size: auto 100%;
 }
 
+/* set up a transparent layer class to set the background color inside the block*/
 .transparentLayer{
     background-color:rgba(0,0,0,0);
 }
@@ -17,15 +18,16 @@ body {font-family: Arial, Helvetica, sans-serif;}
     overflow: hidden;
     height:90%;
 }
+/* greeting block */
 .greetings{
     color:white;
     font-size:24px;
     text-align:center;
     width:100%;
     line-height: 36px;
-    height:177px;
     height:60%;
 }
+
 .intro-text{
     width:40%;
     margin: auto;
@@ -40,7 +42,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 input[type=file]{
 display:none;
-font-size:0px;
+font-size:0;
 }
 
 #viewFile:before{
@@ -69,9 +71,10 @@ font-size:0px;
 .text-muted{
     color:white;
 }
+/*
 .errors{
     margin:auto;
-}
+}(*/
 
 /* thumbnails block */
 .thumbnails-block{
@@ -93,32 +96,19 @@ font-size:0px;
     max-width: 1140px;
 }
 .row{
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;
-    background-color: #fff;
     background-clip: border-box;
-}
-.row{
-        /* this is the latest codes */
-        display: flex;
-        justify-content: start;
-        flex-wrap: wrap;
-        background-color: rgba(0,0,0,0);
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    background-color: rgba(0,0,0,0);
 }
 
 .row div{
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-/* 暂时取消colomn */
-.col{
-
 }
 
 .thumbnail-block{
@@ -132,15 +122,8 @@ font-size:0px;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
     width:388px;
-    height:252.5px;
+    height:252px;
     overflow: hidden;
-
-}
-
-.descriptions{
-    display: none;
-    max-width: 100%;
-    text-align:center;
 }
 
 /* modal pictures */
@@ -226,6 +209,8 @@ font-size:0px;
     cursor: pointer;
 }
 .mySlides {display:none}
+
+/* maximum height of modal pictures */
 #pic01, #pic02, #pic03, #pic04{
     max-height: 80%;
 }
@@ -237,7 +222,6 @@ font-size:0px;
 
 
 .upload_block {
-
     -moz-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
     -moz-transition-delay: 0s;
@@ -274,7 +258,7 @@ font-size:0px;
     width: 362px;
     height: 54px;
     background: rgb(32, 33, 36);
-    top: 0px;
+    top: 0;
     position: absolute;
 }
 

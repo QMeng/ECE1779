@@ -11,17 +11,6 @@
 <div>
     {% block links %}{% endblock %}
 </div>
-<!--
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul style="background-color: rgba(0,0,0,0)">
-            {% for message in messages %}
-                <li style="color:white; opacity:0.9; background-color:rgba(0,0,0,0);">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
--->
 {% block content %}{% endblock %}
 </body>
 </html>

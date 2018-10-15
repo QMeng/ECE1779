@@ -38,6 +38,5 @@ class SignUpForm(FlaskForm):
 
 class FileForm(FlaskForm):
     '''File form, this form is used in upload page'''
-    ##file = FileField(validators=[FileRequired()])
     file = FileField('image', validators=[FileRequired(),
                                           FileAllowed(['jpg', 'jpeg', 'png', 'tiff', 'exif', 'gif'], 'Images only!')])

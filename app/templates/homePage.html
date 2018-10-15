@@ -17,9 +17,11 @@
     <br>
     <div class="homePage_banner transparentLayer">
         <div class="greetings">
-        <h1>Hi, {{ username }}!</h1>
+            <h1>Hi, {{ username }}!</h1>
             <div class="intro-text">
-            <p>Upload photographs here to create an album of your own
+            <p style="line-height: 55px;">Record your life and catch every impressive moment.
+                <br>
+                Upload photos to create an album of your own.
             </p>
             </div>
         </div>
@@ -29,10 +31,9 @@
                 {{ form.file.label(id="viewFile") }}
             <div><p id="upload-info"></p></div>
                 {{ form.file() }}
-                    <input type="submit" value="upload" id="upload-button">
+                <input type="submit" value="upload" id="upload-button">
             </div>
         </form>
-    <!--p-->
     </div>
 </div>
 
@@ -44,7 +45,6 @@
                 <div class="col">
                     <div class="thumbnail-block">
                         <img class="originThumbnails" src="{{url_for('send_thumbnail', filename=image_name)}}">
-                         <p class="descriptions">{{ image_name }}</p>
                     </div>
                 </div>
             {% endfor %}

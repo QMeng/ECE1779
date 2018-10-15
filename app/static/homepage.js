@@ -34,6 +34,8 @@ for(let i=0; i<img_list.length; i++){
         slides1.click();
     }
 }
+
+
 // get <span> element to set close button
 var span = document.getElementById("modalclose");
 
@@ -42,7 +44,7 @@ span.onclick = function() {
   modal.style.display = "none";
 };
 
-// slides part
+// slides showing part
 var slideIndex = 1;
 showDivs(slideIndex);
 
@@ -76,14 +78,15 @@ window.onload = function() {
 };
 
 
-//just a test
+//function of showing upload messages
 var upload_banner = document.getElementById("wrap");
 var tester = document.getElementById("upload-filename").innerHTML;
 document.getElementById("uploadTitle").innerHTML;
 var fail_text = document.getElementById("check").innerHTML;
 var upload_close = document.getElementById("close_button");
 
-function showing(){//定时器
+//if there's an upload, showing the message
+function showing(){
     if (!(tester === '')){
         if(!(fail_text === ''))
         {
@@ -96,23 +99,18 @@ function showing(){//定时器
 }
 
 }
-function hiding(){//定时器
+function hiding(){
     upload_banner.style.display = 'none';
 }
 
-
 upload_close.onclick = hiding;
-//document.getElementById("uploadTitle").innerHTML = fail_text;
 showing();
-setTimeout(function(){//定时器
-    //upload_banner.css.fadeOut();
+setTimeout(function(){//fade in animation
     upload_banner.style.opacity = 1.0;
 },14);
 
-setTimeout(function(){//定时器
-    //upload_banner.css.fadeOut();
-    //upload_banner.style.opcaity = 0;
-    //hiding();
+setTimeout(function(){//uploading modal hide after 6.000s
+    hiding();
 }, 6000);
 
 
