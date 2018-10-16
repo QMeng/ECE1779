@@ -35,7 +35,6 @@ for (let i = 0; i < img_list.length; i++) {
     }
 }
 
-
 // get <span> element to set close button
 var span = document.getElementById("modalclose");
 
@@ -85,22 +84,27 @@ window.onload = function () {
 //function of showing upload messages
 var upload_banner = document.getElementById("wrap");
 var tester = document.getElementById("upload-filename").innerHTML;
-document.getElementById("uploadTitle").innerHTML;
 var fail_text = document.getElementById("check").innerHTML;
 var upload_close = document.getElementById("close_button");
 var file_name = document.getElementById("upload-filename");
+var upload_button = document.getElementById('upload-button');
 
 function showing() {
+    upload_banner.style.display = 'none';
+    upload_banner.style.display.opacity = '0';
     upload_banner.style.display = 'block';
     setTimeout(function () {//fade in animation
-        upload_banner.style.opacity = 1.0;
+        upload_banner.style.opacity = '1.0';
     }, 14);
 }
 
 
 function auto_hiding() {
     setTimeout(function () {//uploading modal hide after 6.000s
+        upload_banner.style.opacity = '0';
         upload_banner.style.display = 'none';
+        //clear the text in the file-name
+        document.getElementById("upload-filename").innerHTML = "";
     }, 6000);
 }
 
@@ -112,32 +116,54 @@ function finish_upload() {
         }
 
         else {
-            document.getElementById("uploadTitle").innerHTML = '1 upload complete';
+            document.getElementById("uploadTitle").innerHTML = "1 upload complete";
         }
         showing();
         auto_hiding();
     }
 }
 
+/* raise a modal to remind users to select file first */
+function remind_selectfile() {
+    if ((document.getElementById('file').value === '')) {
+        //change the words in the title
+        document.getElementById("uploadTitle").innerHTML = "No File Selected";
+        //change the words in text
+        document.getElementById("upload-filename").innerHTML = "Please select a file before you upload";
+        showing();
+    }
+}
+
 /* get the selected file name */
 function showSelectedFile() {
-    document.getElementById('file').onchange = function () {
+    document.getElementById('file').addEventListener('change', function () {
         //alert('Selected file: ' + this.value);
-        if (this.value == "") {
+        if (document.getElementById('file').value === "") {
+            upload_banner.style.opacity = '0';
             upload_banner.style.display = 'none';
         }
         else {
+            upload_button.style.backgroundColor = 'rgb(60, 114, 242)';
             document.getElementById("uploadTitle").innerHTML = "1 upload selected";
             file_name.innerHTML = this.value.replace(/.*[\/\\]/, '');
             showing();
         }
-    };
+    });
 }
 
 
+/*close the upload modal using 'x' button */
 upload_close.onclick = function () {
     upload_banner.style.display = 'none';
-}; //close the upload modal using 'x' button
+    upload_banner.style.opacity = '0';
+    //clear the text in the file-name
+    document.getElementById("upload-filename").innerHTML = "";
+    tester = "";
+};
+
+//when the 'upload' button is clicked, remind users to selecte file first.
+upload_button.addEventListener('click', remind_selectfile);
+
 showSelectedFile();
 finish_upload();
 

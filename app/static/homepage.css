@@ -73,16 +73,13 @@ input[type=file] {
 
 #upload-button {
     float: right;
+    background-color: rgb(159, 159, 159);
+    transition: all 0.4s linear;
 }
 
 .text-muted {
     color: white;
 }
-
-/*
-.errors{
-    margin:auto;
-}(*/
 
 /* thumbnails block */
 .thumbnails-block {
