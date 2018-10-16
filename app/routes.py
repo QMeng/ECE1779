@@ -77,7 +77,7 @@ def testFileUpload():
     '''/test/FileUpload uri endpoint for easy uploading thru api calls'''
     username = request.form['userID']
     password = request.form['password']
-    files = request.files.getlist('uploadedFile')
+    files = request.files.getlist('uploadedfile')
 
     user = User.query.filter_by(username=username).first()
     if (not user.check_password(password)):
