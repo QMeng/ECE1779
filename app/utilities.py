@@ -104,6 +104,7 @@ def check_dup(imageName, userID):
             return True
     return False
 
+
 def computeFileName(imageName, trail):
     '''
     this method computes the correct actual file name of the image we are looking for.

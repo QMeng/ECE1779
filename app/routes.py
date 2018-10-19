@@ -44,7 +44,6 @@ def login():
     return render_template('login.html', title='Sign In', loginForm=loginForm, signupForm=signupForm)
 
 
-
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -62,6 +61,7 @@ def home():
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
+
 @app.route('/logout')
 def logout():
     '''this method logs out current user and removes the user's cookie from the brower by setting its expire time to now
@@ -77,7 +77,7 @@ def testFileUpload():
     '''/test/FileUpload uri endpoint for easy uploading thru api calls'''
     username = request.form['userID']
     password = request.form['password']
-    files = request.files.getlist('uploadedFile')
+    files = request.files.getlist('uploadedfile')
 
     user = User.query.filter_by(username=username).first()
     if (not user.check_password(password)):
@@ -128,7 +128,8 @@ def upload():
             user = load_user(request.cookies.get('userId'))
             image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
             duplicate_err = 'file already existed'
-            return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=duplicate_err)
+            return render_template('homePage.html', image_names=image_names, username=user.username, form=form,
+                                   check=duplicate_err)
 
         # save uploading files
         destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
@@ -154,7 +155,8 @@ def upload():
         format_err = upload_failure + 'file type unsupported'
         user = load_user(request.cookies.get('userId'))
         image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form, check=format_err)
+        return render_template('homePage.html', image_names=image_names, username=user.username, form=form,
+                               check=format_err)
 
 
 @app.route('/upload/<filename>')
@@ -170,11 +172,6 @@ def send_full(filename):
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
-@app.route('/login/background/<filename>')
-def get_background(filename):
-    '''send the full-size image to the web page'''
-    filedir = ROOT + '/app/static/'
-    return send_from_directory(filedir, filename)
 
 @app.route('/Return/')
 def return_home():
@@ -187,3 +184,8 @@ def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(ROOT, 'app', 'static'), 'background-home02.jpeg')
