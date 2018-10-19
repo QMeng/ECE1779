@@ -9,6 +9,7 @@ body {
     height: 40%;
     min-height: 360px;
     background-size: auto 100%;
+    min-width: 400px;
 }
 
 /* set up a transparent layer class to set the background color inside the block*/
@@ -32,16 +33,47 @@ body {
     height: 60%;
 }
 
-.intro-text {
-    width: 40%;
+.intro-text{
     margin: auto;
+    line-height: 30px;
+    font-size: 20px;
+
 }
 
-.upload-widgets {
+.upload-widgets{
     margin-left: auto;
     margin-right: auto;
-    width: 28%;
-    height: 20%;
+    width:19rem;
+    height:20%;
+}
+@media screen and (min-width: 300px) {
+  .intro-text{
+    line-height:30px;
+    font-size: 20px;
+  }
+  .upload-widgets{
+      width:19rem;
+  }
+}
+@media screen and (min-width: 487px) {
+  .intro-text{
+    line-height:55px;
+    font-size: 20px;
+  }
+}
+@media screen and (min-width: 536px) {
+  .intro-text{
+    line-height:55px;
+    font-size: 22px;
+  }
+}
+@media screen and (min-width: 650px) {
+  .intro-text{
+    font-size: 26px;
+  }
+  .upload-widgets{
+      width:28rem;
+  }
 }
 
 input[type=file] {
@@ -53,8 +85,8 @@ input[type=file] {
     content: "select ";
 }
 
-#viewFile, #upload-button {
-    width: 35%;
+#viewFile, #upload-button{
+    width:9.0rem;
     padding: 19px 20px; /*previous 8px*/
     display: inline-block;
     box-sizing: border-box;
@@ -168,8 +200,8 @@ input[type=file] {
     max-width: 1000px;
 }
 
-.w3-content {
-    height: 100%;
+.w3-content{
+    height:100rem;
 }
 
 .w3-section {
@@ -261,20 +293,20 @@ input[type=file] {
     opacity: 0;
     transition: all 0.4s linear;
     background-color: white;
-
+    width:270px;
 }
 
 .upload_files_info {
     background-color: #fff;
     overflow: auto;
     /*position: relative;*/
-    width: 360px;
+    width: 270px;
     margin-top: 60px;
     height: 45px;
 }
 
-.upload_title {
-    width: 362px;
+.upload_title{
+    width: 272px;
     height: 54px;
     background: rgb(32, 33, 36);
     top: 0;
@@ -303,6 +335,21 @@ input[type=file] {
 #upload-filename {
     position: absolute;
     bottom: 4px;
-    left: 40px;
+    left: 26px;
     font-size: 13px;
+}
+@media screen and (min-width: 400px) {
+  #wrap{
+    width:360px;
+  }
+    .upload_files_info{
+        width:360px;
+    }
+
+    .upload_title{
+        width: 362px;
+    }
+    #upload-filename{
+    left: 40px;
+}
 }

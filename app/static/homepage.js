@@ -98,7 +98,6 @@ function showing() {
     }, 14);
 }
 
-
 function auto_hiding() {
     setTimeout(function () {//uploading modal hide after 6.000s
         upload_banner.style.opacity = '0';
@@ -108,11 +107,11 @@ function auto_hiding() {
     }, 6000);
 }
 
-
 function finish_upload() {
     if (!(tester === '')) {
         if (!(fail_text === '')) {
             document.getElementById("uploadTitle").innerHTML = fail_text;
+            //window.location.replace("../home");
         }
 
         else {
@@ -120,6 +119,7 @@ function finish_upload() {
         }
         showing();
         auto_hiding();
+        tester = "";
     }
 }
 
@@ -151,7 +151,6 @@ function showSelectedFile() {
     });
 }
 
-
 /*close the upload modal using 'x' button */
 upload_close.onclick = function () {
     upload_banner.style.display = 'none';
@@ -166,7 +165,6 @@ upload_button.addEventListener('click', remind_selectfile);
 
 showSelectedFile();
 finish_upload();
-
 
 
 
