@@ -17,25 +17,56 @@ html{
 /* welcome words */
 #welcome-text{
     color:whitesmoke;
-    font-size:62px;
+    font-size:21px;
     opacity:0.90;
 }
+
+
+@media screen and (min-width: 500px) {
+  #welcome-text{
+     font-size: 36px;
+  }
+  button[class="home-button"]{
+      width:100%;
+  }
+
+}
+@media screen and (min-width: 750px) {
+  #welcome-text{
+     font-size: 50px;
+  }
+  button[class="home-button"]{
+      width:100%;
+  }
+}
+@media screen and (min-width: 1000px) {
+  #welcome-text{
+     font-size: 64px;
+  }
+  button[class="home-button"]{
+      width:100%;
+  }
+}
+
+
 
 /* set buttons' position */
 .buttons{
     margin-left: auto;
     margin-right: auto;
-    width: 9%;
+    width: 9.3rem;
+    max-width: 99%;
+
 
 }
 /* button style */
 button[class="home-button"]{
     border-radius: 8px;
-    width:100%;
+
     border: 3px solid white; /* white */
     background-color:rgba(0,0,0,0);
     opacity:0.90;
-    font-size:15px;
+    font-size:14px;
     margin-top:30px;
 }
 
@@ -72,7 +103,6 @@ button, .button{
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 100%;
     border-radius: 8px;
 }
 
