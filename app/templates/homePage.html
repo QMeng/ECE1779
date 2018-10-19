@@ -12,17 +12,17 @@
     </head>
 
 
-<div id="firstblock" class="transparentLayer">
+    <div id="firstblock" class="transparentLayer">
     <br>
     <br>
     <div class="homePage_banner transparentLayer">
         <div class="greetings">
             <h1>Hi, {{ username }}!</h1>
             <div class="intro-text">
-            <p>Record your life and catch every impressive moment.
-                <br>
-                Upload photos to create an album of your own.
-            </p>
+                <p>Record your life and catch every impressive moment.
+                    <br>
+                    Upload photos to create an album of your own.
+                </p>
             </div>
             <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
