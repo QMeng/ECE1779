@@ -26,8 +26,6 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=loginForm.remember_me.data)
-        downloadFromS3(user.get_id(), THUMBNAIL_BUCKET_PREFIX + user.get_id(), False)
-        downloadFromS3(user.get_id(), IMAGE_BUCKET_PREFIX + user.get_id(), True)
         response = redirect(url_for('home'))
         response.set_cookie('userId', user.get_id())
         return response
@@ -56,11 +54,14 @@ def home():
     '''
     form = FileForm()
     user = load_user(request.cookies.get('userId'))
-    if not os.path.isdir(os.path.join(THUMBNAIL_FOLDER, user.get_id())):
-        return render_template('homePage.html', username=user.username, form=form)
-    else:
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
+    original_thumbnail_images = getUserOriginalImages(user.get_id())
+    all_images = getUserImages(user.get_id())
+    original_thumbnail_url = getPresignedUrl(user.get_id(), original_thumbnail_images, False)
+    all_thumbnail_url = getPresignedUrl(user.get_id(), all_images, False)
+    all_image_url = getPresignedUrl(user.get_id(), all_images, True)
+    return render_template('homePage.html', orig_tbn_img=original_thumbnail_images, all_images=all_images,
+                           orig_tbn_url=original_thumbnail_url, all_tbn_url=all_thumbnail_url,
+                           all_image_url=all_image_url, username=user.username, form=form)
 
 
 @app_worker.route('/logout')
@@ -116,7 +117,6 @@ def upload():
     This is the upload page. User can upload images.
     '''
     form = FileForm()
-    upload_failure = '1 upload failed: '
     if form.validate_on_submit():
         f = form.file.data
         imageName = secure_filename(f.filename)
@@ -128,11 +128,8 @@ def upload():
 
         # check uploading duplications.
         if check_dup(imageName, user_id):
-            user = load_user(request.cookies.get('userId'))
-            image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-            duplicate_err = 'file already existed'
-            return render_template('homePage.html', image_names=image_names, username=user.username, form=form,
-                                   check=duplicate_err)
+            flash("file already existed")
+            return redirect(url_for('home'))
 
         # save uploading files
         destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
@@ -150,31 +147,9 @@ def upload():
                                   thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
-        user = load_user(request.cookies.get('userId'))
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
-
     else:
-        print('here')
-        format_err = upload_failure + 'file type unsupported'
-        user = load_user(request.cookies.get('userId'))
-        image_names = glob.glob1(os.path.join(THUMBNAIL_FOLDER, user.get_id()), "*-1.*")
-        return render_template('homePage.html', image_names=image_names, username=user.username, form=form,
-                               check=format_err)
-
-
-@app_worker.route('/upload/<filename>')
-def send_thumbnail(filename):
-    '''send the thumbnail image to the web page'''
-    user_id = request.cookies.get('userId')
-    return send_from_directory(os.path.join(THUMBNAIL_FOLDER, user_id), filename)
-
-
-@app_worker.route('/upload/thumbnail_<filename>/full')
-def send_full(filename):
-    '''send the full-size image to the web page'''
-    user_id = request.cookies.get('userId')
-    return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
+        flash('File type not supported')
+    return redirect(url_for('home'))
 
 
 @app_worker.route('/Return/')

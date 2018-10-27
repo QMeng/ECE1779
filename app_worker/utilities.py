@@ -41,33 +41,29 @@ def create_thumbnail(source_file, userID):
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 250)
         img.resize(round(new_width), 250)
-        thumbnailName = "thumbnail_" + pictureName
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
-        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName), thumbnailName, False)
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, pictureName))
+        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, pictureName), pictureName, False)
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, rightshiftName)) as img:
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 250)
         img.resize(round(new_width), 250)
-        thumbnailName = "thumbnail_" + rightshiftName
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
-        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName), thumbnailName, False)
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, rightshiftName))
+        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, rightshiftName), rightshiftName, False)
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, blackAndWhiteName)) as img:
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 250)
         img.resize(round(new_width), 250)
-        thumbnailName = "thumbnail_" + blackAndWhiteName
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
-        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName), thumbnailName, False)
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, blackAndWhiteName))
+        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, blackAndWhiteName), blackAndWhiteName, False)
 
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, sepiaName)) as img:
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 250)
         img.resize(round(new_width), 250)
-        thumbnailName = "thumbnail_" + sepiaName
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName))
-        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, thumbnailName), thumbnailName, False)
+        img.save(filename=os.path.join(THUMBNAIL_FOLDER, userID, sepiaName))
+        uploadIntoS3(userID, os.path.join(THUMBNAIL_FOLDER, userID, sepiaName), sepiaName, False)
 
     return os.path.join(THUMBNAIL_FOLDER, userID)
 
@@ -141,8 +137,8 @@ def uploadIntoS3(userID, filePath, fileName, isImage):
         bucketName = THUMBNAIL_BUCKET_PREFIX + userID
 
     if (not checkBucketExist(bucketName)):
-        s3.create_bucket(Bucket=bucketName)
-    s3.Bucket(bucketName).upload_file(Filename=filePath, Key=fileName)
+        s3_resource.create_bucket(Bucket=bucketName)
+    s3_resource.Bucket(bucketName).upload_file(Filename=filePath, Key=fileName)
 
 
 def downloadFromS3(userID, bucketName, isImage):
@@ -154,7 +150,7 @@ def downloadFromS3(userID, bucketName, isImage):
     :return:
     '''
     if checkBucketExist(bucketName):
-        bucket = s3.Bucket(bucketName)
+        bucket = s3_resource.Bucket(bucketName)
         if isImage:
             createImageFolder(userID)
             folderBase = IMAGE_FOLDER
@@ -172,7 +168,7 @@ def checkBucketExist(bucketName):
     check if specific s3 bucket exists or not
     '''
     try:
-        s3.meta.client.head_bucket(Bucket=bucketName)
+        s3_resource.meta.client.head_bucket(Bucket=bucketName)
         return True
     except botocore.exceptions.ClientError as e:
         return False
@@ -186,9 +182,52 @@ def wipeOutLocalImage(userID):
         files = glob.glob(os.path.join(IMAGE_FOLDER, userID, '*'))
         for file in files:
             os.remove(file)
+        os.removedirs(os.path.join(IMAGE_FOLDER, userID))
     if os.path.isdir(os.path.join(THUMBNAIL_FOLDER, userID)):
         files = glob.glob(os.path.join(THUMBNAIL_FOLDER, userID, '*'))
         for file in files:
             os.remove(file)
-    os.removedirs(os.path.join(IMAGE_FOLDER, userID))
-    os.removedirs(os.path.join(THUMBNAIL_FOLDER, userID))
+        os.removedirs(os.path.join(THUMBNAIL_FOLDER, userID))
+
+
+def getUserOriginalImages(userID):
+    '''
+    get the original images belong to this user in the database
+    '''
+    images = ImageContents.query.filter_by(user_id=userID).all()
+    keys = []
+    for image in images:
+        keys.append(computeFileName(image.name, '-1.'))
+
+    return keys
+
+
+def getUserImages(userID):
+    '''
+    get all the images belong to this user in the database
+    '''
+    images = ImageContents.query.filter_by(user_id=userID).all()
+    keys = []
+    for image in images:
+        keys.append(computeFileName(image.name, '-1.'))
+        keys.append(computeFileName(image.name, '-2.'))
+        keys.append(computeFileName(image.name, '-3.'))
+        keys.append(computeFileName(image.name, '-4.'))
+
+    return keys
+
+
+def getPresignedUrl(userID, image_list, isImage):
+    '''
+    compute the presigned urls for the images in S3
+    '''
+    if isImage:
+        bucket = IMAGE_BUCKET_PREFIX + userID
+    else:
+        bucket = THUMBNAIL_BUCKET_PREFIX + userID
+
+    urls = []
+    for image in image_list:
+        url = s3_client.generate_presigned_url('get_object', Params={'Bucket': bucket, 'Key': image})
+        urls.append(url)
+    return urls
