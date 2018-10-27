@@ -1,18 +1,17 @@
-from app.forms import *
-from app.models import *
-from app.utilities import *
+from app_worker.forms import *
+from app_worker.utilities import *
 from flask_login import login_user, login_required, logout_user
 from werkzeug.utils import secure_filename
 import glob
 
 
-@app.route('/')
+@app_worker.route('/')
 def index():
     '''want the defualt page to be login page'''
     return redirect(url_for('login'))
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app_worker.route('/login', methods=['GET', 'POST'])
 def login():
     '''
     Login page for user to login.
@@ -27,6 +26,8 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=loginForm.remember_me.data)
+        downloadFromS3(user.get_id(), THUMBNAIL_BUCKET_PREFIX + user.get_id(), False)
+        downloadFromS3(user.get_id(), IMAGE_BUCKET_PREFIX + user.get_id(), True)
         response = redirect(url_for('home'))
         response.set_cookie('userId', user.get_id())
         return response
@@ -44,7 +45,7 @@ def login():
     return render_template('login.html', title='Sign In', loginForm=loginForm, signupForm=signupForm)
 
 
-@app.route('/home', methods=['GET', 'POST'])
+@app_worker.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
     '''
@@ -62,17 +63,18 @@ def home():
         return render_template('homePage.html', image_names=image_names, username=user.username, form=form)
 
 
-@app.route('/logout')
+@app_worker.route('/logout')
 def logout():
     '''this method logs out current user and removes the user's cookie from the brower by setting its expire time to now
     '''
+    wipeOutLocalImage(request.cookies.get('userId'))
     logout_user()
     response = redirect(url_for('login'))
     response.set_cookie('userId', '', expires=0)
     return response
 
 
-@app.route('/test/FileUpload', methods=['POST'])
+@app_worker.route('/test/FileUpload', methods=['POST'])
 def testFileUpload():
     '''/test/FileUpload uri endpoint for easy uploading thru api calls'''
     username = request.form['userID']
@@ -96,6 +98,7 @@ def testFileUpload():
 
         destination = os.path.join(IMAGE_FOLDER, user.get_id(), saveName)
         image.save(destination)
+        uploadIntoS3(user.get_id(), destination, saveName, True)
 
         create_transformations(imageName, user.get_id())
         thumbnailDestination = create_thumbnail(imageName, user.get_id())
@@ -107,7 +110,7 @@ def testFileUpload():
     return "Success"
 
 
-@app.route("/upload", methods=["POST"])
+@app_worker.route("/upload", methods=["POST"])
 def upload():
     '''
     This is the upload page. User can upload images.
@@ -134,6 +137,7 @@ def upload():
         # save uploading files
         destination = os.path.join(IMAGE_FOLDER, user_id, saveName)
         f.save(destination)
+        uploadIntoS3(user_id, destination, saveName, True)
 
         # create multishift, black and white, sepia transformations
         create_transformations(imageName, user_id)
@@ -159,33 +163,33 @@ def upload():
                                check=format_err)
 
 
-@app.route('/upload/<filename>')
+@app_worker.route('/upload/<filename>')
 def send_thumbnail(filename):
     '''send the thumbnail image to the web page'''
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(THUMBNAIL_FOLDER, user_id), filename)
 
 
-@app.route('/upload/thumbnail_<filename>/full')
+@app_worker.route('/upload/thumbnail_<filename>/full')
 def send_full(filename):
     '''send the full-size image to the web page'''
     user_id = request.cookies.get('userId')
     return send_from_directory(os.path.join(IMAGE_FOLDER, user_id), filename)
 
 
-@app.route('/Return/')
+@app_worker.route('/Return/')
 def return_home():
     return redirect(url_for('home'))
 
 
-@app.errorhandler(InvalidUsage)
+@app_worker.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
-    '''handle the invalid usage of this app.'''
+    '''handle the invalid usage of this app_worker.'''
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
 
 
-@app.route('/favicon.ico')
+@app_worker.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(ROOT, 'app', 'static'), 'background-home02.jpeg')
+    return send_from_directory(os.path.join(ROOT, 'app_worker', 'static'), 'background-home02.jpeg')

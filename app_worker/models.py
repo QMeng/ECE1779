@@ -1,7 +1,7 @@
 from builtins import dict, Exception, int
 
 from werkzeug.security import *
-from app import *
+from app_worker import *
 from flask_login import UserMixin
 
 

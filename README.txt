@@ -26,7 +26,7 @@ Project structure layout:
         -> images/ (will be created after web app started running)
         -> thumbnails/ (will be created after web app started running)
         -> run.sh
-        -> ECE1779A1.sql
+        -> ECE1779.sql
         -> app
             -> static
                 -> *.css
@@ -47,7 +47,7 @@ Detailed project structure:
     3.  images and thumbnails folders will be used to store the images (and transformations) uploaded by the users and
         thumbnails (of original image and transformed images).
     4.  run.sh is the script for spinning up the virtual environment and kick off the web app.
-    5.  ECE1779A1.sql contains sql scripts for creating the database, tables used by this project. Table schema will be
+    5.  ECE1779.sql contains sql scripts for creating the database, tables used by this project. Table schema will be
         listed in later sections.
     6.  app folder contains the scripts that make this web app work.
     7.  app/static folder contains css and javascript files that used by the front end UI of the web app.
