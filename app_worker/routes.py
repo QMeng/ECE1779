@@ -2,7 +2,6 @@ from app_worker.forms import *
 from app_worker.utilities import *
 from flask_login import login_user, login_required, logout_user
 from werkzeug.utils import secure_filename
-import glob
 
 
 @app_worker.route('/')
