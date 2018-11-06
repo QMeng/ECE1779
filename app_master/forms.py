@@ -1,22 +1,32 @@
-from flask_wtf import *
-from wtforms import StringField, SubmitField, BooleanField
+from flask_wtf import FlaskForm
+from wtforms import FloatField, IntegerField, SubmitField
+from wtforms.validators import *
 
 
 class AutoScalingConfigForm(FlaskForm):
     '''
     Auto Scaling Configuration form
     '''
-    scaleUpThreshhold = StringField("Scale Up CPU Threshhold")
-    scaleDownThreshhold = StringField("Scale Down CPU Threshhold")
-    scaleUpRatio = StringField("Scale Up Ratio")
-    scaleDownRatio = StringField("Scale Down Ratio")
+    scaleUpThreshhold = FloatField("Scale Up CPU Threshhold")
+    scaleDownThreshhold = FloatField("Scale Down CPU Threshhold")
+    scaleUpRatio = FloatField("Scale Up Ratio")
+    scaleDownRatio = FloatField("Scale Down Ratio")
     submit = SubmitField("Submit")
+
+
+class RefreshCurrentPageForm(FlaskForm):
+    '''
+    A simple form for refreshing current page
+    '''
+    refresh = SubmitField("Refresh Table")
 
 
 class ManualScalingConfigForm(FlaskForm):
     '''
     Manual Scaling Configuration form
     '''
-    manualScaleUp = BooleanField("Manual Scale Up")
-    manualScaleDown = BooleanField("Manual Scale Down")
-    submit = SubmitField("Submit")
+    manualScaleUp = IntegerField("Manual Scale Up",
+                                 validators=[DataRequired(),
+                                             NumberRange(min=1, max=5,
+                                                         message='Please input a number between 1 and 5')])
+    submitConfig = SubmitField("Submit Manual Config")

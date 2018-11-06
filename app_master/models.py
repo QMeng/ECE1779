@@ -2,8 +2,11 @@ from flask_table import *
 
 
 class InstanceTable(Table):
+    id = Col('Id', show=False)
     name = Col("Worker Name")
+    instanceId = Col("Instance ID")
     cpuUsage = Col("CPU Utilization")
+    destroy = ButtonCol("Destroy", 'destroyWorker', url_kwargs=dict(id='instanceId'))
     items = []
 
     def __init__(self, items):
@@ -14,6 +17,7 @@ class InstanceTable(Table):
 
 
 class InstanceInfo(object):
-    def __init__(self, name, cpuUsage):
+    def __init__(self, name, instanceId, cpuUsage):
         self.name = name
+        self.instanceId = instanceId
         self.cpuUsage = cpuUsage
