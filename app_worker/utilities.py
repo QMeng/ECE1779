@@ -108,6 +108,7 @@ def check_dup(imageName, userID):
     for image in imageList:
         if (image.name == imageName):
             return True
+    db.session.commit()
     return False
 
 
@@ -199,6 +200,8 @@ def getUserOriginalImages(userID):
     for image in images:
         keys.append(computeFileName(image.name, '-1.'))
 
+    db.session.commit()
+
     return keys
 
 
@@ -213,6 +216,7 @@ def getUserImages(userID):
         keys.append(computeFileName(image.name, '-2.'))
         keys.append(computeFileName(image.name, '-3.'))
         keys.append(computeFileName(image.name, '-4.'))
+    db.session.commit()
 
     return keys
 

@@ -18,3 +18,11 @@ create table ECE1779.ImageInfo(
   thumbnail_path VARCHAR(256) NULL,
   FOREIGN KEY (user_id) REFERENCES ECE1779.UserInfo(id),
   PRIMARY KEY (id)) ENGINE=innodb;
+
+create table ECE1779.AutoScalingConfig(
+  id BIGINT AUTO_INCREMENT,
+  scaleUpRatio INTEGER NULL,
+  scaleDownRatio INTEGER NULL,
+  scaleUpThreshold FLOAT NULL,
+  scaleDownThreshold FLOAT NULL,
+  PRIMARY KEY (id)) ENGINE=innodb;

@@ -1,17 +1,18 @@
 from app_master import *
-from datetime import *
+import time
+from datetime import datetime, timedelta
 from app_master.config import *
-
 from app_master.models import InstanceInfo, InstanceTable
 
 
-def getEC2InstanceIDs():
+def getEC2WorkerInstanceIDs():
     '''
     return a list of ids of the current running instances
     '''
     result = []
     instances = ec2_resource.instances.filter(
-        Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
+        Filters=[{'Name': 'instance-state-name', 'Values': ['running']},
+                 {'Name': 'tag-value', 'Values': ['ECE1779Worker']}, ])
 
     for instance in instances:
         result.append(instance.id)
@@ -77,11 +78,15 @@ def createWorkerInstance(numInstance):
     ec2_resource.create_tags(Resources=idList, Tags=[{'Key': 'Name', 'Value': 'ECE1779Worker'}])
 
 
-def destroyInstance(instanceID):
+def destroyInstance(instanceIDs):
     '''
     delete a specific instance
     '''
-    ec2_client.terminate_instances(InstanceIds=[instanceID], DryRun=False)
+    if PRIMARY_WORKER_ID in instanceIDs:
+        instanceIDs.remove(PRIMARY_WORKER_ID)
+
+    if instanceIDs != []:
+        ec2_client.terminate_instances(InstanceIds=instanceIDs, DryRun=False)
 
 
 def waitForInstancesRunning(idList):

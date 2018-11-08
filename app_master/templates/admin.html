@@ -2,32 +2,68 @@
 
 {% block links %}
     <a href="/admin">Refresh Current Page</a>
+    <a href="/admin/reset">Wipe Out Everything</a>
 {% endblock %}
 
 {% block content %}
     <div class="workerCPUTable">
-        <p>Workers CPU Utilizations:</p>
+        <h3>Workers CPU Utilizations:</h3>
         {{ workerTable }}
     </div>
 
-    <h4>Refresh Worker CPU Utilization Table:</h4>
-    <form name='refreshForm' id='refreshForm' action="" method="post" novalidate>
-        <input name='form-name' value='refreshForm' hidden>
-        {{ refreshForm.hidden_tag() }}
-        <div>{{ refreshForm.refresh }}</div>
-    </form>
-
-    <h4>Manual Scale Up Form</h4>
-    <form name='manualScalingConfigForm' id='manualScalingConfigForm' action="" method="post" novalidate>
+    <h3>Manual Scale Up</h3>
+    <form name="manualScalingConfigForm" id="manualScalingConfigForm" action="" method="post" novalidate>
         {{ manualScalingConfigForm.hidden_tag() }}
-        <input name='form-name' value='manualScalingConfigForm' hidden>
+        <input name="form-name" value="manualScalingConfigForm" hidden>
         <div>
             {{ manualScalingConfigForm.manualScaleUp.label }}<br>
             {{ manualScalingConfigForm.manualScaleUp() }}<br>
             {% for error in manualScalingConfigForm.manualScaleUp.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div>{{ manualScalingConfigForm.submitConfig }}</div>
+        <div>{{ manualScalingConfigForm.submitManualConfig() }}</div>
     </form>
+
+    <h3>Auto Scaling Config</h3>
+    <div>
+        <div class="workerCPUTable">
+            <h4>Current auto scaling configuration:</h4>
+            {{ asTable }}
+            <p></p>
+        </div>
+        <form name="autoScalingConfigForm" id="autoScalingConfigForm" action="" method="post" novalidate>
+            {{ autoScalingConfigForm.hidden_tag() }}
+            <input name="form-name" value="autoScalingConfigForm" hidden>
+            <div>
+                {{ autoScalingConfigForm.scaleDownThreshold.label }}<br>
+                {{ autoScalingConfigForm.scaleDownThreshold() }}
+                {% for error in autoScalingConfigForm.scaleDownThreshold.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleUpThreshold.label }}<br>
+                {{ autoScalingConfigForm.scaleUpThreshold() }}
+                {% for error in autoScalingConfigForm.scaleUpThreshold.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleDownRatio.label }}<br>
+                {{ autoScalingConfigForm.scaleDownRatio() }}
+                {% for error in autoScalingConfigForm.scaleDownRatio.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleUpRatio.label }}<br>
+                {{ autoScalingConfigForm.scaleUpRatio() }}
+                {% for error in autoScalingConfigForm.scaleUpRatio.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>{{ autoScalingConfigForm.submitAutoConfig() }}</div>
+        </form>
+    </div>
 {% endblock %}
