@@ -9,9 +9,18 @@
     <div class="workerCPUTable">
         <h3>Workers CPU Utilizations:</h3>
         {{ workerTable }}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {%  endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
     </div>
 
-    <h3>Manual Scale Up</h3>
+    <h3>Manual Scale Up Config</h3>
     <form name="manualScalingConfigForm" id="manualScalingConfigForm" action="" method="post" novalidate>
         {{ manualScalingConfigForm.hidden_tag() }}
         <input name="form-name" value="manualScalingConfigForm" hidden>

@@ -76,7 +76,10 @@ def destroyWorker(id):
     '''
     Destroy a specific worker instance
     '''
-    destroyInstance([id])
+    if PRIMARY_WORKER_ID == id:
+        flash("This is the primary worker instance, it should not be terminated, please choose another one!")
+    else:
+        destroyInstance([id])
     return redirect(url_for('home'))
 
 
@@ -87,6 +90,8 @@ def wipeOutEverything():
     '''
     # terminate all worker instances
     instanceIDs = getEC2WorkerInstanceIDs()
+    if PRIMARY_WORKER_ID in instanceIDs:
+        instanceIDs.remove(PRIMARY_WORKER_ID)
     destroyInstance(instanceIDs)
 
     # wipe out database's image table

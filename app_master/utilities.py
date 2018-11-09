@@ -12,7 +12,7 @@ def getEC2WorkerInstanceIDs():
     result = []
     instances = ec2_resource.instances.filter(
         Filters=[{'Name': 'instance-state-name', 'Values': ['running']},
-                 {'Name': 'tag-value', 'Values': ['ECE1779Worker']}, ])
+                 {'Name': 'tag-value', 'Values': ['ECE1779Worker', 'ECE1779PrimaryWorker']}, ])
 
     for instance in instances:
         result.append(instance.id)
@@ -60,30 +60,40 @@ def computeWorkerTable(instanceIDs):
 
 def createWorkerInstance(numInstance):
     '''
-    create a specific number of worker instances
+    create a specific number of worker instances, and register them to the CLB
     '''
     instances = ec2_resource.create_instances(ImageId=AMI_ID,
                                               InstanceType=WORKER_INSTANCE_TYPE,
                                               SecurityGroups=SECURITY_GROUP,
                                               KeyName=KEY_NAME,
+                                              UserData=USER_DATA,
                                               Monitoring={'Enabled': True},
                                               MinCount=1,
                                               MaxCount=numInstance)
     idList = []
+    registerIdList = []
+
     for instance in instances:
         idList.append(instance.id)
+        registerIdList.append({'InstanceId': instance.id})
 
     waitForInstancesRunning(idList)
 
     ec2_resource.create_tags(Resources=idList, Tags=[{'Key': 'Name', 'Value': 'ECE1779Worker'}])
+    elb_client.register_instances_with_load_balancer(LoadBalancerName=LOAD_BALANCER_NAME, Instances=registerIdList)
 
 
 def destroyInstance(instanceIDs):
     '''
-    delete a specific instance
+    delete a specific instance, deregister the instances from CLB before terminatings
     '''
-    if PRIMARY_WORKER_ID in instanceIDs:
-        instanceIDs.remove(PRIMARY_WORKER_ID)
+    deregisterIdList = []
+    for instanceID in instanceIDs:
+        deregisterIdList.append({'InstanceId': instanceID})
+
+    if deregisterIdList != []:
+        elb_client.deregister_instances_from_load_balancer(LoadBalancerName=LOAD_BALANCER_NAME,
+                                                           Instances=deregisterIdList)
 
     if instanceIDs != []:
         ec2_client.terminate_instances(InstanceIds=instanceIDs, DryRun=False)
