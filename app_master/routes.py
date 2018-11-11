@@ -1,13 +1,9 @@
-from celery.task import periodic_task
-
 from app_master import *
 from app_master.utilities import *
 from app_master.models import *
 from app_master.forms import *
 from app_worker.models import ImageContents, User
 import math
-
-import celery
 
 
 @app_master.route('/')
