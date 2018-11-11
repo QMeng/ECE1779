@@ -9,6 +9,7 @@ app_master.config.from_object(Config)
 
 db = SQLAlchemy(app_master)
 
+# AWS services
 cw_client = boto3.client('cloudwatch', **AWS_CONNECTION_ARGS)
 ec2_resource = boto3.resource('ec2', **AWS_CONNECTION_ARGS)
 ec2_client = boto3.client('ec2', **AWS_CONNECTION_ARGS)
@@ -17,6 +18,7 @@ elb_client = boto3.client('elb', **AWS_CONNECTION_ARGS)
 
 from app_master import routes
 
+# scheduler, it will be used for periodic (1 min) checks for auto scaling
 scheduler = BackgroundScheduler()
-job = scheduler.add_job(routes.autoScaling, 'interval', minutes=2)
+job = scheduler.add_job(routes.autoScaling, 'interval', minutes=1)
 scheduler.start()

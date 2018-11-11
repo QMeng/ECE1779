@@ -94,6 +94,8 @@ def createWorkerInstance(numInstance):
     ec2_resource.create_tags(Resources=idList, Tags=[{'Key': 'Name', 'Value': 'ECE1779Worker'}])
     elb_client.register_instances_with_load_balancer(LoadBalancerName=LOAD_BALANCER_NAME, Instances=registerIdList)
 
+    time.sleep(30)
+
 
 def destroyInstance(instanceIDs):
     '''
@@ -118,7 +120,6 @@ def waitForInstancesRunning(idList):
     while not isAllInstanceRunning(idList):
         time.sleep(5)
         print("Waiting for instances to be running")
-    time.sleep(60)
     print("All instances are running now")
 
 
@@ -149,7 +150,7 @@ def calculateAverage(instances):
 
 def validateAutoScalingInputs(asUpRatio, asDownRatio, asUpThreshold, asDownThreshold):
     '''
-    :return: true if the values inputed satisfies the constraints
+    :return: true if the values inputed satisfies the auto scaling constraints
     '''
     rc = 1
     if (not asUpRatio) and (not asDownRatio) and (not asUpThreshold) and (not asDownThreshold):

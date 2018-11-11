@@ -37,6 +37,7 @@ def create_thumbnail(source_file, userID):
     blackAndWhiteName = computeFileName(source_file, '-3.')
     sepiaName = computeFileName(source_file, '-4.')
 
+    # creating, saving and uploadind into S3 for the thumbnails for original and 3 transformations
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         # resize the image to produce the thumbnail
         new_width = img.width / (img.height / 250)
@@ -80,6 +81,7 @@ def create_transformations(source_file, userID):
     blackAndWhiteName = computeFileName(source_file, '-3.')
     sepiaName = computeFileName(source_file, '-4.')
 
+    # creating, saving and uploading into S3 for the 3 transformations
     with Image(filename=os.path.join(IMAGE_FOLDER, userID, pictureName)) as img:
         img.evaluate(operator='rightshift', value=1, channel='blue')
         img.evaluate(operator='leftshift', value=1, channel='red')

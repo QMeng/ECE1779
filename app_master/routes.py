@@ -46,17 +46,20 @@ def home():
         if request.form['form-name']:
             formName = request.form['form-name']
 
+            # the submitted form is manual scaling up form
             if formName == 'manualScalingConfigForm':
                 if manualScalingForm.validate_on_submit():
                     manualScalingUp = manualScalingForm.manualScaleUp.data
                     createWorkerInstance(manualScalingUp)
                     return redirect(url_for('home'))
 
+            # the submitted form is auto scaling form
             if formName == 'autoScalingConfigForm':
                 if autoScalingForm.validate_on_submit():
                     if validateAutoScalingInputs(autoScalingForm.scaleUpRatio.data, autoScalingForm.scaleDownRatio.data,
                                                  autoScalingForm.scaleUpThreshold.data,
                                                  autoScalingForm.scaleDownThreshold.data):
+                        # update the auto scaling settings if any of them is modified thru the form
                         if autoScalingForm.scaleUpRatio.data:
                             autoScalingSetting.set_scaleUpRatio(autoScalingForm.scaleUpRatio.data)
                         if autoScalingForm.scaleDownRatio.data:
@@ -122,6 +125,7 @@ def autoScaling():
     instanceIDs = getEC2WorkerInstanceIDs()
     instanceInfo = computeWorkerDict(instanceIDs)
 
+    # grab the auto scaling setting from remote database
     autoScalingSettings = AutoScalingConfig.query.all()[0]
     as_up_ratio = autoScalingSettings.scaleUpRatio
     as_down_ratio = autoScalingSettings.scaleDownRatio
