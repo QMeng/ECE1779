@@ -136,6 +136,9 @@ def calculateAverage(instances):
     '''
     return the average cpu usage of instances
     '''
+    if len(instances) == 0:
+        return 0
+
     total = 0
     for (id, value) in instances:
         total += value
