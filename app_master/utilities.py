@@ -118,6 +118,7 @@ def waitForInstancesRunning(idList):
     while not isAllInstanceRunning(idList):
         time.sleep(5)
         print("Waiting for instances to be running")
+    time.sleep(60)
     print("All instances are running now")
 
 

@@ -136,7 +136,7 @@ def autoScaling():
         # need to scale up the pool
         print("Auto Scaling Up " + str(len(instanceIDs) * (as_up_ratio - 1)) + " instances")
         createWorkerInstance(len(instanceIDs) * (as_up_ratio - 1))
-        redirect(url_for('home'))
+
     if (average < as_down_threshold) and as_down_ratio > 1 and len(instanceIDs) > 1:
         # if worker pool is below scale down threshhold
         # need to destroy workers with least loads
@@ -150,4 +150,3 @@ def autoScaling():
             instanceToDestroy.append(instanceInfo[i][0])
         print("Auto scaling down " + str(len(instanceToDestroy)) + " instances")
         destroyInstance(instanceToDestroy)
-        redirect(url_for('home'))
