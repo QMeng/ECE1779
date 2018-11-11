@@ -2,8 +2,8 @@
 var modal = document.getElementById('myModal');
 var img_list = document.getElementsByClassName('originThumbnails');
 for (let i = 0; i < img_list.length; i++) {
-    temp = img_list[i];
-    temp.onclick = function () {
+    var temp = img_list[i];
+    temp.onclick = function (event) {
         //change the pic src
         modal.style.display = "block";
         pic4 = document.getElementById("pic04");
@@ -11,26 +11,34 @@ for (let i = 0; i < img_list.length; i++) {
         pic2 = document.getElementById("pic02");
         pic1 = document.getElementById("pic01");
 
-        //change the slides thumbnail src
         slides2 = document.getElementById("slide02");
         slides1 = document.getElementById("slide01");
         slides3 = document.getElementById("slide03");
         slides4 = document.getElementById("slide04");
-        origin_url = this.src;
-        changed_url01 = origin_url.replace("-1.", "-2.");
-        changed_url03 = origin_url.replace("-1.", "-3.");
-        changed_url04 = origin_url.replace("-1.", "-4.");
 
-        slides1.src = this.src;
-        slides2.src = changed_url01;
-        slides3.src = changed_url03;
-        slides4.src = changed_url04;
+        // grab the urls from hidden elements
+        img_name = event.currentTarget.id
+        var basename = (img_name + '').split('-1')[0];
+        var type = (img_name + '').split('-1')[1];
+        thumbnail1_url = document.getElementById("thumbnail-" + basename + '-1' + type).getAttribute("value");
+        thumbnail2_url = document.getElementById("thumbnail-" + basename + '-2' + type).getAttribute("value");
+        thumbnail3_url = document.getElementById("thumbnail-" + basename + '-3' + type).getAttribute("value");
+        thumbnail4_url = document.getElementById("thumbnail-" + basename + '-4' + type).getAttribute("value");
+        image1_url = document.getElementById("image-" + basename + '-1' + type).getAttribute("value");
+        image2_url = document.getElementById("image-" + basename + '-2' + type).getAttribute("value");
+        image3_url = document.getElementById("image-" + basename + '-3' + type).getAttribute("value");
+        image4_url = document.getElementById("image-" + basename + '-4' + type).getAttribute("value");
 
-        //change the slides full-size src
-        pic1.src = this.src + "/full";
-        pic2.src = changed_url01 + "/full";
-        pic3.src = changed_url03 + "/full";
-        pic4.src = changed_url04 + "/full";
+        // re-assign the src of the elements
+        slides1.src = thumbnail1_url;
+        slides2.src = thumbnail2_url;
+        slides3.src = thumbnail3_url;
+        slides4.src = thumbnail4_url;
+
+        pic1.src = image1_url;
+        pic2.src = image2_url;
+        pic3.src = image3_url;
+        pic4.src = image4_url;
         slides1.click();
     }
 }

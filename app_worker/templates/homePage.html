@@ -41,10 +41,10 @@
     <div class="thumbnails-block">
         <div class="thumbnail-container">
             <div class="row" id="box">
-                {% for image_name in image_names %}
+                {% for orig_tbn in orig_tbn_img %}
                     <div class="col">
                         <div class="thumbnail-block">
-                            <img class="originThumbnails" src="{{ url_for('send_thumbnail', filename=image_name) }}">
+                            <img id="{{ orig_tbn }}" class="originThumbnails" src="{{ orig_tbn_url[loop.index - 1] }}">
                         </div>
                     </div>
                 {% endfor %}
@@ -85,6 +85,12 @@
             </div>
         </div>
     </div>
+
+    {% for image_name in all_images %}
+        <div id="thumbnail-{{ image_name }}" value="{{ all_tbn_url[loop.index - 1] }}" hidden></div>
+        <div id="image-{{ image_name }}" value="{{ all_image_url[loop.index - 1] }}" hidden></div>
+    {% endfor %}
+
     <script src="../static/homepage.js" type="text/javascript" charset="utf-8"></script>
 
 {% endblock %}

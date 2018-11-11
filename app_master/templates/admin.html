@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block links %}
+    <a href="/admin">Refresh Current Page</a>
+    <a href="/admin/reset">Wipe Out Everything</a>
+{% endblock %}
+
+{% block content %}
+    <div class="workerCPUTable">
+        <h3>Workers CPU Utilizations:</h3>
+        {{ workerTable }}
+        {% with messages = get_flashed_messages(with_categories=True, category_filter=['warning']) %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color: red;">{{ message[1] }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <h3>Manual Scale Up Config</h3>
+    <form name="manualScalingConfigForm" id="manualScalingConfigForm" action="" method="post" novalidate>
+        {{ manualScalingConfigForm.hidden_tag() }}
+        <input name="form-name" value="manualScalingConfigForm" hidden>
+        <div>
+            {{ manualScalingConfigForm.manualScaleUp.label }}<br>
+            {{ manualScalingConfigForm.manualScaleUp() }}<br>
+            {% for error in manualScalingConfigForm.manualScaleUp.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>{{ manualScalingConfigForm.submitManualConfig() }}</div>
+    </form>
+
+    <h3>Auto Scaling Config</h3>
+    <div>
+        <div class="workerCPUTable">
+            <h4>Current auto scaling configuration:</h4>
+            {{ asTable }}
+            <p></p>
+        </div>
+        <form name="autoScalingConfigForm" id="autoScalingConfigForm" action="" method="post" novalidate>
+            {{ autoScalingConfigForm.hidden_tag() }}
+            <input name="form-name" value="autoScalingConfigForm" hidden>
+            {% with messages = get_flashed_messages(with_categories=True, category_filter=['as_error']) %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li style="color: red;">{{ message[1] }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <div>
+                {{ autoScalingConfigForm.scaleUpRatio.label }}<br>
+                {{ autoScalingConfigForm.scaleUpRatio() }}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleDownRatio.label }}<br>
+                {{ autoScalingConfigForm.scaleDownRatio() }}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleUpThreshold.label }}<br>
+                {{ autoScalingConfigForm.scaleUpThreshold() }}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleDownThreshold.label }}<br>
+                {{ autoScalingConfigForm.scaleDownThreshold() }}
+            </div>
+            <div>{{ autoScalingConfigForm.submitAutoConfig() }}</div>
+        </form>
+    </div>
+{% endblock %}
