@@ -58,6 +58,18 @@ def computeWorkerTable(instanceIDs):
     return workerTable
 
 
+def computeWorkerDict(instanceIDs):
+    '''
+    :return: a sorted dictionary of all the instance's cpu usage
+    '''
+    listOfWorker = {}
+    for i in range(len(instanceIDs)):
+        cpuAverage = getInstanceCPUUtilization(instanceIDs[i])
+        listOfWorker[instanceIDs[i]] = cpuAverage
+    listOfWorker = sorted(listOfWorker.items(), key=lambda kv: kv[1])
+    return listOfWorker
+
+
 def createWorkerInstance(numInstance):
     '''
     create a specific number of worker instances, and register them to the CLB
@@ -118,3 +130,38 @@ def isAllInstanceRunning(idList):
         if ins.state['Name'] == 'pending':
             return False
     return True
+
+
+def calculateAverage(instances):
+    '''
+    return the average cpu usage of instances
+    '''
+    total = 0
+    for (id, value) in instances:
+        total += value
+
+    return 1.0 * total / len(instances)
+
+
+def validateAutoScalingInputs(asUpRatio, asDownRatio, asUpThreshold, asDownThreshold):
+    '''
+    :return: true if the values inputed satisfies the constraints
+    '''
+    rc = 1
+    if (not asUpRatio) and (not asDownRatio) and (not asUpThreshold) and (not asDownThreshold):
+        flash("Please fill out at least one of the fields!", 'as_error')
+        rc = 0
+    if (asUpRatio) and (asUpRatio < 1):
+        flash("Auto Scaling Up Ratio should be an integer greater than 1!", 'as_error')
+        rc = 0
+    if (asDownRatio) and (asDownRatio < 1):
+        flash("Auto Scaling Down Ratio should be an integer greater than 1!", 'as_error')
+        rc = 0
+    if (asUpThreshold) and (asUpThreshold < 0 or asUpThreshold > 100):
+        flash("Auto Scaling Up Threshold should be an float between 0 and 100")
+        rc = 0
+    if (asDownThreshold) and (asDownThreshold < 0 or asDownThreshold > 100):
+        flash("Auto Scaling Down Threshold should be an float between 0 and 100")
+        rc = 0
+
+    return rc == 1

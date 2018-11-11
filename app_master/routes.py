@@ -1,8 +1,13 @@
+from celery.task import periodic_task
+
 from app_master import *
 from app_master.utilities import *
 from app_master.models import *
 from app_master.forms import *
 from app_worker.models import ImageContents, User
+import math
+
+import celery
 
 
 @app_master.route('/')
@@ -53,18 +58,24 @@ def home():
 
             if formName == 'autoScalingConfigForm':
                 if autoScalingForm.validate_on_submit():
-                    if autoScalingForm.scaleUpRatio.data:
-                        autoScalingSetting.set_scaleUpRatio(autoScalingForm.scaleUpRatio.data)
-                    if autoScalingForm.scaleDownRatio.data:
-                        autoScalingSetting.set_scaleDownRatio(autoScalingForm.scaleDownRatio.data)
-                    if autoScalingForm.scaleUpThreshold.data:
-                        autoScalingSetting.set_scaleUpThreshhold(autoScalingForm.scaleUpThreshold.data)
-                    if autoScalingForm.scaleDownThreshold.data:
-                        autoScalingSetting.set_scaleDownThreshold(autoScalingForm.scaleDownThreshold.data)
+                    if validateAutoScalingInputs(autoScalingForm.scaleUpRatio.data, autoScalingForm.scaleDownRatio.data,
+                                                 autoScalingForm.scaleUpThreshold.data,
+                                                 autoScalingForm.scaleDownThreshold.data):
+                        if autoScalingForm.scaleUpRatio.data:
+                            autoScalingSetting.set_scaleUpRatio(autoScalingForm.scaleUpRatio.data)
+                        if autoScalingForm.scaleDownRatio.data:
+                            autoScalingSetting.set_scaleDownRatio(autoScalingForm.scaleDownRatio.data)
+                        if autoScalingForm.scaleUpThreshold.data:
+                            autoScalingSetting.set_scaleUpThreshhold(autoScalingForm.scaleUpThreshold.data)
+                        if autoScalingForm.scaleDownThreshold.data:
+                            autoScalingSetting.set_scaleDownThreshold(autoScalingForm.scaleDownThreshold.data)
 
-                    db.session.add(autoScalingSetting)
+                        if autoScalingSetting.scaleDownThreshold > autoScalingSetting.scaleUpThreshold:
+                            flash("Scale down threshold should be smaller than scale up threshold", 'as_error')
+                            db.session.remove()
+                        else:
+                            db.session.add(autoScalingSetting)
                     db.session.commit()
-
                     return redirect(url_for('home'))
 
     return render_template('admin.html', workerTable=workerTable, manualScalingConfigForm=manualScalingForm,
@@ -77,7 +88,7 @@ def destroyWorker(id):
     Destroy a specific worker instance
     '''
     if PRIMARY_WORKER_ID == id:
-        flash("This is the primary worker instance, it should not be terminated, please choose another one!")
+        flash("This is the primary worker instance, it should not be terminated, please choose another one!", 'warning')
     else:
         destroyInstance([id])
     return redirect(url_for('home'))
@@ -106,3 +117,41 @@ def wipeOutEverything():
         bucket.delete()
 
     return redirect(url_for('home'))
+
+
+def autoScaling():
+    '''
+    this method will be called by scheduler periodically to perform auto scaling for the worker pool.
+    '''
+    instanceIDs = getEC2WorkerInstanceIDs()
+    instanceInfo = computeWorkerDict(instanceIDs)
+
+    autoScalingSettings = AutoScalingConfig.query.all()[0]
+    as_up_ratio = autoScalingSettings.scaleUpRatio
+    as_down_ratio = autoScalingSettings.scaleDownRatio
+    as_up_threshold = autoScalingSettings.scaleUpThreshold
+    as_down_threshold = autoScalingSettings.scaleDownThreshold
+
+    average = calculateAverage(instanceInfo)
+    print("Current average CPU consumption is: " + str(average))
+
+    if (average > as_up_threshold) and as_up_ratio > 1:
+        # if worker pool load is greater than scale up threshold
+        # need to scale up the pool
+        print("Auto Scaling Up " + str(len(instanceIDs) * (as_up_ratio - 1)) + " instances")
+        createWorkerInstance(len(instanceIDs) * (as_up_ratio - 1))
+        redirect(url_for('home'))
+    if (average < as_down_threshold) and as_down_ratio > 1 and len(instanceIDs) > 1:
+        # if worker pool is below scale down threshhold
+        # need to destroy workers with least loads
+        numToDestroy = math.ceil(len(instanceIDs) / (as_down_ratio))
+        if numToDestroy > len(instanceIDs):
+            numToDestroy = len(instanceIDs) - 1
+        instanceToDestroy = []
+        for i in range(numToDestroy):
+            if instanceInfo[i][0] == PRIMARY_WORKER_ID:
+                instanceInfo.pop(i)
+            instanceToDestroy.append(instanceInfo[i][0])
+        print("Auto scaling down " + str(len(instanceToDestroy)) + " instances")
+        destroyInstance(instanceToDestroy)
+        redirect(url_for('home'))

@@ -9,14 +9,14 @@
     <div class="workerCPUTable">
         <h3>Workers CPU Utilizations:</h3>
         {{ workerTable }}
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {%  endfor %}
-        </ul>
-        {% endif %}
+        {% with messages = get_flashed_messages(with_categories=True, category_filter=['warning']) %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color: red;">{{ message[1] }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endwith %}
     </div>
 
@@ -44,33 +44,30 @@
         <form name="autoScalingConfigForm" id="autoScalingConfigForm" action="" method="post" novalidate>
             {{ autoScalingConfigForm.hidden_tag() }}
             <input name="form-name" value="autoScalingConfigForm" hidden>
+            {% with messages = get_flashed_messages(with_categories=True, category_filter=['as_error']) %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li style="color: red;">{{ message[1] }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             <div>
-                {{ autoScalingConfigForm.scaleDownThreshold.label }}<br>
-                {{ autoScalingConfigForm.scaleDownThreshold() }}
-                {% for error in autoScalingConfigForm.scaleDownThreshold.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <div>
-                {{ autoScalingConfigForm.scaleUpThreshold.label }}<br>
-                {{ autoScalingConfigForm.scaleUpThreshold() }}
-                {% for error in autoScalingConfigForm.scaleUpThreshold.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                {{ autoScalingConfigForm.scaleUpRatio.label }}<br>
+                {{ autoScalingConfigForm.scaleUpRatio() }}
             </div>
             <div>
                 {{ autoScalingConfigForm.scaleDownRatio.label }}<br>
                 {{ autoScalingConfigForm.scaleDownRatio() }}
-                {% for error in autoScalingConfigForm.scaleDownRatio.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
             </div>
             <div>
-                {{ autoScalingConfigForm.scaleUpRatio.label }}<br>
-                {{ autoScalingConfigForm.scaleUpRatio() }}
-                {% for error in autoScalingConfigForm.scaleUpRatio.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                {{ autoScalingConfigForm.scaleUpThreshold.label }}<br>
+                {{ autoScalingConfigForm.scaleUpThreshold() }}
+            </div>
+            <div>
+                {{ autoScalingConfigForm.scaleDownThreshold.label }}<br>
+                {{ autoScalingConfigForm.scaleDownThreshold() }}
             </div>
             <div>{{ autoScalingConfigForm.submitAutoConfig() }}</div>
         </form>

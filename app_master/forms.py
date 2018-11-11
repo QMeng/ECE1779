@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
+from flask import *
 from wtforms import FloatField, IntegerField, SubmitField
 from wtforms.validators import *
+
+from app_master.models import AutoScalingConfig
 
 
 class AutoScalingConfigForm(FlaskForm):
@@ -12,17 +15,6 @@ class AutoScalingConfigForm(FlaskForm):
     scaleUpRatio = IntegerField("Scale Up Ratio", validators=[Optional()])
     scaleDownRatio = IntegerField("Scale Down Ratio", validators=[Optional()])
     submitAutoConfig = SubmitField("Submit Auto Config")
-
-    def validate(self):
-        if (not self.scaleDownRatio.data) and (not self.scaleUpRatio.data) and (not self.scaleDownThreshold.data) and (
-                not self.scaleUpThreshold.data):
-            errMsg = "At least one of the field should be filled!"
-            self.scaleDownRatio.errors.append(errMsg)
-            self.scaleUpRatio.errors.append(errMsg)
-            self.scaleDownThreshold.errors.append(errMsg)
-            self.scaleUpThreshold.errors.append(errMsg)
-            return False
-        return True
 
 
 class RefreshCurrentPageForm(FlaskForm):
