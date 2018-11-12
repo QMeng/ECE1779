@@ -1,0 +1,117 @@
+/* nav-bar */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(48, 48, 48);
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+/* table styling */
+
+table {
+    border-collapse: collapse;
+
+}
+
+#cpu-utilize {
+    text-align: center;
+}
+
+table, th, td {
+    border: 1px solid rgb(65, 156, 213);
+    color: rgb(48, 48, 48);
+}
+
+th {
+    background-color: rgb(232, 232, 232);
+}
+
+tr:hover {
+    background-color: rgb(249, 249, 249);
+}
+
+/* destroy button styling */
+
+button {
+    color: white;
+    background-color: red;
+    border-color: rgba(0, 0, 0, 0);
+    position: relative;
+    top: 8px;
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#submitManualConfig, #submitAutoConfig {
+    color: white;
+    background-color: rgb(48, 48, 48);
+    padding: 10px 12px;
+    font-size: 10px;
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.Auto-Scaling-Config {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#scaleUpThreshold, #scaleDownThreshold, #scaleDownRatio, #scaleUpRatio, #manualScaleUp {
+    width: 16rem;
+    height: 1.8rem;
+}
+
+/* size-adjustable table accoriding to windows size */
+th, td {
+    padding: 4px;
+}
+
+#cpu-utilize {
+    font-size: 10px;
+}
+
+@media screen and (min-width: 450px) {
+    #cpu-utilize {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}
+
+@media screen and (min-width: 555px) {
+    #cpu-utilize {
+        font-size: 16px;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+}
+
