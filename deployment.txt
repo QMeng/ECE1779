@@ -1,18 +1,36 @@
+AWS instances:
+    1. ECE1779Master 18.205.87.91
+    2. ECE1779Database 34.202.92.63
+    3. ECE1779PrimaryWorker 54.227.126.13
+
+    These instances have fixed IP address. So no need to modify anything after they are fully up.
+    Also, 1 classic load balancer was created.
+    ECE1779LoadBalancer ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com
+
 Deployment instructions:
     0.  login into AWS management console with the provided credentials.
-    1.  start the aws instance, wait for it to fully start, grab the public ip address (<IP>).
-    2.  open up a terminal. command: 
-            ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP> -L 5901:localhost:5901
-    3.  cd Desktop/ECE1779A1
-    4.  kick off the application. command: 
-            . run.sh
+    1.  start the 3 instances mentioned above, wait for them to be fully up (status checks passed)
+    2.  open a terminal, use the following command to ssh into master instance
+            ssh -i <path to key>/ece1779a1_instance.pem ubuntu@18.205.87.91
+        2.1.  cd Desktop/ECE1779A1
+        2.2.  kick off the master application. command:
+            . run_master.sh
+    3. open a new terminal, use the following command to ssh into the primary instance
+            ssh -i <path to key>/ece1779a1_instance.pem ubuntu@54.227.126.13 -L 5901:localhost:5901
+        2.1.  cd Desktop/ECE1779A1
+        2.2.  kick off the worker application. command:
+            . run_worker.sh
 
 To stop the web app:
     1.  stop the process by press ctrl + C at the same time, or kill the process.
     2.  exit the ssh session
-    3.  stop the AWS instance (Please do not forget to stop the aws instance :) )
+    3.  stop the AWS instances (Please do not forget to stop the aws instance :) )
 
 How to access the web application (after deployment):
-    Port 8080 of the AWS instance is opened for HTTP access.
-    1. From the AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
-    2. From your computer, open any type of browser, type 'http//<public ip of aws instance>:8080/' in the address bar.
+    Port 8080 of the AWS instances is opened for HTTP access.
+    For master app:
+        1. From the AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
+        2. From your computer, open any type of browser, type 'http//18.205.87.91:8080/' in the address bar.
+    For worker app:
+        1. From the AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
+        2. From you computer, open any type of browser, type 'http://ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com' in the address bar.

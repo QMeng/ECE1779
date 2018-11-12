@@ -1,0 +1,144 @@
+This project is for ECE1779 - Cloud Computing - offered at University of Toronto 2018 fall semester.
+
+The following sections will be an introduction of the project with some detailed layout.
+
+Contributors/Group members (Name, UTorID, Student #):
+Qingsong Meng,  mengqin6,   998383093
+Shihan Liu,     liushih3,   1005056145
+Zou Ming,       zouming2,   1003495611
+
+Project introduction:
+    UserUI:
+    This part of the project builds a image uploading web application using flask, mysql, imagemagick, werkzeug, boto3.
+    This web application lets registered users upload images into their accounts/pages, and creates 3 transformations 
+    (MultiShift, Black & White, Sepia) for the uploaded images. For new users, there is option for sign up as well.
+    Images are stored on S3 and image information are stored on remote database server
+
+    ManagerUI:
+    This part of the project creates a page for administrator control of this web application using flask, boto3, APScheduler.
+    Functionalities include manual scale up instances (1 to 5 instances), manual destroy specific instance (excluding
+    prime worker instance), display of current works' CPU stats, configuring auto scaling settings (ratio and threshold)
+    and wipeout application data (image, user, worker instances).
+
+    The web application is deployed on 3 AWS instances. 1 for running master app, 1 for running the database, 1 for running
+    the worker app (this is the primary worker instance). During running, more worker instances will be created if there
+    is request for manual increment from admin user or cpu usage of existing instances exceeds the auto scale up threshold.
+    Also, worker instances will be destoryed if there is request from admin user to destory a specific instance, or cpu
+    usage of existing instances dropped below auto scaling down threshold.
+
+    There is 1 classic load balancer to distribute requests among the worker pool.
+
+    Deployment instructions and AWS credentials are stored in deployment.txt.
+
+Project structure layout:
+    ECE1779A1
+        -> imageUploader.py
+        -> master.py
+        -> venv/
+        -> run_worker.sh
+        -> run_master.sh
+        -> ECE1779.sql
+        -> app_worker
+            -> static
+                -> *.css
+                -> *.js
+            -> templates
+                -> *.html
+            -> __init__.py
+            -> config.py
+            -> forms.py
+            -> models.py
+            -> routes.py
+            -> utilities.py
+        -> app_master
+            -> static
+                -> *.css
+                -> *.js
+            -> templates
+                -> *.html
+            -> __init__.py
+            -> config.py
+            -> forms.py
+            -> models.py
+            -> routes.py
+            -> utilities.py
+
+Detailed project structure:
+    1.  imageUploader.py contains the main function of this web app's worker part.
+    2.  master.py contains the main function of this web app's master part.
+    3.  venv folder contains all the python libraries used in this project. Including: flask, flask-login, flask-wtf,
+        flask-sqlalchemy, flask-table, boto3, werkzeug, pymysql, wand (api binding for ImageMagick), etc.
+    4.  run_worker.sh is the script for spinning up the virtual environment and kick off the worker app.
+    5.  run_master.sh is the script for spinning up the virtual environment and kick off the master app.
+    6.  ECE1779.sql contains sql scripts for creating the database, tables used by this project. Table schema will be
+        listed in later sections.
+    7.  app_worker/static folder contains css and javascript files that used by the worker app's front end UI.
+    8.  app_worker/templates folder contains the HTML files used for the worker app's front end UI display. Combined
+        with files under app_worker/static folder, the front end UI display of the worker app is completed.
+    9.  app_worker/__init__.py initializes the flask app object, aws objects that is used across almost all the scripts
+        for the worker app. It also contains multiple global variables that will be referred in other scripts.
+    10. app_worker/config.py stores all the configurations for the flask app and aws configs, including database credentials, etc.
+    11. app_worker/forms.py stores object classes for the login, signup, file upload forms. These objects is integrated with
+        the front end forms that were displayed on the web pages, so the values will be extracted and feed into these
+        objects. Form fields has validations on them, for example, in sign up form, password field and repeat password
+        field must have the same value.
+    12. app_worker/models.py stores User and ImageContent object classes, information stored in these 2 objects will be
+        feed into mysql database. Note: the password field in User object will be first appended with a random salt value,
+        then hashed, before committed into database.
+    13. app_worker/routes.py contains all the definitions for the routes in worker app. All the request handling are
+        happening in this file, like sign up requests, user login requests, receiving form info, receiving uploaded
+        file and store them, etc. There are 2 types of routes, one is pages that is visible, or in other words,
+        rendered with html templates under app/templates, the other kind is hidden api endpoint, like the project
+        requirement, '/test/FileUpload' URI is not accessible through front end, but it can receive post requests sent
+        by API client (for example, Postman).
+    14. app_worker/utilities.py contains utility functions like creating thumbnails, creating transformations for images, etc.
+    15. app_master/static folder contains css and javascript files that is used by the master app's front end UI.
+    16. app_master/templates folder contains html templates used for master app's front end UI. Together with files in
+        app_master/static folder, the front end UI is complete
+    17. app_master/__init__.py initialized flask app, aws resouces and clients, as well as the scheduler for periodic
+        checking for auto scaling.
+    18. app_master/config.py stores configurations for flask app, aws configs, database configs.
+    19. app_master/forms.py contains the manual scale up form, auto scale config form that are used in the master app
+    20. app_master/models.py contains cpu utilization table model, instance info model, auto scaling config model. Table
+        models are used for easy generation of tables in web pages, config model will be interacting with remote database
+        to store and update auto scaling setting
+    21. app_master/routes.py contains the routes of master app, the cpu stats checking task. The master app only has 1 page,
+        therefore, the routes.py file is much shorter than the worker's.
+    22. app_master/utilities.py contains utility methods for interaction with AWS, methods including retrieve instance ids,
+        create instance, destroy instance, retrieve instances' cpu stats, validate auto scaling form inputs.
+
+/test/FileUpload URI of the worker app:
+    This is the URI for automatic image uploading. This URI was implemented exactly according to the requirements listed
+    on the project page.
+
+    relative URL = /test/FileUpload
+    enctype = multipart/form-data
+    method = post
+    field1 name = userID type = string
+    field2 name = password type = string
+    field2 name = uploadedfile type = file
+
+Database table schema:
+    3 tables were created and used in this project. UserInfo is used for storing user information. ImageInfo is used
+    for storing image information. AutoScalingConfig is used to store master app's auto scaling configuration setting,
+    this table should only have 1 row.
+
+    UserInfo
+        id - primary key of this table
+	    username - user name
+	    password - hash value of the password + salt
+	    email - email address of the user
+
+    ImageInfo
+        id - primary key of this table
+        user_id - foreign key referencing UserInfo table
+        name - image's name
+        path - absolute path of where this image (and its transformations) is stored
+        thumbnail_path - absolute path of where the thumbnails of this image is stored
+
+    AutoScalingConfig
+        id - primary key of this table
+        scaleUpRatio - auto scaling up ratio
+        scaleDownRatio - auto scaling down ratio
+        scaleUpThreshold - auto scaling up threshold
+        scaleDownThreshold - auto scaling down threshold
