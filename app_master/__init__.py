@@ -18,7 +18,7 @@ elb_client = boto3.client('elb', **AWS_CONNECTION_ARGS)
 
 from app_master import routes
 
-# scheduler, it will be used for periodic (1 min) checks for auto scaling
+# scheduler, it will be used for periodic (2 min) checks for auto scaling
 scheduler = BackgroundScheduler()
-job = scheduler.add_job(routes.autoScaling, 'interval', minutes=1)
+job = scheduler.add_job(routes.autoScaling, 'interval', minutes=2)
 scheduler.start()
