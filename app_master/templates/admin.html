@@ -31,9 +31,11 @@
         <div>
             {{ manualScalingConfigForm.manualScaleUp.label }}<br>
             {{ manualScalingConfigForm.manualScaleUp() }}<br>
-            {% for error in manualScalingConfigForm.manualScaleUp.errors %}
-                <span style="color: red;background-color: rgba(0,0,0,0)">[{{ error }}]</span>
-            {% endfor %}
+            <ul style="background-color: rgba(0,0,0,0)">
+                {% for error in manualScalingConfigForm.manualScaleUp.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </ul>
         </div>
         <div>{{ manualScalingConfigForm.submitManualConfig() }}</div>
     </form>
@@ -50,7 +52,7 @@
             <input name="form-name" value="autoScalingConfigForm" hidden>
             {% with messages = get_flashed_messages(with_categories=True, category_filter=['as_error']) %}
                 {% if messages %}
-                    <ul>
+                    <ul style="background-color: rgba(0,0,0,0)">
                         {% for message in messages %}
                             <li style="color: red;">{{ message[1] }}</li>
                         {% endfor %}
