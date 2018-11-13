@@ -65,10 +65,12 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 .idea/workspace.xml
-app/images/
-app/thumbnails/
+images/*
+thumbnails/*
 images/
 thumbnails/
 .idea/*
 venv/*
 background-home01.jpeg
+app_master/__pycache__/*
+app_worker/__pycache__/*
