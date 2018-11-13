@@ -14,7 +14,7 @@
         {{ workerTable }}
         {% with messages = get_flashed_messages(with_categories=True, category_filter=['warning']) %}
             {% if messages %}
-                <ul>
+                <ul style="background-color: rgba(0,0,0,0)">
                     {% for message in messages %}
                         <li style="color: red;background-color: rgba(0,0,0,0)">{{ message[1] }}</li>
                     {% endfor %}
