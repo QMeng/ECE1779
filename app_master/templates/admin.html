@@ -16,7 +16,7 @@
             {% if messages %}
                 <ul>
                     {% for message in messages %}
-                        <li style="color: red;">{{ message[1] }}</li>
+                        <li style="color: red;background-color: rgba(0,0,0,0)">{{ message[1] }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -32,7 +32,7 @@
             {{ manualScalingConfigForm.manualScaleUp.label }}<br>
             {{ manualScalingConfigForm.manualScaleUp() }}<br>
             {% for error in manualScalingConfigForm.manualScaleUp.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span style="color: red;background-color: rgba(0,0,0,0)">[{{ error }}]</span>
             {% endfor %}
         </div>
         <div>{{ manualScalingConfigForm.submitManualConfig() }}</div>

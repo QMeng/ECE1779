@@ -5,7 +5,7 @@ AWS instances:
 
     These instances have fixed IP address. So no need to modify anything after they are fully up.
     Also, 1 classic load balancer was created.
-    ECE1779LoadBalancer ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com
+    ECE1779LoadBalancer ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com 52.205.115.114
 
 Deployment instructions:
     0.  login into AWS management console with the provided credentials.

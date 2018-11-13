@@ -12,7 +12,7 @@ Project introduction:
     This part of the project builds a image uploading web application using flask, mysql, imagemagick, werkzeug, boto3.
     This web application lets registered users upload images into their accounts/pages, and creates 3 transformations 
     (MultiShift, Black & White, Sepia) for the uploaded images. For new users, there is option for sign up as well.
-    Images are stored on S3 and image information are stored on remote database server
+    Images are stored on S3 and image information are stored on remote database server.
 
     ManagerUI:
     This part of the project creates a page for administrator control of this web application using flask, boto3, APScheduler.
@@ -20,6 +20,7 @@ Project introduction:
     prime worker instance), display of current works' CPU stats, configuring auto scaling settings (ratio and threshold)
     and wipeout application data (image, user, worker instances).
 
+    Overall:
     The web application is deployed on 3 AWS instances. 1 for running master app, 1 for running the database, 1 for running
     the worker app (this is the primary worker instance). During running, more worker instances will be created if there
     is request for manual increment from admin user or cpu usage of existing instances exceeds the auto scale up threshold.
