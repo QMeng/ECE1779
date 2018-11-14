@@ -15,8 +15,8 @@ IMAGE_FOLDER = os.path.join(ROOT, 'images')
 THUMBNAIL_FOLDER = os.path.join(ROOT, 'thumbnails')
 
 # AWS services
-s3_resource = boto3.resource('s3', **config.AWS_CONNECTION_ARGS)
-s3_client = boto3.client('s3', **config.AWS_CONNECTION_ARGS)
+s3_resource = boto3.resource('s3', config.AWS_CONNECTION_ARGS)
+s3_client = boto3.client('s3', config.AWS_CONNECTION_ARGS)
 IMAGE_BUCKET_PREFIX = 'ece1779-images-'
 THUMBNAIL_BUCKET_PREFIX = 'ece1779-thumbnails-'
 
