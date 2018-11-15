@@ -93,8 +93,7 @@ def createWorkerInstance(numInstance):
 
     ec2_resource.create_tags(Resources=idList, Tags=[{'Key': 'Name', 'Value': 'ECE1779Worker'}])
     elb_client.register_instances_with_load_balancer(LoadBalancerName=LOAD_BALANCER_NAME, Instances=registerIdList)
-
-    time.sleep(30)
+    waitForInstancesHealthy(idList)
 
 
 def destroyInstance(instanceIDs):
@@ -121,6 +120,33 @@ def waitForInstancesRunning(idList):
         time.sleep(5)
         print("Waiting for instances to be running")
     print("All instances are running now")
+
+
+def waitForInstancesHealthy(idList):
+    '''
+    wait for instances to be healthy in load balancer
+    '''
+    counter = 0
+    while not isAllInstanceHealthy(idList):
+        time.sleep(5)
+        print("Waiting for instances in CLB to be healthy")
+        if counter == 60:
+            break
+        counter += 5
+    print("All instances are healthy now")
+
+
+def isAllInstanceHealthy(idList):
+    '''
+    check if instances are healthy in load balancer
+    '''
+    status = True
+    for instanceId in idList:
+        response = elb_client.describe_instance_health(LoadBalancerName=LOAD_BALANCER_NAME,
+                                                       Instances=[{'InstanceId': instanceId}])
+        if response['InstanceStates'][0]['State'] != 'InService':
+            return False
+    return status
 
 
 def isAllInstanceRunning(idList):

@@ -20,16 +20,32 @@ Project introduction:
     prime worker instance), display of current works' CPU stats, configuring auto scaling settings (ratio and threshold)
     and wipeout application data (image, user, worker instances).
 
-    Overall:
-    The web application is deployed on 3 AWS instances. 1 for running master app, 1 for running the database, 1 for running
-    the worker app (this is the primary worker instance). During running, more worker instances will be created if there
-    is request for manual increment from admin user or cpu usage of existing instances exceeds the auto scale up threshold.
-    Also, worker instances will be destoryed if there is request from admin user to destory a specific instance, or cpu
-    usage of existing instances dropped below auto scaling down threshold.
-
-    There is 1 classic load balancer to distribute requests among the worker pool.
-
     Deployment instructions and AWS credentials are stored in deployment.txt.
+
+Project Infrastructure:
+    This web application is deployed on 3 AWS istances initially. 1 for running master app, 1 for running the database,
+    1 for running worker app (this instance is the primary worker instance). While the app is running, more workern
+    instances will be created if there is request for manual increment from admin user or cpu usage of existing instances
+    exceeds the auto scale up threshold. Also, worker instances will be destoryed if there is request from admin user
+    to destory a specific instance, or cpu usage of existing instances dropped below auto scaling down threshold.
+
+    Workers will be spin off using an AMI. The AMi's name is ECE1779WorkerImage, it is created from taking an image of
+    the ECE1779PrimaryWorker instance.
+
+    A classic load balancer was created to distribute the requests to the website (UserUI) among the worker pool.
+
+    ManagerUI:
+    The ManagerUI (master app) is deployed on ECE1779Master instance. It consists of only 1 web page and 1 API endpoint.
+    On the webpage, there are CPU tables, manual scale up form, auto scaling setting table, auto scaling config form. The
+    web page also has functionality to refresh itself (which updates the cpu usage table), wipe out application contents
+    (image info, user info in database, images in S3). It also runs a periodic task checking the average CPU usage of
+    running instances, if the average drops below auto scale down threshold, it will kill serveral instances that is using
+    the least CPUs based on the scale down ratio. On the other hand, if the average is above auto scale up threshold, it
+    will create new instances based on the scale up ratio. For the UI of the webpage, we kept it simple and clean, as admin
+    configuration pages should have a clean look.
+
+    UserUI:
+
 
 Project structure layout:
     ECE1779A1
