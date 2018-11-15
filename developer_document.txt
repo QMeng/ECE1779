@@ -10,7 +10,7 @@ Zou Ming,       zouming2,   1003495611
 Project introduction:
     UserUI:
     This part of the project builds a image uploading web application using flask, mysql, imagemagick, werkzeug, boto3.
-    This web application lets registered users upload images into their accounts/pages, and creates 3 transformations 
+    This web application lets registered users upload images into their accounts/pages, and creates 3 transformations
     (MultiShift, Black & White, Sepia) for the uploaded images. For new users, there is option for sign up as well.
     Images are stored on S3 and image information are stored on remote database server.
 
@@ -43,8 +43,13 @@ Project Infrastructure:
     the least CPUs based on the scale down ratio. On the other hand, if the average is above auto scale up threshold, it
     will create new instances based on the scale up ratio. For the UI of the webpage, we kept it simple and clean, as admin
     configuration pages should have a clean look.
+    Information on using the ManagerUI interface is included in administrator_manual.txt
 
     UserUI:
+    The UserUI (worker app) is deployed on ECE1779PrimaryWorker instance and on multiple ECE1779Worker instances (if needed).
+    The worker app is capable of handling requests like user sign up, logins, image uploading, image displayes (with 3
+    transformations). Requests will be distributed among worker pool by the classic load balancer. On the UI side, worker
+    app is "fancier" than the master app as we think the UI facing the users should be nicer.
 
 
 Project structure layout:

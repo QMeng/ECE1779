@@ -4,8 +4,8 @@ AWS instances:
     3. ECE1779PrimaryWorker 54.227.126.13
 
     These instances have fixed IP address. So no need to modify anything after they are fully up.
-    Also, 1 classic load balancer was created.
-    ECE1779LoadBalancer ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com 52.205.115.114
+    Also, 1 classic load balancer was created for request handling.
+    ECE1779LoadBalancer ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com 34.197.138.222
 
 Deployment instructions:
     0.  login into AWS management console with the provided credentials.
@@ -32,5 +32,13 @@ How to access the web application (after deployment):
         1. From the AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
         2. From your computer, open any type of browser, type 'http//18.205.87.91:8080/' in the address bar.
     For worker app:
-        1. From the AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
+        1. From the worker AWS instance, open any type of browser (firefox), type 'http://0.0.0.0:8080/' in the address bar.
         2. From you computer, open any type of browser, type 'http://ECE1779LoadBalancer-2091637738.us-east-1.elb.amazonaws.com' in the address bar.
+
+How to use the load generator on the load balancer:
+    0. Assume the user (of the image uploader app) is pre-created on the web site
+    1. Use vnc client to connect to ECE1779PrimaryWorker
+    2. open terminal on instance's desktop
+    3. type "cd ece1779/loadbalancer"
+    4. type: "java -cp . ece1779.loadgenerator.LoadGenerator 34.197.138.222 80 <userid> <password>"
+    5. a window will pop out with options to start worker, stop worker

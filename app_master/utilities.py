@@ -130,8 +130,8 @@ def waitForInstancesHealthy(idList):
     while not isAllInstanceHealthy(idList):
         time.sleep(5)
         print("Waiting for instances in CLB to be healthy")
-        if counter == 60:
-            break
+        if counter == 30:
+            return
         counter += 5
     print("All instances are healthy now")
 

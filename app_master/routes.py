@@ -107,6 +107,7 @@ def wipeOutEverything():
     # wipe out database's image table
     db.session.query(ImageContents).delete()
     db.session.query(User).delete()
+    db.session.query(AutoScalingConfig).delete()
     db.session.commit()
 
     # wipe out S3 buckets

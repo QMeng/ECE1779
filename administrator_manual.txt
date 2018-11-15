@@ -1,0 +1,46 @@
+Administrator manual:
+    This document is the manual for administrators who wish to monitor and adjust work pool.
+    You can access the admin control console at "http//18.205.87.91:8080/"
+
+Page Layout:
+    -> Button bar (Refresh current page, wipe out everything)
+    -> Worker CPU Utilization Table
+    -> Manual Scale Up Config Form
+    -> Auto Scaling Config Section
+        -> Current auto scaling configuration display table
+        -> Auto Scaling config form
+
+Detailed explanation:
+    1.  Button bar contains 2 buttons for refresh current page and wipe out everthing. Clicking refresh current page will
+        refresh the current wipe page, therefore, retrieving the lastest worker cpu usage information (displayed in Worker
+        CPU Utilization table). Clicking wipe out everything button will delete all application data, including all worker
+        instances that is not the primary worker instane, images stored on S3 and users, images, auto config setting stored
+        on remote database server. Auto scaling config setting will be reset to default which is 20.0, 5.0, 2, 2 for auto
+        scale up threshold, auto scale down threshold, auto scale up ratio and auto scale down ratio respectively.
+    2.  Worker CPU Utilization Table displayes all the workes in the worker pool and their CPU usage. The left most column
+        contains the destroy button that will destroy the work in this row (this is the manual scale down feature). Note,
+        the primary worker instance can not be destroyed, if you click the destroy button for it, an error message will be
+        displayed under the table.
+    3.  Manual scale up form is for inputting the number of instances to be created (this is the manual scale up feature).
+        When filling the field, please input an integer between (including) 1 and 5. An error message will be displayed if
+        the input does not satisfy the requirement.
+    4.  Current auto scaling configuration table displayes the current setting (retieved from remote database) of auto scaling.
+    5.  Auto scaling config form is used for changing the auto scaling configurations. Scale up ratio and scale down ratio
+        should be integers, while scale up threshold and scale down threshold are expected to be float. Also, scale up threshold
+        should be always larger than scale down threshold. If any of the requirement is not satisfied, an error message will
+        be displayed. After submitting the form, the current auto scaling configuration table will be updated.
+
+Notes:
+    1.  After submitting the number of instances to be created in the manual scale up form. There will be a delay on the
+        webpage as it takes some time to create the instances and wait for them to be running and healthy in the load balancer.
+        The webpage will refresh itself after the process is completed.
+    2.  Newly created instances will have a CPU usage of 0 for a few moments (as instance is booting up). Please refresh
+        the page (by clicking refresh current page button) after half a minute or so, the cpu usage will be updated.
+    3.  Auto scaling checking is running periodically in the background, the period is 2 minutes. For testing auto scaling
+        features efficiently, it is recommanded to adjust the auto scale up and down threshold to a more "triggerable" range
+         to avoid the delays in creating AWS instances interfering with the auto scaling policies. For example, when testing
+        the auto scale up feature, adjust the scale up threshold and scale down threshold to 10.0 and 0.1 would make the
+        testing very efficient, because the newly created instance won't be auto destroyed since its CPU usage is low upon
+        start (as it may bring the overall cpu usage averges of the work pool below the auto scale down threshold). Same
+        goes for testing auto scale down feature, making the auto scale up threshold and auto scale down threshold to be
+        45.0 and 15.0 will make the testing much visible and more efficient.
