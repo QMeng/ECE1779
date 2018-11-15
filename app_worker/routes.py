@@ -165,6 +165,7 @@ def upload():
                                   thumbnail_path=thumbnailDestination)
         db.session.add(new_image)
         db.session.commit()
+        wipeOutLocalImage(user_id)
     else:
         flash('File type not supported')
     return redirect(url_for('home'))
