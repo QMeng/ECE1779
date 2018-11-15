@@ -10,21 +10,24 @@ AWS instances:
 Deployment instructions:
     0.  login into AWS management console with the provided credentials.
     1.  start the 3 instances mentioned above, wait for them to be fully up (status checks passed)
-    2.  open a terminal, use the following command to ssh into master instance
-            ssh -i <path to key>/ece1779a1_instance.pem ubuntu@18.205.87.91
+    2.  ssh into master instance
+	    2.0.  open a new terminal, and use the following command
+              ssh -i <path to key>/ece1779a1_instance.pem ubuntu@18.205.87.91
         2.1.  cd Desktop/ECE1779A1
         2.2.  kick off the master application. command:
-            . run_master.sh
-    3. open a new terminal, use the following command to ssh into the primary instance
-            ssh -i <path to key>/ece1779a1_instance.pem ubuntu@54.227.126.13 -L 5901:localhost:5901
-        2.1.  cd Desktop/ECE1779A1
-        2.2.  kick off the worker application. command:
-            . run_worker.sh
+              . run_master.sh
+    3. ssh into the primary worker instance
+	    3.0.  open a new terminal, and use the following command
+              ssh -i <path to key>/ece1779a1_instance.pem ubuntu@54.227.126.13 -L 5901:localhost:5901
+        3.1.  cd Desktop/ECE1779A1
+        3.2.  kick off the worker application. command:
+              . run_worker.sh
 
 To stop the web app:
+    0.  wipe out all application data and normal worker instances by clicking the "wipe out everything" button on the admin console page of master app
     1.  stop the process by press ctrl + C at the same time, or kill the process.
     2.  exit the ssh session
-    3.  stop the AWS instances (Please do not forget to stop the aws instance :) )
+    3.  stop the AWS instances (Please do not forget to stop the aws instances :) )
 
 How to access the web application (after deployment):
     Port 8080 of the AWS instances is opened for HTTP access.
@@ -42,3 +45,11 @@ How to use the load generator on the load balancer:
     3. type "cd ece1779/loadbalancer"
     4. type: "java -cp . ece1779.loadgenerator.LoadGenerator 34.197.138.222 80 <userid> <password>"
     5. a window will pop out with options to start worker, stop worker
+
+For checking access log of instances:
+    1. get the instance IP address <IP>
+    2. ssh into the instance
+	    2.0. open a new terminal and use the following command
+	        ssh -i <path to key>/ece1779a1_instance.pem ubuntu@<IP>
+	    2.1.  cd Desktop/ECE1779A1
+	    2.2.  vi access.log

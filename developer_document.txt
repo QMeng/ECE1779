@@ -9,7 +9,7 @@ Zou Ming,       zouming2,   1003495611
 
 Project introduction:
     UserUI:
-    This part of the project builds a image uploading web application using flask, mysql, imagemagick, werkzeug, boto3.
+    This part of the project builds an image uploading web application using flask, mysql, imagemagick, werkzeug, boto3.
     This web application lets registered users upload images into their accounts/pages, and creates 3 transformations
     (MultiShift, Black & White, Sepia) for the uploaded images. For new users, there is option for sign up as well.
     Images are stored on S3 and image information are stored on remote database server.
@@ -23,14 +23,14 @@ Project introduction:
     Deployment instructions and AWS credentials are stored in deployment.txt.
 
 Project Infrastructure:
-    This web application is deployed on 3 AWS istances initially. 1 for running master app, 1 for running the database,
+    This web application is deployed on 3 AWS instances initially. 1 for running master app, 1 for running the database,
     1 for running worker app (this instance is the primary worker instance). While the app is running, more workern
     instances will be created if there is request for manual increment from admin user or cpu usage of existing instances
-    exceeds the auto scale up threshold. Also, worker instances will be destoryed if there is request from admin user
-    to destory a specific instance, or cpu usage of existing instances dropped below auto scaling down threshold.
+    exceeds the auto scale up threshold. Also, worker instances will be destroyed if there is request from admin user
+    to destroy a specific instance, or cpu usage of existing instances dropped below auto scaling down threshold.
 
-    Workers will be spin off using an AMI. The AMi's name is ECE1779WorkerImage, it is created from taking an image of
-    the ECE1779PrimaryWorker instance.
+    Workers of type t2.micro will be spin off using an AMI. The AMi's name is ECE1779WorkerImage, it is created from taking
+    an image of the ECE1779PrimaryWorker instance.
 
     A classic load balancer was created to distribute the requests to the website (UserUI) among the worker pool.
 
@@ -39,17 +39,19 @@ Project Infrastructure:
     On the webpage, there are CPU tables, manual scale up form, auto scaling setting table, auto scaling config form. The
     web page also has functionality to refresh itself (which updates the cpu usage table), wipe out application contents
     (image info, user info in database, images in S3). It also runs a periodic task checking the average CPU usage of
-    running instances, if the average drops below auto scale down threshold, it will kill serveral instances that is using
+    running instances, if the average drops below auto scale down threshold, it will kill several instances that is using
     the least CPUs based on the scale down ratio. On the other hand, if the average is above auto scale up threshold, it
     will create new instances based on the scale up ratio. For the UI of the webpage, we kept it simple and clean, as admin
     configuration pages should have a clean look.
+    Worker instances created by manual or auto scaling are all t2.micro types.
     Information on using the ManagerUI interface is included in administrator_manual.txt
 
     UserUI:
     The UserUI (worker app) is deployed on ECE1779PrimaryWorker instance and on multiple ECE1779Worker instances (if needed).
-    The worker app is capable of handling requests like user sign up, logins, image uploading, image displayes (with 3
+    The worker app is capable of handling requests like user sign up, logins, image uploading, image displays (with 3
     transformations). Requests will be distributed among worker pool by the classic load balancer. On the UI side, worker
     app is "fancier" than the master app as we think the UI facing the users should be nicer.
+    Information on using the UserUI interface is included in user_manual.txt
 
 
 Project structure layout:
@@ -141,9 +143,10 @@ Detailed project structure:
     field2 name = uploadedfile type = file
 
 Database table schema:
-    3 tables were created and used in this project. UserInfo is used for storing user information. ImageInfo is used
-    for storing image information. AutoScalingConfig is used to store master app's auto scaling configuration setting,
-    this table should only have 1 row.
+    3 tables were created and used in this project. 
+        UserInfo is used for storing user information.
+        ImageInfo is used for storing image information.
+        AutoScalingConfig is used to store master app's auto scaling configuration setting, this table should only have 1 row.
 
     UserInfo
         id - primary key of this table
