@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "app_function": "app_musicUploader.app_musicUploader",
+    "aws_region": "us-east-1",
+    "profile_name": "default",
+    "project_name": "ece1779",
+    "runtime": "python3.6",
+    "s3_bucket": "musicuploader.damonqingsongmeng.com",
+    "app_function": "app_musicUploader.app_musicUploader",
+    "parameter_depth": 1,
+    "timeout_seconds": 300,
+    "memory_size": 128,
+    "use_precompiled_packages": true,
+    "keep_warm": false,
+    "http_methods": [
+      "GET",
+      "POST"
+    ]
+  }
+}

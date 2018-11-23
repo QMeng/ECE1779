@@ -1,10 +1,14 @@
 from flask import *
+from flask_s3 import FlaskS3
+
 from app_musicUploader.config import Config
 from flask_login import LoginManager
+from flask_cors import CORS
 import boto3
 import os
 
 app_musicUploader = Flask(__name__)
+CORS(app_musicUploader, origins=['https://musicuploader.damonqingsongmeng.com'])
 app_musicUploader.config.from_object(Config)
 login = LoginManager(app_musicUploader)
 

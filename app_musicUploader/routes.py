@@ -4,7 +4,7 @@ from app_musicUploader.utilities import *
 from werkzeug.utils import secure_filename
 
 
-@app_musicUploader.route('/')
+@app_musicUploader.route('/', methods=['GET', 'POST'])
 def index():
     '''want the defualt page to be login page'''
     return redirect(url_for('login'))
@@ -118,96 +118,6 @@ def logout():
     response = redirect(url_for('login'))
     response.set_cookie('username', '', expires=0)
     return response
-
-
-@app_musicUploader.route('/test/FileUpload', methods=['POST'])
-def testFileUpload():
-    '''/test/FileUpload uri endpoint for easy uploading thru api calls'''
-    username = request.form['userID']
-    password = request.form['password']
-    files = request.files.getlist('uploadedfile')
-
-    if not checkUserAuth(username, password):
-        error = InvalidUsage("User not authenticated")
-        return handle_invalid_usage(error)
-
-    user = UserInfo.get(username)
-    createImageFolder(username)
-    createThumbnailFolder(username)
-
-    # save the uploaded image
-    for image in files:
-        imageName = image.filename
-        saveName = computeFileName(imageName, '-1.')
-
-        # check for duplicate
-        if (check_dup(imageName, username)):
-            error = InvalidUsage("The image you tried to upload already exists. Please try another file")
-            return handle_invalid_usage(error)
-
-        # save to local, then upload into S3
-        destination = os.path.join(IMAGE_FOLDER, username, saveName)
-        image.save(destination)
-        uploadIntoS3(username, destination, saveName, True)
-
-        # create transformation and their thumbnails, upload into S3
-        image_bucket = create_transformations(imageName, username)
-        thumbnail_bucket = create_thumbnail(imageName, username)
-        newImage = ImageInfo(username, imageName)
-        newImage.set_s3ImageBucket(image_bucket)
-        newImage.set_s3ThumbnailBucket(thumbnail_bucket)
-        newImage.save()
-
-    wipeOutLocalImage(username)
-
-    return "Success"
-
-
-@app_musicUploader.route("/upload", methods=["POST"])
-def upload():
-    '''
-    This is the upload page. User can upload images.
-    '''
-    form = FileUploadForm()
-    if form.validate_on_submit():
-        f = form.image.data
-        imageName = secure_filename(f.filename)
-        saveName = computeFileName(imageName, '-1.')
-        username = request.cookies.get("username")
-
-        createImageFolder(username)
-        createThumbnailFolder(username)
-
-        # check uploading duplications.
-        if check_dup(imageName, username):
-            flash("file already existed")
-            return redirect(url_for('home'))
-
-        # save uploading files
-        destination = os.path.join(IMAGE_FOLDER, username, saveName)
-        f.save(destination)
-        uploadIntoS3(username, destination, saveName, True)
-
-        # create multishift, black and white, sepia transformations
-        image_bucket = create_transformations(imageName, username)
-
-        # Create thumbanil related to uploaded image.
-        thumbnail_bucket = create_thumbnail(imageName, username)
-
-        # save the image info in DB
-        new_image = ImageInfo(username, imageName)
-        new_image.set_s3ImageBucket(image_bucket)
-        new_image.set_s3ThumbnailBucket(thumbnail_bucket)
-        new_image.save()
-        wipeOutLocalImage(username)
-    else:
-        flash('File type not supported')
-    return redirect(url_for('home'))
-
-
-@app_musicUploader.route('/Return/')
-def return_home():
-    return redirect(url_for('home'))
 
 
 @app_musicUploader.errorhandler(InvalidUsage)

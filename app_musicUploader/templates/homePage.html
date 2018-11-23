@@ -9,7 +9,7 @@
 
 {% block content %}
     <head>
-        <link rel="stylesheet" type="text/css" href="../static/homepage.css">
+        <link rel="stylesheet" type="text/css" href="static/homepage.css">
     </head>
 
 
@@ -60,7 +60,7 @@
                 <p id="check" style="color:white;display:none;">{{ check }}</p>
             </div>
             <div class="upload_files_info">
-                <p id="upload-filename">{{ form.file.data.filename }}</p>
+                <p id="upload-filename">{{ form.image.data.filename }}</p>
             </div>
         </div>
     </div>
@@ -94,7 +94,7 @@
         <div id="image-{{ image_name }}" value="{{ all_image_url[loop.index - 1] }}" hidden></div>
     {% endfor %}
 
-    <script src="../static/homepage.js" type="text/javascript" charset="utf-8"></script>
+    <script src="static/homepage.js" type="text/javascript" charset="utf-8"></script>
 
 {% endblock %}
 
