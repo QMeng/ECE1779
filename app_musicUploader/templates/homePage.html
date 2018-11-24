@@ -9,10 +9,8 @@
 
 {% block content %}
     <head>
-        <link rel="stylesheet" type="text/css" href="static/homepage.css">
+        <!--<link rel="stylesheet" type="text/css" href="static/homepage.css">-->
     </head>
-
-
     <div id="firstblock" class="transparentLayer">
         <br>
         <br>
@@ -26,7 +24,7 @@
                     </p>
                 </div>
             </div>
-            <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            <form id="upload-form" action="" method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <div class="upload-widgets">
                     {{ form.image.label(id="viewFile") }}
@@ -89,12 +87,19 @@
         </div>
     </div>
 
-    {% for image_name in all_images %}
-        <div id="thumbnail-{{ image_name }}" value="{{ all_tbn_url[loop.index - 1] }}" hidden></div>
-        <div id="image-{{ image_name }}" value="{{ all_image_url[loop.index - 1] }}" hidden></div>
+    {% for image_name in images %}
+        <div id="thumbnail-{{ image_name }}" value="{{ thumbnail_urls[loop.index - 1] }}" hidden></div>
+        <div id="image-{{ image_name }}" value="{{ image_urls[loop.index - 1] }}" hidden></div>
     {% endfor %}
 
-    <script src="static/homepage.js" type="text/javascript" charset="utf-8"></script>
+    {% for music_name in musics %}
+        <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}" hidden></div>
+        <form id="add_to_list-{{ music_name }}" action="{{ url_for('addToList', musicname=music_name) }}" >
+            <input type="submit" value="Add to playlist" id="add_to_list">
+        </form>
+    {% endfor %}
+
+    <!--<script src="static/homepage.js" type="text/javascript" charset="utf-8"></script>-->
 
 {% endblock %}
 

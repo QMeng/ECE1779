@@ -40,39 +40,83 @@ class UserInfo(Model):
         return check_password_hash(self.password, password)
 
 
-class ImageInfo(Model):
+class MusicInfo(Model):
     '''
-    Image information table in dynamodb
+    Music information table in dynamodb
     '''
 
     class Meta:
         '''
-        Metadata for ImageInfo table
+        Metadata for MusicInfo table
         '''
-        table_name = 'ImageInfo'
+        table_name = 'MusicInfo'
         region = 'us-east-1'
         aws_access_key_id = AWS_CONNECTION_ARGS.get('aws_access_key_id')
         aws_secret_access_key = AWS_CONNECTION_ARGS.get('aws_secret_access_key')
 
     username = UnicodeAttribute(hash_key=True)
-    imagename = UnicodeAttribute(range_key=True)
+    musicname = UnicodeAttribute(range_key=True)
+    imagename = UnicodeAttribute()
+    s3MusicBucket = UnicodeAttribute()
     s3ImageBucket = UnicodeAttribute()
     s3ThumbnailBucket = UnicodeAttribute()
 
+    def set_musicname(self, musicname):
+        '''
+        set the music name
+        '''
+        self.musicname = musicname
+        return self
+
     def set_imagename(self, imagename):
+        '''
+        set the image name
+        '''
         self.imagename = imagename
+        return self
+
+    def set_s3MusicBucket(self, s3MusicBucket):
+        self.s3MusicBucket = s3MusicBucket
+        return self
 
     def set_s3ImageBucket(self, s3ImageBucket):
         '''
         set the s3 image bucket attribute
         '''
         self.s3ImageBucket = s3ImageBucket
+        return self
 
     def set_s3ThumbnailBucket(self, s3ThumbnailBucket):
         '''
         set the s3 thumbnail bucket attribute
         '''
         self.s3ThumbnailBucket = s3ThumbnailBucket
+        return self
+
+
+class MusicList(Model):
+    '''
+    Music list table
+    '''
+
+    class Meta:
+        '''
+        Metadata for MusicList table
+        '''
+        table_name = 'MusicList'
+        region = 'us-east-1'
+        aws_access_key_id = AWS_CONNECTION_ARGS.get('aws_access_key_id')
+        aws_secret_access_key = AWS_CONNECTION_ARGS.get('aws_secret_access_key')
+
+    username = UnicodeAttribute(hash_key=True)
+    musicname = UnicodeAttribute(range_key=True)
+
+    def set_musicname(self, musicname):
+        '''
+        set the music name
+        '''
+        self.musicname = musicname
+        return self
 
 
 class InvalidUsage(Exception):

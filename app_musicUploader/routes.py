@@ -45,7 +45,7 @@ def login():
         else:
             # existing user, flash the message
             flash("User already signed up!")
-            return redirect(url_for('signup'))
+            return redirect(url_for('login'))
     return render_template('login.html', title='Sign In', loginForm=loginForm, signupForm=signupForm)
 
 
@@ -57,55 +57,55 @@ def home():
     :return:
     the rendered page of current user's home
     '''
-    form = FileUploadForm()
+    fileform = FileUploadForm()
 
     user = load_user(request.cookies.get('username'))
-    original_thumbnail_images = getUserOriginalImages(user.username)
-    all_images = getUserImages(user.username)
-    original_thumbnail_url = getPresignedUrl(user.username, original_thumbnail_images, False)
-    all_thumbnail_url = getPresignedUrl(user.username, all_images, False)
-    all_image_url = getPresignedUrl(user.username, all_images, True)
+    images = getUserImages(user.username)
+    musics = getUserMusics(user.username)
+    thumbnail_urls = getPresignedUrl(user.username, images, 2)
+    image_urls = getPresignedUrl(user.username, images, 1)
+    music_urls = getPresignedUrl(user.username, musics, 3)
 
-    if form.validate_on_submit():
-        image = form.image.data
-        music = form.music.data
-        imageName = secure_filename(image.filename)
-        musicName = secure_filename(music.filename)
-        saveName = computeFileName(imageName, '-1.')
+    if fileform.validate_on_submit():
+        image = fileform.image.data
+        music = fileform.music.data
+        imagename = secure_filename(image.filename).replace(" ", "_")
+        musicname = secure_filename(music.filename)
         username = request.cookies.get("username")
 
         createImageFolder(username)
         createThumbnailFolder(username)
+        createMusicFolder(username)
 
         # check uploading duplications.
-        if check_dup(imageName, username):
-            flash("file already existed")
+        if check_dup(musicname, username):
+            flash("file already existed", "uploadError")
             return redirect(url_for('home'))
 
         # save uploading files
-        destination = os.path.join(IMAGE_FOLDER, username, saveName)
-        image.save(destination)
-        uploadIntoS3(username, destination, saveName, True)
+        image_des = os.path.join(IMAGE_FOLDER, username, imagename)
+        image.save(image_des)
+        image_bucket = uploadIntoS3(username, image_des, imagename, 1)
 
-        # create multishift, black and white, sepia transformations
-        image_bucket = create_transformations(imageName, username)
+        music_des = os.path.join(MUSIC_FOLDER, username, musicname)
+        music.save(music_des)
+        music_bucket = uploadIntoS3(username, music_des, musicname, 3)
 
         # Create thumbanil related to uploaded image.
-        thumbnail_bucket = create_thumbnail(imageName, username)
+        thumbnail_bucket = create_thumbnail(imagename, username)
 
-        # save the image info in DB
-        new_image = ImageInfo(username, imageName)
-        new_image.set_s3ImageBucket(image_bucket)
-        new_image.set_s3ThumbnailBucket(thumbnail_bucket)
-        new_image.save()
-        wipeOutLocalImage(username)
+        # save the music info in DB
+        music = MusicInfo(username)
+        music.set_musicname(musicname).set_imagename(imagename).set_s3MusicBucket(music_bucket).set_s3ImageBucket(
+            image_bucket).set_s3ThumbnailBucket(thumbnail_bucket).save()
+
+        wipeOutContent(username)
         return redirect(url_for('home'))
     else:
-        flash('File type not supported')
+        flash('File type not supported', "uploadError")
 
-    return render_template('homePage.html', orig_tbn_img=original_thumbnail_images, all_images=all_images,
-                           orig_tbn_url=original_thumbnail_url, all_tbn_url=all_thumbnail_url,
-                           all_image_url=all_image_url, username=user.username, form=form)
+    return render_template('homePage.html', username=user.username, form=fileform, thumbnail_urls=thumbnail_urls,
+                           image_urls=image_urls, music_urls=music_urls, images=images, musics=musics)
 
 
 @app_musicUploader.route('/logout')
@@ -114,10 +114,21 @@ def logout():
     this method logs out current user and removes the user's cookie from the brower by setting its expire time to now
     this method also removed local images and thumbnails
     '''
-    wipeOutLocalImage(request.cookies.get('username'))
+    wipeOutContent(request.cookies.get('username'))
     response = redirect(url_for('login'))
     response.set_cookie('username', '', expires=0)
     return response
+
+
+@app_musicUploader.route('/addToList/<musicname>', methods=['Get', 'POST'])
+def addToList(musicname):
+    '''
+    add the music into play list
+    '''
+    user = load_user(request.cookies.get("username"))
+    item = MusicList(user.username)
+    item.set_musicname(musicname).save()
+    return redirect(url_for('home'))
 
 
 @app_musicUploader.errorhandler(InvalidUsage)
@@ -136,11 +147,17 @@ def wipe_out_data():
     username = request.cookies.get("username")
     imageBucket = IMAGE_BUCKET_PREFIX + username
     thumbnailBucket = THUMBNAIL_BUCKET_PREFIX + username
+    musicBucket = MUSIC_BUCKET_PREFIX + username
 
-    result = ImageInfo.query(username)
+    result = MusicInfo.query(username)
     for item in result:
-        image = ImageInfo.get(item.username, item.imagename)
-        image.delete()
+        music = MusicInfo.get(item.username, item.musicname)
+        music.delete()
+
+    result = MusicList.query(username)
+    for item in result:
+        listItem = MusicList.get(item.username, item.musicname)
+        listItem.delete()
 
     if checkBucketExist(imageBucket):
         bucket = s3_resource.Bucket(imageBucket)
@@ -150,6 +167,12 @@ def wipe_out_data():
 
     if checkBucketExist(thumbnailBucket):
         bucket = s3_resource.Bucket(thumbnailBucket)
+        for obj in bucket.objects.all():
+            obj.delete()
+        bucket.delete()
+
+    if checkBucketExist(musicBucket):
+        bucket = s3_resource.Bucket(musicBucket)
         for obj in bucket.objects.all():
             obj.delete()
         bucket.delete()

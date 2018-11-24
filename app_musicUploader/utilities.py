@@ -1,18 +1,19 @@
-import ctypes
 from builtins import round
 
 import botocore
 from pynamodb.exceptions import DoesNotExist
 
 from app_musicUploader.models import *
-from wand.image import Image
-from wand.api import library
+from PIL import Image
+from resizeimage import resizeimage
+
 import glob
 
 
 def createImageFolder(username):
-    '''create folder to store images uploaded by the user
-        the location should be [project dir]/images
+    '''
+    create folder to store images uploaded by the user
+    the location should be [project dir]/images
     '''
     if not os.path.isdir(IMAGE_FOLDER):
         os.mkdir(IMAGE_FOLDER)
@@ -21,8 +22,9 @@ def createImageFolder(username):
 
 
 def createThumbnailFolder(username):
-    '''create folder to store thumbnails of the images uploaded by the user
-        the location should be [project dir]/thumbnails
+    '''
+    create folder to store thumbnails of the images uploaded by the user
+    the location should be [project dir]/thumbnails
     '''
     if not os.path.isdir(THUMBNAIL_FOLDER):
         os.mkdir(THUMBNAIL_FOLDER)
@@ -30,103 +32,55 @@ def createThumbnailFolder(username):
         os.mkdir(os.path.join(THUMBNAIL_FOLDER, username))
 
 
+def createMusicFolder(username):
+    '''
+    create folder to store music and its transformations
+    '''
+    if not os.path.isdir(MUSIC_FOLDER):
+        os.mkdir(MUSIC_FOLDER)
+    if not os.path.isdir(os.path.join(MUSIC_FOLDER, username)):
+        os.mkdir(os.path.join(MUSIC_FOLDER, username))
+
+
 def create_thumbnail(source_file, username):
     '''create thumbnail for the image uploaded by user'''
 
-    pictureName = computeFileName(source_file, '-1.')
-    rightshiftName = computeFileName(source_file, '-2.')
-    blackAndWhiteName = computeFileName(source_file, '-3.')
-    sepiaName = computeFileName(source_file, '-4.')
+    # creating, saving and uploadind into S3 for the thumbnail
 
-    # creating, saving and uploadind into S3 for the thumbnails for original and 3 transformations
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, pictureName)) as img:
-        # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 250)
-        img.resize(round(new_width), 250)
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, username, pictureName))
-        uploadIntoS3(username, os.path.join(THUMBNAIL_FOLDER, username, pictureName), pictureName, False)
-
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, rightshiftName)) as img:
-        # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 250)
-        img.resize(round(new_width), 250)
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, username, rightshiftName))
-        uploadIntoS3(username, os.path.join(THUMBNAIL_FOLDER, username, rightshiftName), rightshiftName, False)
-
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, blackAndWhiteName)) as img:
-        # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 250)
-        img.resize(round(new_width), 250)
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, username, blackAndWhiteName))
-        uploadIntoS3(username, os.path.join(THUMBNAIL_FOLDER, username, blackAndWhiteName), blackAndWhiteName, False)
-
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, sepiaName)) as img:
-        # resize the image to produce the thumbnail
-        new_width = img.width / (img.height / 250)
-        img.resize(round(new_width), 250)
-        img.save(filename=os.path.join(THUMBNAIL_FOLDER, username, sepiaName))
-        uploadIntoS3(username, os.path.join(THUMBNAIL_FOLDER, username, sepiaName), sepiaName, False)
+    with open(os.path.join(IMAGE_FOLDER, username, source_file), 'r+b') as f:
+        with Image.open(f) as img:
+            new_width = img._size[0] / (img._size[1] / 250)
+            img = resizeimage.resize_thumbnail(img, [new_width, 250])
+            img.save(os.path.join(THUMBNAIL_FOLDER, username, source_file), img.format)
+            uploadIntoS3(username, os.path.join(THUMBNAIL_FOLDER, username, source_file), source_file, 2)
+        f.close()
 
     return THUMBNAIL_BUCKET_PREFIX + username
 
 
-def create_transformations(source_file, username):
+def check_dup(musicname, username):
     '''
-    This methods creates ans saves 3 transformations of the source file: multishift of red and blue, black and white, sepia
-    :param source_file:
-    :param username:
-    :return: image folder path
+    check to see if there are music belong to the user in database that has the same name
     '''
-    pictureName = computeFileName(source_file, '-1.')
-    rightshiftName = computeFileName(source_file, '-2.')
-    blackAndWhiteName = computeFileName(source_file, '-3.')
-    sepiaName = computeFileName(source_file, '-4.')
-
-    # creating, saving and uploading into S3 for the 3 transformations
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, pictureName)) as img:
-        img.evaluate(operator='rightshift', value=1, channel='blue')
-        img.evaluate(operator='leftshift', value=1, channel='red')
-        img.save(filename=os.path.join(IMAGE_FOLDER, username, rightshiftName))
-        uploadIntoS3(username, os.path.join(IMAGE_FOLDER, username, rightshiftName), rightshiftName, True)
-
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, pictureName)) as img:
-        img.type = 'grayscale';
-        img.save(filename=os.path.join(IMAGE_FOLDER, username, blackAndWhiteName))
-        uploadIntoS3(username, os.path.join(IMAGE_FOLDER, username, blackAndWhiteName), blackAndWhiteName, True)
-
-    with Image(filename=os.path.join(IMAGE_FOLDER, username, pictureName)) as img:
-        library.MagickSepiaToneImage.argtypes = [ctypes.c_void_p, ctypes.c_double]
-        library.MagickSepiaToneImage.restype = None
-        threshold = img.quantum_range * 0.8
-        library.MagickSepiaToneImage(img.wand, threshold)
-        img.save(filename=os.path.join(IMAGE_FOLDER, username, sepiaName))
-        uploadIntoS3(username, os.path.join(IMAGE_FOLDER, username, sepiaName), sepiaName, True)
-
-    return IMAGE_BUCKET_PREFIX + username
-
-
-def check_dup(imageName, username):
-    '''check to see if there are image belong to the user in database that has the same name'''
-    imageList = ImageInfo.query(username)
-    for image in imageList:
-        if image.imagename == imageName:
+    music_list = MusicInfo.query(username)
+    for music in music_list:
+        if music.musicname == musicname:
             return True
     return False
 
 
-def computeFileName(imageName, trail):
+def computeFileName(musicName, trail):
     '''
-    this method computes the correct actual file name of the image we are looking for.
-    trail as 4 values: '-1.', '-2.', '-3.', '-4.', each representing the original, multishift, black and white, sepia
+    this method computes the correct actual file name of the music we are looking for.
     '''
-    nameAndType = imageName.split('.')
+    nameAndType = musicName.split('.')
     fileName = "".join(nameAndType[:-1])
     fileType = nameAndType[-1]
-    pictureName = fileName + trail + fileType
-    return pictureName
+    rcName = fileName + trail + fileType
+    return rcName
 
 
-def uploadIntoS3(username, filePath, fileName, isImage):
+def uploadIntoS3(username, filePath, fileName, type):
     '''
     Upload image into S3 bucket
     :param username: user id of current user
@@ -134,36 +88,18 @@ def uploadIntoS3(username, filePath, fileName, isImage):
     :param fileName: file name
     :param isImage: set to true if it is image, set to false if it is thumbnail
     '''
-    if isImage:
+    if type == 1:
         bucketName = IMAGE_BUCKET_PREFIX + username
-    else:
+    elif type == 2:
         bucketName = THUMBNAIL_BUCKET_PREFIX + username
+    else:
+        bucketName = MUSIC_BUCKET_PREFIX + username
 
-    if (not checkBucketExist(bucketName)):
+    if not checkBucketExist(bucketName):
         s3_resource.create_bucket(Bucket=bucketName)
     s3_resource.Bucket(bucketName).upload_file(Filename=filePath, Key=fileName)
 
-
-def downloadFromS3(username, bucketName, isImage):
-    '''
-    download specific bucket from S3
-    :param username: current user id
-    :param bucketName: bucket's name
-    :param isImage: set to true if want to download image bucket, set to false if want to download thumbnail bucket
-    :return:
-    '''
-    if checkBucketExist(bucketName):
-        bucket = s3_resource.Bucket(bucketName)
-        if isImage:
-            createImageFolder(username)
-            folderBase = IMAGE_FOLDER
-        else:
-            createThumbnailFolder(username)
-            folderBase = THUMBNAIL_FOLDER
-
-        for obj in bucket.objects.all():
-            path, filename = os.path.split(obj.key)
-            bucket.download_file(obj.key, os.path.join(folderBase, username, filename))
+    return bucketName
 
 
 def checkBucketExist(bucketName):
@@ -177,7 +113,7 @@ def checkBucketExist(bucketName):
         return False
 
 
-def wipeOutLocalImage(username):
+def wipeOutContent(username):
     '''
     remove all the user's files from local
     '''
@@ -192,46 +128,51 @@ def wipeOutLocalImage(username):
             os.remove(file)
         os.removedirs(os.path.join(THUMBNAIL_FOLDER, username))
 
-
-def getUserOriginalImages(username):
-    '''
-    get the original images belong to this user in the database
-    '''
-    images = ImageInfo.query(username)
-    keys = []
-    for image in images:
-        keys.append(computeFileName(image.imagename, '-1.'))
-
-    return keys
+    if os.path.isdir(os.path.join(MUSIC_FOLDER, username)):
+        files = glob.glob(os.path.join(MUSIC_FOLDER, username, '*'))
+        for file in files:
+            os.remove(file)
+        os.removedirs(os.path.join(MUSIC_FOLDER, username))
 
 
 def getUserImages(username):
     '''
-    get all the images belong to this user in the database
+    get the original images belong to this user in the database
     '''
-    images = ImageInfo.query(username)
+    musics = MusicInfo.query(username)
     keys = []
-    for image in images:
-        keys.append(computeFileName(image.imagename, '-1.'))
-        keys.append(computeFileName(image.imagename, '-2.'))
-        keys.append(computeFileName(image.imagename, '-3.'))
-        keys.append(computeFileName(image.imagename, '-4.'))
+    for music in musics:
+        keys.append(music.imagename)
 
     return keys
 
 
-def getPresignedUrl(username, image_list, isImage):
+def getUserMusics(username):
     '''
-    compute the presigned urls for the images in S3
+    get all the musics belong to this user in the database
     '''
-    if isImage:
+    musics = MusicInfo.query(username)
+    keys = []
+    for music in musics:
+        keys.append(music.musicname)
+
+    return keys
+
+
+def getPresignedUrl(username, file_list, type):
+    '''
+    compute the presigned urls for the files in S3
+    '''
+    if type == 1:
         bucket = IMAGE_BUCKET_PREFIX + username
-    else:
+    elif type == 2:
         bucket = THUMBNAIL_BUCKET_PREFIX + username
+    else:
+        bucket = MUSIC_BUCKET_PREFIX + username
 
     urls = []
-    for image in image_list:
-        url = s3_client.generate_presigned_url('get_object', Params={'Bucket': bucket, 'Key': image})
+    for file in file_list:
+        url = s3_client.generate_presigned_url('get_object', Params={'Bucket': bucket, 'Key': file})
         urls.append(url)
     return urls
 
