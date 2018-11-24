@@ -135,11 +135,15 @@ def wipeOutContent(username):
         os.removedirs(os.path.join(MUSIC_FOLDER, username))
 
 
-def getUserImages(username):
+def getUserImages(username, type):
     '''
     get the original images belong to this user in the database
     '''
-    musics = MusicInfo.query(username)
+    if type == 1:
+        musics = MusicInfo.query(username)
+    else:
+        musics = MusicList.query(username)
+
     keys = []
     for music in musics:
         keys.append(music.imagename)
@@ -147,11 +151,15 @@ def getUserImages(username):
     return keys
 
 
-def getUserMusics(username):
+def getUserMusics(username, type):
     '''
     get all the musics belong to this user in the database
     '''
-    musics = MusicInfo.query(username)
+    if type == 1:
+        musics = MusicInfo.query(username)
+    else:
+        musics = MusicList.query(username)
+
     keys = []
     for music in musics:
         keys.append(music.musicname)
@@ -194,4 +202,4 @@ def checkUserExists(username):
     '''
     return True if user exists
     '''
-    return UserInfo.query(username) == 1
+    return UserInfo.count(username) == 1

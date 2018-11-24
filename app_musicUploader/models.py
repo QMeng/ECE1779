@@ -110,12 +110,20 @@ class MusicList(Model):
 
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
+    imagename = UnicodeAttribute()
 
     def set_musicname(self, musicname):
         '''
         set the music name
         '''
         self.musicname = musicname
+        return self
+
+    def set_imagename(self, imagename):
+        '''
+        set the image name
+        '''
+        self.imagename = imagename
         return self
 
 

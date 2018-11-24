@@ -60,8 +60,8 @@ def home():
     fileform = FileUploadForm()
 
     user = load_user(request.cookies.get('username'))
-    images = getUserImages(user.username)
-    musics = getUserMusics(user.username)
+    images = getUserImages(user.username, 1)
+    musics = getUserMusics(user.username, 1)
     thumbnail_urls = getPresignedUrl(user.username, images, 2)
     image_urls = getPresignedUrl(user.username, images, 1)
     music_urls = getPresignedUrl(user.username, musics, 3)
@@ -106,6 +106,35 @@ def home():
 
     return render_template('homePage.html', username=user.username, form=fileform, thumbnail_urls=thumbnail_urls,
                            image_urls=image_urls, music_urls=music_urls, images=images, musics=musics)
+
+
+@app_musicUploader.route('/playlist')
+def playlist():
+    '''
+    renders the playlist page
+    '''
+    user = load_user(request.cookies.get("username"))
+    images = getUserImages(user.username, 2)
+    musics = getUserMusics(user.username, 2)
+    thumbnail_urls = getPresignedUrl(user.username, images, 2)
+    image_urls = getPresignedUrl(user.username, images, 1)
+    music_urls = getPresignedUrl(user.username, musics, 3)
+
+    return render_template('playlist.html', images=images, musics=musics, thumbnail_urls=thumbnail_urls,
+                           image_urls=image_urls, music_urls=music_urls)
+
+
+@app_musicUploader.route('/cleanList')
+def cleanList():
+    '''
+    delete all things in the play list, jump back to home pages
+    '''
+    user = load_user(request.cookies.get("username"))
+    result = MusicList.query(user.username)
+    for item in result:
+        music = MusicList.get(item.username, item.musicname)
+        music.delete()
+    return redirect(url_for('home'))
 
 
 @app_musicUploader.route('/logout')
@@ -168,7 +197,20 @@ def addToList(musicname):
     '''
     user = load_user(request.cookies.get("username"))
     item = MusicList(user.username)
-    item.set_musicname(musicname).save()
+    musicInfo = MusicInfo.get(user.username, musicname)
+    item.set_musicname(musicname).set_imagename(musicInfo.imagename).save()
+    return redirect(url_for('home'))
+
+
+@app_musicUploader.route('/removeFromList/<musicname>', methods=['Get', 'Post'])
+def removeFromList(musicname):
+    '''
+    remove the music from play list
+    '''
+    user = load_user(request.cookies.get("username"))
+    if MusicList.count(user.username, MusicList.musicname == musicname) != 0:
+        tobeDeleted = MusicList.get(user.username, musicname)
+        tobeDeleted.delete()
     return redirect(url_for('home'))
 
 

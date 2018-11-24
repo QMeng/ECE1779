@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block links %}
+    <ul>
+        <li><a class="active" href="/home">Home</a></li>
+        <li><a href="/cleanList">Clean Play List</a></li>
+    </ul>
+{% endblock %}
+
+
+{% block content %}
+
+    {% for music_name in musics %}
+        <div id= {{ music_name }}>
+            <div id="thumbnail-{{ music_name }}" value="{{ thumbnail_urls[loop.index - 1] }}" hidden></div>
+            <div id="image-{{ music_name }}" value="{{ image_urls[loop.index - 1] }}" hidden></div>
+            <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}" hidden></div>
+            <div>{{ music_name }}</div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
