@@ -120,25 +120,6 @@ def logout():
     return response
 
 
-@app_musicUploader.route('/addToList/<musicname>', methods=['Get', 'POST'])
-def addToList(musicname):
-    '''
-    add the music into play list
-    '''
-    user = load_user(request.cookies.get("username"))
-    item = MusicList(user.username)
-    item.set_musicname(musicname).save()
-    return redirect(url_for('home'))
-
-
-@app_musicUploader.errorhandler(InvalidUsage)
-def handle_invalid_usage(error):
-    '''handle the invalid usage of this app_worker.'''
-    response = jsonify(error.to_dict())
-    response.status_code = error.status_code
-    return response
-
-
 @app_musicUploader.route('/wipeout')
 def wipe_out_data():
     '''
@@ -178,3 +159,22 @@ def wipe_out_data():
         bucket.delete()
 
     return redirect(url_for('home'))
+
+
+@app_musicUploader.route('/addToList/<musicname>', methods=['Get', 'POST'])
+def addToList(musicname):
+    '''
+    add the music into play list
+    '''
+    user = load_user(request.cookies.get("username"))
+    item = MusicList(user.username)
+    item.set_musicname(musicname).save()
+    return redirect(url_for('home'))
+
+
+@app_musicUploader.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    '''handle the invalid usage of this app_worker.'''
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response

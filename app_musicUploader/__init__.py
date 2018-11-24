@@ -14,9 +14,9 @@ login = LoginManager(app_musicUploader)
 
 # Global variales
 ROOT = os.path.dirname(os.path.abspath('imageUploader.py'))
-IMAGE_FOLDER = os.path.join(ROOT, 'images')
-THUMBNAIL_FOLDER = os.path.join(ROOT, 'thumbnails')
-MUSIC_FOLDER = os.path.join(ROOT, 'musics')
+IMAGE_FOLDER = '/tmp/images'
+THUMBNAIL_FOLDER = '/tmp/thumbnails'
+MUSIC_FOLDER = '/tmp/musics'
 IMAGE_BUCKET_PREFIX = 'ece1779-images-'
 THUMBNAIL_BUCKET_PREFIX = 'ece1779-thumbnails-'
 MUSIC_BUCKET_PREFIX = 'ece1779-musics-'
