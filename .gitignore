@@ -74,3 +74,9 @@ venv/*
 background-home01.jpeg
 app_master/__pycache__/*
 app_worker/__pycache__/*
+app_master/config.py
+app_musicUploader/config.py
+app_worker/config.py
+app_master/config.py
+app_musicUploader/config.py
+app_worker/config.py
