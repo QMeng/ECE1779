@@ -211,7 +211,7 @@ def removeFromList(musicname):
     if MusicList.count(user.username, MusicList.musicname == musicname) != 0:
         tobeDeleted = MusicList.get(user.username, musicname)
         tobeDeleted.delete()
-    return redirect(url_for('home'))
+    return redirect(url_for('playlist'))
 
 
 @app_musicUploader.errorhandler(InvalidUsage)
