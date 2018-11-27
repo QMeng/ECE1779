@@ -96,9 +96,6 @@
             <form id="add_to_list-{{ music_name }}" action="{{ url_for('addToList', musicname=music_name) }}">
                 <input type="submit" value="Add to playlist" id="add_to_list">
             </form>
-            <form id="remove_from_list-{{ music_name }}" action="{{ url_for('removeFromList', musicname=music_name) }}">
-                <input type="submit" value="Remove from playlist" id="remove_from_list">
-            </form>
         </div>
     {% endfor %}
 
