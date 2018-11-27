@@ -1,45 +1,28 @@
 //modal settings
 var modal = document.getElementById('myModal');
 var img_list = document.getElementsByClassName('originThumbnails');
+preloadedSong = new Audio();
 for (let i = 0; i < img_list.length; i++) {
     var temp = img_list[i];
     temp.onclick = function (event) {
         //change the pic src
         modal.style.display = "block";
-        pic4 = document.getElementById("pic04");
-        pic3 = document.getElementById("pic03");
-        pic2 = document.getElementById("pic02");
         pic1 = document.getElementById("pic01");
-
-        slides2 = document.getElementById("slide02");
-        slides1 = document.getElementById("slide01");
-        slides3 = document.getElementById("slide03");
-        slides4 = document.getElementById("slide04");
-
         // grab the urls from hidden elements
-        img_name = event.currentTarget.id
-        var basename = (img_name + '').split('-1')[0];
-        var type = (img_name + '').split('-1')[1];
-        thumbnail1_url = document.getElementById("thumbnail-" + basename + '-1' + type).getAttribute("value");
-        thumbnail2_url = document.getElementById("thumbnail-" + basename + '-2' + type).getAttribute("value");
-        thumbnail3_url = document.getElementById("thumbnail-" + basename + '-3' + type).getAttribute("value");
-        thumbnail4_url = document.getElementById("thumbnail-" + basename + '-4' + type).getAttribute("value");
-        image1_url = document.getElementById("image-" + basename + '-1' + type).getAttribute("value");
-        image2_url = document.getElementById("image-" + basename + '-2' + type).getAttribute("value");
-        image3_url = document.getElementById("image-" + basename + '-3' + type).getAttribute("value");
-        image4_url = document.getElementById("image-" + basename + '-4' + type).getAttribute("value");
+        img_name = this.id;
+
+        var type = (img_name + '').split('thumbnail-')[0];
+        var basename = (img_name + '').split('thumbnail-')[1];
+        var singlename =(basename + '').split('.')[0];
+        image1_url = document.getElementById("image-" + basename).getAttribute("value");
 
         // re-assign the src of the elements
-        slides1.src = thumbnail1_url;
-        slides2.src = thumbnail2_url;
-        slides3.src = thumbnail3_url;
-        slides4.src = thumbnail4_url;
-
         pic1.src = image1_url;
-        pic2.src = image2_url;
-        pic3.src = image3_url;
-        pic4.src = image4_url;
-        slides1.click();
+        document.getElementById('single-title').innerHTML = singlename;
+        document.getElementById('song').innerHTML = singlename;
+
+        preloadedSong.src = document.getElementById('music-'+ basename).getAttribute("value");
+        //document.getElementById('mainAudio').src = document.getElementById('music-'+ basename).getAttribute("value");
     }
 }
 
@@ -50,34 +33,6 @@ var span = document.getElementById("modalclose");
 span.onclick = function () {
     modal.style.display = "none";
 };
-
-// slides showing part
-var slideIndex = 1;
-showDivs(slideIndex);
-
-function currentDiv(n) {
-    showDivs(slideIndex = n);
-}
-
-function showDivs(n) {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    var dots = document.getElementsByClassName("demo");
-    if (n > x.length) {
-        slideIndex = 1
-    }
-    if (n < 1) {
-        slideIndex = x.length
-    }
-    for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
-    }
-    x[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " w3-opacity-off";
-}
 
 window.onload = function () {
     var box = document.getElementById("box");
@@ -96,7 +51,7 @@ var fail_text = document.getElementById("check").innerHTML;
 var upload_close = document.getElementById("close_button");
 var file_name = document.getElementById("upload-filename");
 var upload_button = document.getElementById('upload-button');
-
+var music_button = document.getElementById('viewMusic');
 function showing() {
     upload_banner.style.display = 'none';
     upload_banner.style.display.opacity = '0';
@@ -133,28 +88,58 @@ function finish_upload() {
 
 /* raise a modal to remind users to select file first */
 function remind_selectfile() {
-    if ((document.getElementById('file').value === '')) {
+    if ((document.getElementById('image').value === '')) {
         //change the words in the title
-        document.getElementById("uploadTitle").innerHTML = "No File Selected";
+        document.getElementById("uploadTitle").innerHTML = "No image Selected";
         //change the words in text
-        document.getElementById("upload-filename").innerHTML = "Please select a file before you upload";
+        document.getElementById("upload-filename").innerHTML = "Please select an image before you upload";
         showing();
+    }
+    else if ((document.getElementById('music').value === '')) {
+        //change the words in the title
+        //setTimeout(function(){music_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
+        document.getElementById("uploadTitle").innerHTML = "No music Selected";
+        //change the words in text
+        document.getElementById("upload-filename").innerHTML = "Please select a music before you upload";
+        showing();
+    }
+    else{
+        //setTimeout(function(){music_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
+        //setTimeout(function(){upload_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
     }
 }
 
-/* get the selected file name */
-function showSelectedFile() {
-    document.getElementById('file').addEventListener('change', function () {
+/* get the selected image name */
+function showSelectedImage() {
+    document.getElementById('image').addEventListener('change', function () {
         //alert('Selected file: ' + this.value);
-        if (document.getElementById('file').value === "") {
+        if (document.getElementById('image').value === "") {
             upload_banner.style.opacity = '0';
             upload_banner.style.display = 'none';
         }
         else {
-            upload_button.style.backgroundColor = 'rgb(60, 114, 242)';
+            //setTimeout(function(){music_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
             document.getElementById("uploadTitle").innerHTML = "1 upload selected";
             file_name.innerHTML = this.value.replace(/.*[\/\\]/, '');
             showing();
+            checkUploadButton();
+        }
+    });
+}
+
+/* get the selected music name */
+function showSelectedMusic() {
+    document.getElementById('music').addEventListener('change', function () {
+        //alert('Selected file: ' + this.value);
+        if (document.getElementById('music').value === "") {
+            upload_banner.style.opacity = '0';
+            upload_banner.style.display = 'none';
+        }
+        else {
+            document.getElementById("uploadTitle").innerHTML = "1 upload selected";
+            file_name.innerHTML = this.value.replace(/.*[\/\\]/, '');
+            showing();
+            checkUploadButton();
         }
     });
 }
@@ -168,12 +153,98 @@ upload_close.onclick = function () {
     tester = "";
 };
 
-//when the 'upload' button is clicked, remind users to selecte file first.
-upload_button.addEventListener('click', remind_selectfile);
+/* ban click event of select music (currently not used) */
+function checkUploadButton(){
+     if (document.getElementById('image').value != "" && document.getElementById('music').value != ""){
+        setTimeout(function(){upload_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
+     }
+}
 
-showSelectedFile();
+//when the 'upload' button is clicked, remind users to selecte file first.
+//banClickMusicButton();
+upload_button.addEventListener('click', remind_selectfile);
+//music_button.addEventListener('click', remind_selectfile);
+showSelectedImage();
+showSelectedMusic();
 finish_upload();
 
+/*play button function */
 
+//var playButton = document.getElementById('triangle');
+//var audioTest = document.getElementById('hego-1');
+//need a for loop to make all the function works
+var uploadedMusics = document.getElementsByClassName('uploadedMusics');
+var playButtons = document.getElementsByClassName('playButtons');
+for (let i = 0; i < uploadedMusics.length; i++) {
+    //var temp = uploadedMusics[i];
+    //var playButton = playButtons[i];
+    playButtons[i].onclick = function () {
+        var sounds = document.getElementsByTagName('audio');
+        for(j=0; j<sounds.length; j++){
+        if(sounds[j]==uploadedMusics[i]){
+        }
+        else{
+            sounds[j].pause();
+        }
+        }
+        if(uploadedMusics[i].paused){
+            uploadedMusics[i].play();
+            playButtons[i].src = "../static/Pause.png";
+        }
+        else{
+            uploadedMusics[i].pause();
+            playButtons[i].src = "../static/Play.png";
+        }
+    }
+}
 
+/* play in the modal*/
+var songBlock = document.getElementById('song-info');
+songBlock.onclick = function() {
+    var sounds = document.getElementsByClassName('uploadedMusics');
+    for(j=0; j<sounds.length; j++){
+        if(document.getElementById('mainAudio')==sounds[j]){
+        }
+        else{
+            sounds[j].pause();
+        }
+    }
+     if(document.getElementById('mainAudio').paused){
+        if(document.getElementById('mainAudio').src == preloadedSong.src){
+            document.getElementById('mainAudio').play();
+        }
+        else{
+            document.getElementById('mainAudio').src = preloadedSong.src;
+            document.getElementById('mainAudio').play();
+        }
+    }
+    else{
+        if(document.getElementById('mainAudio').src == preloadedSong.src){
+            document.getElementById('mainAudio').pause();
+        }
+        else{
+            document.getElementById('mainAudio').src = preloadedSong.src;
+            document.getElementById('mainAudio').play();
+        }
+    }
+}
+
+/* control bar */
+var pastime = document.getElementById("pastime");
+var interval = setInterval(function() {
+    var widthline = Math.round(document.getElementById('mainAudio').currentTime)/Math.round(document.getElementById('mainAudio').duration) * 100;
+    pastime.style.width = widthline + "%";
+    //currentTime.innerHTML = parseInt(Math.round(firstTest.currentTime)/60)+ ":"+Math.round(firstTest.currentTime)%60;
+    var totalTime = Math.round(preloadedSong.duration);
+    var miniteShowing = Math.round(totalTime/60);
+    var secondShowing = Math.round(totalTime%60);
+    if (secondShowing < 10){
+        document.getElementById('songTime').innerHTML = miniteShowing + ':0' + secondShowing;
+    }
+    else{
+        document.getElementById('songTime').innerHTML = miniteShowing + ':' + secondShowing;
+    }
+},1000);
+
+/* song duration */
 

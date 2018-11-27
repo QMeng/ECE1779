@@ -199,7 +199,8 @@ def addToList(musicname):
     item = MusicList(user.username)
     musicInfo = MusicInfo.get(user.username, musicname)
     item.set_musicname(musicname).set_imagename(musicInfo.imagename).save()
-    return redirect(url_for('home'))
+    #return redirect(url_for('home'))
+    return "success"
 
 
 @app_musicUploader.route('/removeFromList/<musicname>', methods=['Get', 'Post'])
