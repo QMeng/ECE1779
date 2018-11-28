@@ -167,6 +167,22 @@ def getUserMusics(username, type):
     return keys
 
 
+def getMusicDurations(username, type):
+    '''
+    get music duration info
+    '''
+    if type == 1:
+        musics = MusicInfo.query(username)
+    else:
+        musics = MusicList.query(username)
+
+    keys = []
+    for music in musics:
+        keys.append(music.duration)
+
+    return keys
+
+
 def getPresignedUrl(username, file_list, type):
     '''
     compute the presigned urls for the files in S3
