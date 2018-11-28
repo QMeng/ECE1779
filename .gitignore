@@ -73,4 +73,4 @@ thumbnails/
 venv/*
 background-home01.jpeg
 app_master/__pycache__/*
-app_worker/__pycache__/*
+app_worker/__pycache__/* 
