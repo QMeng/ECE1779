@@ -10,7 +10,7 @@
 
 {% block content %}
     <head>
-        <link rel="stylesheet" type="text/css" href="../static/homepage.css">
+        <link rel="stylesheet" type="text/css" href="static/homepage.css">
     </head>
     <div id="firstblock" class="transparentLayer">
         <div class="homePage_banner transparentLayer">
@@ -27,12 +27,11 @@
                 {{ form.hidden_tag() }}
                 <div class="upload-widgets" style="width:100%">
                     <div id="widgets">
-                    {{ form.image.label(id="viewImage") }}
-                    <!--<div><p id="upload-info"></p></div>-->
-                    {{ form.image() }}
-                    {{ form.music.label(id="viewMusic") }}
-                    {{ form.music() }}
-                    <input type="submit" value="upload" id="upload-button">
+                        {{ form.image.label(id="viewImage") }}
+                        {{ form.image() }}
+                        {{ form.music.label(id="viewMusic") }}
+                        {{ form.music() }}
+                        <input type="submit" value="upload" id="upload-button">
                     </div>
                 </div>
             </form>
@@ -46,19 +45,21 @@
                 {% for music_name in musics %}
                     <div class="col">
                         <div class="thumbnail-block">
-                            <img id="thumbnail-{{ music_name }}" class="originThumbnails" src="{{ thumbnail_urls[loop.index - 1] }}">
+                            <img id="thumbnail-{{ music_name }}" class="originThumbnails"
+                                 src="{{ thumbnail_urls[loop.index - 1] }}">
                             <div class="overlay"></div>
                             <div class="playButton">
                                 <div id="play-border">
                                     <div id="triangle">
-                                        <img class="playButtons" src="../static/Play.png" >
+                                        <img class="playButtons" src="static/Play.png">
                                     </div>
                                 </div>
                             </div>
-                            <form id="add_to_list-{{ music_name }}" class="addList" action="{{ url_for('addToList', musicname=music_name) }}">
+                            <form id="add_to_list-{{ music_name }}" class="addList"
+                                  action="{{ url_for('addToList', musicname=music_name) }}">
                                 <input type="submit" value="+" id="add_to_list" title="add to PlayList">
                             </form>
-                            <audio class="uploadedMusics" controls >
+                            <audio class="uploadedMusics" controls>
                                 <source src="{{ music_urls[loop.index - 1] }}">
                             </audio>
                         </div>
@@ -87,7 +88,7 @@
                     <p id="single-title">Album Title</p>
                     <p id="single-artist">Music Artist</p>
                 </div>
-                    <img id="pic01" class="mySlides" src="img01.jpg">
+                <img id="pic01" class="mySlides" src="img01.jpg">
                 <div class="timeline">
                     <div id="pastime"></div>
                 </div>
@@ -96,7 +97,7 @@
             <div id="right">
                 <div id="song-list">
                     <div id="song-info">
-                        <img class="playButtons" id="mainPlayButton" src="../static/Play.png" >
+                        <img class="playButtons" id="mainPlayButton" src="static/Play.png">
                         <div class="songDiv" id="songDiv1"><p id="song" style="color:white; "></p></div>
                         <div id="songTime">04:37</div>
                         <audio id="mainAudio"></audio>
@@ -106,16 +107,16 @@
         </div>
         <!-- close button -->
         <span id="modalclose">&times;</span>
-        </div>
+    </div>
     {% for music_name in musics %}
         <div id= {{ music_name }}>
-            <div id="thumbnail-{{ music_name }}" value="{{ thumbnail_urls[loop.index - 1] }}" ></div>
-            <div id="image-{{ music_name }}" value="{{ image_urls[loop.index - 1] }}" ></div>
-            <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}" ></div>
+            <div id="thumbnail-{{ music_name }}" value="{{ thumbnail_urls[loop.index - 1] }}"></div>
+            <div id="image-{{ music_name }}" value="{{ image_urls[loop.index - 1] }}"></div>
+            <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}"></div>
             <div id="duration-{{ music_name }}" value="{{ durations[loop.index - 1] }}" hidden></div>
         </div>
     {% endfor %}
 
-    <script src="../static/homepage.js" type="text/javascript" charset="utf-8"></script>
+    <script src="static/homepage.js" type="text/javascript" charset="utf-8"></script>
 
 {% endblock %}
