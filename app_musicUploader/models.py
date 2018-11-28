@@ -1,4 +1,4 @@
-from pynamodb.attributes import UnicodeAttribute
+from pynamodb.attributes import *
 from pynamodb.models import Model
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -56,6 +56,7 @@ class MusicInfo(Model):
 
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
+    duration = UnicodeAttribute()
     imagename = UnicodeAttribute()
     s3MusicBucket = UnicodeAttribute()
     s3ImageBucket = UnicodeAttribute()
@@ -66,6 +67,13 @@ class MusicInfo(Model):
         set the music name
         '''
         self.musicname = musicname
+        return self
+
+    def set_duration(self, duration):
+        '''
+        set the music duration
+        '''
+        self.duration = duration
         return self
 
     def set_imagename(self, imagename):
@@ -110,6 +118,7 @@ class MusicList(Model):
 
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
+    duration = UnicodeAttribute()
     imagename = UnicodeAttribute()
 
     def set_musicname(self, musicname):
@@ -117,6 +126,13 @@ class MusicList(Model):
         set the music name
         '''
         self.musicname = musicname
+        return self
+
+    def set_duration(self, duration):
+        '''
+        set the music duration
+        '''
+        self.duration = duration
         return self
 
     def set_imagename(self, imagename):

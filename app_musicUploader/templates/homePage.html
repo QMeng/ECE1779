@@ -112,15 +112,7 @@
             <div id="thumbnail-{{ music_name }}" value="{{ thumbnail_urls[loop.index - 1] }}" ></div>
             <div id="image-{{ music_name }}" value="{{ image_urls[loop.index - 1] }}" ></div>
             <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}" ></div>
-
-
-            <!--<form id="add_to_list-{{ music_name }}" class="addList" action="{{ url_for('addToList', musicname=music_name) }}">
-                <input type="submit" value="+" id="add_to_list">
-            </form>-->
-            <!--<form id="remove_from_list-{{ music_name }}" action="{{ url_for('removeFromList', musicname=music_name) }}">
-                <input type="submit" value="Remove from playlist" id="remove_from_list">
-            </form>-->
-
+            <div id="duration-{{ music_name }}" value="{{ durations[loop.index - 1] }}" hidden></div>
         </div>
     {% endfor %}
 

@@ -43,8 +43,16 @@
                     </div>
                     {% endfor %}
                 </div>
-
-            </div>
+    {% for music_name in musics %}
+        <div id= {{ music_name }}>
+            <div id="thumbnail-{{ music_name }}" value="{{ thumbnail_urls[loop.index - 1] }}" hidden></div>
+            <div id="image-{{ music_name }}" value="{{ image_urls[loop.index - 1] }}" hidden></div>
+            <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}" hidden></div>
+            <div id="duration-{{ music_name }}" value="{{ durations[loop.index - 1] }}" hidden></div>
+            <div>{{ music_name }}</div>
+            <form id="remove_from_list-{{ music_name }}" action="{{ url_for('removeFromList', musicname=music_name) }}">
+                <input type="submit" value="Remove from playlist" id="remove_from_list">
+            </form>
         </div>
     </div>
 
