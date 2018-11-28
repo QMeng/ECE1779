@@ -22,7 +22,6 @@ for (let i = 0; i < img_list.length; i++) {
         document.getElementById('song').innerHTML = singlename;
 
         preloadedSong.src = document.getElementById('music-'+ basename).getAttribute("value");
-        //document.getElementById('mainAudio').src = document.getElementById('music-'+ basename).getAttribute("value");
     }
 }
 
@@ -32,6 +31,7 @@ var span = document.getElementById("modalclose");
 // click (x) to close modal
 span.onclick = function () {
     modal.style.display = "none";
+    document.getElementById('pic01').src = '';
 };
 
 window.onload = function () {
@@ -161,24 +161,30 @@ function checkUploadButton(){
 }
 
 //when the 'upload' button is clicked, remind users to selecte file first.
-//banClickMusicButton();
 upload_button.addEventListener('click', remind_selectfile);
-//music_button.addEventListener('click', remind_selectfile);
 showSelectedImage();
 showSelectedMusic();
 finish_upload();
 
 /*play button function */
 
-//var playButton = document.getElementById('triangle');
-//var audioTest = document.getElementById('hego-1');
 //need a for loop to make all the function works
 var uploadedMusics = document.getElementsByClassName('uploadedMusics');
 var playButtons = document.getElementsByClassName('playButtons');
+/* make all the buttons back to play button */
+function showAllPlayButton(){
+    for(i=0; i<playButtons.length; i++){
+        playButtons[i].src = "../static/Play.png";
+    }
+}
+
+function isPlaying(){
+    var tester = document.getElementById()
+}
+
 for (let i = 0; i < uploadedMusics.length; i++) {
-    //var temp = uploadedMusics[i];
-    //var playButton = playButtons[i];
     playButtons[i].onclick = function () {
+        showAllPlayButton();
         var sounds = document.getElementsByTagName('audio');
         for(j=0; j<sounds.length; j++){
         if(sounds[j]==uploadedMusics[i]){

@@ -80,3 +80,6 @@ app_worker/config.py
 app_master/config.py
 app_musicUploader/config.py
 app_worker/config.py
+app_worker/config.py
+app_master/config.py
+app_musicUploader/config.py
