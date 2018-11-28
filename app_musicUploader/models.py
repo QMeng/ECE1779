@@ -56,7 +56,7 @@ class MusicInfo(Model):
 
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
-    duration = NumberAttribute()
+    duration = UnicodeAttribute()
     imagename = UnicodeAttribute()
     s3MusicBucket = UnicodeAttribute()
     s3ImageBucket = UnicodeAttribute()
@@ -118,7 +118,7 @@ class MusicList(Model):
 
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
-    duration = NumberAttribute()
+    duration = UnicodeAttribute()
     imagename = UnicodeAttribute()
 
     def set_musicname(self, musicname):

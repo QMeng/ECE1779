@@ -3,6 +3,7 @@ from app_musicUploader.forms import *
 from app_musicUploader.utilities import *
 from werkzeug.utils import secure_filename
 from tinytag import *
+import datetime
 
 
 @app_musicUploader.route('/', methods=['GET', 'POST'])
@@ -94,13 +95,15 @@ def home():
         music_bucket = uploadIntoS3(username, music_des, musicname, 3)
 
         tag = TinyTag.get(music_des)
+        seconds = int(tag.duration)
+        minSec = str(int(seconds / 60)) + ":" + str(int(seconds % 60))
 
         # Create thumbanil related to uploaded image.
         thumbnail_bucket = create_thumbnail(imagename, username)
 
         # save the music info in DB
         music = MusicInfo(username)
-        music.set_musicname(musicname).set_duration(tag.duration).set_imagename(imagename).set_s3MusicBucket(
+        music.set_musicname(musicname).set_duration(minSec).set_imagename(imagename).set_s3MusicBucket(
             music_bucket).set_s3ImageBucket(image_bucket).set_s3ThumbnailBucket(thumbnail_bucket).save()
 
         wipeOutContent(username)
