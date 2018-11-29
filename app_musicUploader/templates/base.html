@@ -1,0 +1,17 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<head>
+    {% if title %}
+        <title>{{ title }} - MusicUploader</title>
+    {% else %}
+        <title>Welcome to MusicUploader</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="static/nav.css">
+</head>
+<body>
+<div>
+    {% block links %}{% endblock %}
+</div>
+{% block content %}{% endblock %}
+</body>
+</html>

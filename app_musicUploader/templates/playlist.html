@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block links %}
+    <ul>
+        <li><a class="active" href="/home">Home</a></li>
+        <li><a href="/cleanList">Clean Play List</a></li>
+    </ul>
+{% endblock %}
+
+
+{% block content %}
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/playlist.css">
+    </head>
+    <!-- modals -->
+    <div id="myModal" class="modal">
+        <!--entire body -->
+        <div id="entire">
+            <!-- left part -->
+            <div id="left">
+                <div id="single-info">
+                    <p id="single-title">My Playlist</p>
+                    <p id="single-artist">Music Artist</p>
+                </div>
+                <img id="pic01" class="mySlides" src="static/cover.png">
+            </div>
+            <!-- right part -->
+            <div id="right">
+                <div id="song-list">
+                    {% for music_name in musics %}
+                        <div class="song-info" id="{{ music_name }}">
+                            <!--<div style="color:white;" class="songDiv">-->
+                            <div class="songName"><p id="song" style="color:white; ">{{ music_name }}</p></div>
+                            <div id="image-{{ music_name }}" class="pics"
+                                 value="{{ image_urls[loop.index - 1] }}"></div>
+                            <div id="music-{{ music_name }}" class="musicSource"
+                                 value="{{ music_urls[loop.index - 1] }}"></div>
+                            <!--<div id="songtime-{{ music_name }}" >04:37</div>-->
+                            <div id="duration-{{ music_name }}" class="songTime" value="{{ durations[loop.index - 1] }}">{{ durations[loop.index - 1] }}</div>
+                            <div id="artist-{{ music_name }}" value="{{ artists[loop.index - 1] }}" hidden></div>
+                            <img class="playButtons" id="playbutton-{{ music_name }}" src="static/Play.png">
+                            <div class="timeline">
+                                <div id="pastime-{{ music_name }}" class="pastime"></div>
+                            </div>
+                            <form id="remove_from_list-{{ music_name }}" class="removeFromList"
+                                  action="{{ url_for('removeFromList', musicname=music_name) }}">
+                                <input type="submit" value="-" id="remove_from_list" title="Remove from playlist">
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/playlist.js" type="text/javascript" charset="utf-8"></script>
+
+{% endblock %}

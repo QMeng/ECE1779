@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block links %}
+    <ul>
+        <li><a class="active" href="/home">Home</a></li>
+        <li><a href="/playlist">Play List</a></li>
+        <li style="float:right"><a href="/wipeout">Wipe Out</a></li>
+        <li style="float:right"><a href="/logout">Logout</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/homepage.css">
+    </head>
+    <div id="firstblock" class="transparentLayer">
+        <div class="homePage_banner transparentLayer">
+            <div class="greetings">
+                <h1 style="margin-top: 50px;margin-bottom: 0px;">Hi, {{ username }}!</h1>
+                <div class="intro-text">
+                    <p>Upload music and create the best album.
+                        <br>
+                        Your personal music station starts here.
+                    </p>
+                </div>
+            </div>
+            <form id="upload-form" action="" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="upload-widgets" style="width:100%">
+                    <div id="widgets">
+                        {{ form.image.label(id="viewImage") }}
+                        {{ form.image() }}
+                        {{ form.music.label(id="viewMusic") }}
+                        {{ form.music() }}
+                        <input type="submit" value="Upload" id="upload-button">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- thumbnails showing part -->
+    <div class="thumbnails-block">
+        <div class="thumbnail-container">
+            <div class="row" id="box">
+                {% for music_name in musics %}
+                    <div class="col">
+                        <div class="thumbnail-block">
+                            <img id="thumbnail-{{ music_name }}" class="originThumbnails"
+                                 src="{{ thumbnail_urls[loop.index - 1] }}">
+                            <div class="overlay"></div>
+                            <div class="playButton">
+                                <div id="play-border">
+                                    <div id="triangle">
+                                        <img class="playButtons" src="static/Play.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <form id="add_to_list-{{ music_name }}" class="addList"
+                                  action="{{ url_for('addToList', musicname=music_name) }}">
+                                <input type="submit" value="+" id="add_to_list" title="add to PlayList">
+                            </form>
+                            <audio class="uploadedMusics" controls>
+                                <source src="{{ music_urls[loop.index - 1] }}">
+                            </audio>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div id='wrap' class="upload_block">
+            <div class="upload_title">
+                <span id="close_button">&times;</span>
+                <p id="uploadTitle" style="color:white;top: 3px;position: absolute;left: 36px;">1 upload complete</p>
+                <p id="check" style="color:white;display:none;">{{ check }}</p>
+            </div>
+            <div class="upload_files_info">
+                <p id="upload-filename">{{ form.image.data.filename }}</p>
+            </div>
+        </div>
+    </div>
+    <!-- modals -->
+    <div id="myModal" class="modal">
+        <!--entire body -->
+        <div id="entire">
+            <!-- left part -->
+            <div id="left">
+                <div id="single-info">
+                    <p id="single-title">Album Title</p>
+                    <p id="single-artist">Music Artist</p>
+                </div>
+                <img id="pic01" class="mySlides" src="img01.jpg">
+                <div class="timeline">
+                    <div id="pastime"></div>
+                </div>
+            </div>
+            <!-- right part -->
+            <div id="right">
+                <div id="song-list">
+                    <div id="song-info">
+                        <img class="playButtons" id="mainPlayButton" src="static/Play.png">
+                        <div class="songDiv" id="songDiv1"><p id="song" style="color:white; "></p></div>
+                        <div id="songTime">04:37</div>
+                        <audio id="mainAudio"></audio>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- close button -->
+        <span id="modalclose">&times;</span>
+    </div>
+    {% for music_name in musics %}
+        <div id= {{ music_name }}>
+            <div id="thumbnail-{{ music_name }}" value="{{ thumbnail_urls[loop.index - 1] }}"></div>
+            <div id="image-{{ music_name }}" value="{{ image_urls[loop.index - 1] }}"></div>
+            <div id="music-{{ music_name }}" value="{{ music_urls[loop.index - 1] }}"></div>
+            <div id="duration-{{ music_name }}" value="{{ durations[loop.index - 1] }}" hidden></div>
+            <div id="artist-{{ music_name }}" value="{{ artists[loop.index - 1] }}" hidden></div>
+        </div>
+    {% endfor %}
+
+    <script src="static/homepage.js" type="text/javascript" charset="utf-8"></script>
+
+{% endblock %}
