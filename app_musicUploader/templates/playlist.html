@@ -34,8 +34,8 @@
                                  value="{{ image_urls[loop.index - 1] }}"></div>
                             <div id="music-{{ music_name }}" class="musicSource"
                                  value="{{ music_urls[loop.index - 1] }}"></div>
-                            <div id="songtime-{{ music_name }}" class="songTime">04:37</div>
-                            <div id="duration-{{ music_name }}" value="{{ durations[loop.index - 1] }}" hidden></div>
+                            <!--<div id="songtime-{{ music_name }}" >04:37</div>-->
+                            <div id="duration-{{ music_name }}" class="songTime" value="{{ durations[loop.index - 1] }}">{{ durations[loop.index - 1] }}</div>
                             <div id="artist-{{ music_name }}" value="{{ artists[loop.index - 1] }}" hidden></div>
                             <img class="playButtons" id="playbutton-{{ music_name }}" src="static/Play.png">
                             <div class="timeline">

@@ -91,11 +91,11 @@ input[type=file] {
 }
 
 #viewImage:before {
-    content: "select ";
+    content: "Select ";
 }
 
 #viewMusic:before {
-    content: "select ";
+    content: "Select ";
 }
 
 #viewImage, #upload-button, #viewMusic{

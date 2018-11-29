@@ -3,8 +3,8 @@
     <ul>
         <li><a class="active" href="/home">Home</a></li>
         <li><a href="/playlist">Play List</a></li>
-        <li><a href="/wipeout">Wipe Out</a></li>
-        <li><a href="/logout">Logout</a></li>
+        <li style="float:right"><a href="/wipeout">Wipe Out</a></li>
+        <li style="float:right"><a href="/logout">Logout</a></li>
     </ul>
 {% endblock %}
 
@@ -31,7 +31,7 @@
                         {{ form.image() }}
                         {{ form.music.label(id="viewMusic") }}
                         {{ form.music() }}
-                        <input type="submit" value="upload" id="upload-button">
+                        <input type="submit" value="Upload" id="upload-button">
                     </div>
                 </div>
             </form>
