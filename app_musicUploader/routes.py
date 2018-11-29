@@ -65,6 +65,7 @@ def home():
     images = getUserImages(user.username, 1)
     musics = getUserMusics(user.username, 1)
     durations = getMusicDurations(user.username, 1)
+    artists = getMusicArtists(user.username, 1)
     thumbnail_urls = getPresignedUrl(user.username, images, 2)
     image_urls = getPresignedUrl(user.username, images, 1)
     music_urls = getPresignedUrl(user.username, musics, 3)
@@ -97,14 +98,16 @@ def home():
         tag = TinyTag.get(music_des)
         seconds = int(tag.duration)
         minSec = str(int(seconds / 60)) + ":" + str(int(seconds % 60))
+        artist = tag.artist
 
         # Create thumbanil related to uploaded image.
         thumbnail_bucket = create_thumbnail(imagename, username)
 
         # save the music info in DB
         music = MusicInfo(username)
-        music.set_musicname(musicname).set_duration(minSec).set_imagename(imagename).set_s3MusicBucket(
-            music_bucket).set_s3ImageBucket(image_bucket).set_s3ThumbnailBucket(thumbnail_bucket).save()
+        music.set_musicname(musicname).set_duration(minSec).set_artist(artist).set_imagename(
+            imagename).set_s3MusicBucket(music_bucket).set_s3ImageBucket(image_bucket).set_s3ThumbnailBucket(
+            thumbnail_bucket).save()
 
         wipeOutContent(username)
         return redirect(url_for('home'))
@@ -112,8 +115,8 @@ def home():
         flash('File type not supported', "uploadError")
 
     return render_template('homePage.html', username=user.username, form=fileform, thumbnail_urls=thumbnail_urls,
-                           image_urls=image_urls, music_urls=music_urls, durations=durations, images=images,
-                           musics=musics)
+                           image_urls=image_urls, music_urls=music_urls, durations=durations, artists=artists,
+                           images=images, musics=musics)
 
 
 @app_musicUploader.route('/playlist')
@@ -125,11 +128,12 @@ def playlist():
     images = getUserImages(user.username, 2)
     musics = getUserMusics(user.username, 2)
     durations = getMusicDurations(user.username, 2)
+    artists = getMusicArtists(user.username, 2)
     thumbnail_urls = getPresignedUrl(user.username, images, 2)
     image_urls = getPresignedUrl(user.username, images, 1)
     music_urls = getPresignedUrl(user.username, musics, 3)
 
-    return render_template('playlist.html', images=images, musics=musics, durations=durations,
+    return render_template('playlist.html', images=images, musics=musics, durations=durations, artists=artists,
                            thumbnail_urls=thumbnail_urls, image_urls=image_urls, music_urls=music_urls)
 
 
@@ -207,9 +211,9 @@ def addToList(musicname):
     user = load_user(request.cookies.get("username"))
     item = MusicList(user.username)
     musicInfo = MusicInfo.get(user.username, musicname)
-    item.set_musicname(musicname).set_duration(musicInfo.duration).set_imagename(musicInfo.imagename).save()
+    item.set_musicname(musicname).set_duration(musicInfo.duration).set_artist(musicInfo.artist).set_imagename(
+        musicInfo.imagename).save()
     return redirect(url_for('home'))
-    #return "success"
 
 
 @app_musicUploader.route('/removeFromList/<musicname>', methods=['Get', 'Post'])
