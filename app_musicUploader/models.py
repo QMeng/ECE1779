@@ -57,6 +57,7 @@ class MusicInfo(Model):
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
     duration = UnicodeAttribute()
+    artist = UnicodeAttribute()
     imagename = UnicodeAttribute()
     s3MusicBucket = UnicodeAttribute()
     s3ImageBucket = UnicodeAttribute()
@@ -74,6 +75,13 @@ class MusicInfo(Model):
         set the music duration
         '''
         self.duration = duration
+        return self
+
+    def set_artist(self, artist):
+        '''
+        set the artist info
+        '''
+        self.artist = artist
         return self
 
     def set_imagename(self, imagename):
@@ -119,6 +127,7 @@ class MusicList(Model):
     username = UnicodeAttribute(hash_key=True)
     musicname = UnicodeAttribute(range_key=True)
     duration = UnicodeAttribute()
+    artist = UnicodeAttribute()
     imagename = UnicodeAttribute()
 
     def set_musicname(self, musicname):
@@ -133,6 +142,13 @@ class MusicList(Model):
         set the music duration
         '''
         self.duration = duration
+        return self
+
+    def set_artist(self, artist):
+        '''
+        set the artist info
+        '''
+        self.artist = artist
         return self
 
     def set_imagename(self, imagename):
