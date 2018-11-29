@@ -302,7 +302,7 @@ audio::-webkit-media-controls-overlay-play-button {
     margin:0;
     font-size:20px;
     color:white;
-    padding-left: 36px;
+    padding-left: 50px;
 }
 
 #song::first-letter {

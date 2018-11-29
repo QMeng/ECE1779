@@ -22,16 +22,17 @@ for (let i = 0; i < img_list.length; i++) {
         document.getElementById('song').innerHTML = singlename;
 
         preloadedSong.src = document.getElementById('music-'+ basename).getAttribute("value");
-        if(document.getElementById('mainAudio').play){
+        document.getElementById('single-artist').innerHTML = document.getElementById('artist-'+ basename).getAttribute("value");;
+        if(document.getElementById('mainAudio').paused){
+            document.getElementById('mainPlayButton').src = '../static/Play.png';
+        }
+        else{
             if(document.getElementById('mainAudio').src == preloadedSong.src){
                 document.getElementById('mainPlayButton').src = '../static/Pause.png';
             }
             else{
                 document.getElementById('mainPlayButton').src = '../static/Play.png';
             }
-        }
-        else{
-            document.getElementById('mainPlayButton').src = '../static/Play.png';
         }
     }
 }
@@ -233,19 +234,23 @@ songBlock.onclick = function() {
      if(document.getElementById('mainAudio').paused){
         if(document.getElementById('mainAudio').src == preloadedSong.src){
             document.getElementById('mainAudio').play();
+            document.getElementById('mainPlayButton').src = '../static/Pause.png';
         }
         else{
             document.getElementById('mainAudio').src = preloadedSong.src;
             document.getElementById('mainAudio').play();
+            document.getElementById('mainPlayButton').src = '../static/Pause.png';
         }
     }
     else{
         if(document.getElementById('mainAudio').src == preloadedSong.src){
             document.getElementById('mainAudio').pause();
+            document.getElementById('mainPlayButton').src = '../static/Play.png';
         }
         else{
             document.getElementById('mainAudio').src = preloadedSong.src;
             document.getElementById('mainAudio').play();
+            document.getElementById('mainPlayButton').src = '../static/Pause.png';
         }
     }
 }
@@ -265,12 +270,12 @@ var interval = setInterval(function() {
     else{
         document.getElementById('songTime').innerHTML = miniteShowing + ':' + secondShowing;
     }
-    if(document.getElementById('mainAudio').paused){
+    /*if(document.getElementById('mainAudio').paused){
         document.getElementById('mainPlayButton').src = '../static/Play.png';
     }
     else{
-        document.getElementById('mainPlayButton').src = '../static/Play.png';
-    }
+        document.getElementById('mainPlayButton').src = '../static/Pause.png';
+    }*/
 },1000);
 
 /* song duration */
