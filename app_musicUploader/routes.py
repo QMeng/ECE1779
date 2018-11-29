@@ -97,7 +97,13 @@ def home():
 
         tag = TinyTag.get(music_des)
         seconds = int(tag.duration)
-        minSec = str(int(seconds / 60)) + ":" + str(int(seconds % 60))
+        second = int(seconds % 60)
+        if second < 10:
+            second = "0" + str(second)
+        else:
+            second = str(second)
+
+        minSec = str(int(seconds / 60)) + ":" + second
         artist = tag.artist
 
         # Create thumbanil related to uploaded image.
