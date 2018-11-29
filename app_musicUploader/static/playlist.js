@@ -1,9 +1,11 @@
 /* showing the first picture in the playlist */
 var pics = document.getElementsByClassName('pics');
+var artists = document.getElementsByClassName('artists');
 function showFirstPic(){
     if (pics.length != 0){
         document.getElementById('pic01').src = '';
         document.getElementById('pic01').src = pics[0].getAttribute('value');
+        document.getElementById('single-artist').innerHTML = artists[0].getAttribute('value');
     }
     else{
         document.getElementById('right').style.display = 'none';
@@ -14,7 +16,6 @@ function showFirstPic(){
 }
 showFirstPic();
 
-
 /*play button function */
 var playButtons = document.getElementsByClassName('playButtons');
 function showAllPlayButton(){
@@ -23,23 +24,24 @@ function showAllPlayButton(){
     }
 }
 
-
-
 /* fill each song block with audio url */
 var songBlocks = document.getElementsByClassName('song-info');
 clickedSong = new Audio();
 preloadedSong = new Audio();
+currentBlockId = '';
 
 for (i=0; i<songBlocks.length; i++){
     songBlocks[i].onclick = function(){
         var musicName = this.id;
         thisPlaybutton = document.getElementById("playbutton-" + musicName);
         var pastimes = document.getElementsByClassName('pastime');
+        currentBlockId = this;
         for (i=0; i<pastimes.length; i++){
             pastimes[i].style.display = 'none';
         }
         preloadedSong.src = document.getElementById("music-" + musicName).getAttribute("value");
         document.getElementById('pic01').src = document.getElementById("image-" + musicName).getAttribute("value");
+        document.getElementById('single-artist').innerHTML = document.getElementById("artist-" + musicName).getAttribute('value');
         var pastime = document.getElementById("pastime-" + musicName);
         showAllPlayButton();
         if (clickedSong.paused){
@@ -74,17 +76,33 @@ for (i=0; i<songBlocks.length; i++){
     }
 }
 
-/* control bar */
-
 /* auto play */
-/*
-var songsList = document.getElementsByClassName('musicSource');
-var sourcesList = new Array();
-for(i=0; i<songsList.length; i++){
-    sourcesList.push(songsList[i].src);
+function findTheIndex(src){
+    return src == clickedSong.src;
 }
-var currentIndex = sourcesList.indexOf(clickedSong);
-if (currentIndex + 1 < sourcesList){
 
+var songsList = document.getElementsByClassName('musicSource');
+var sourcesList = [];
+var nextIndex = 0;
+var arr = [];
+for(i=0; i<songsList.length; i++){
+    arr[i] = (function(para){return function(){sourcesList.push(songsList[i].getAttribute('value'));}}(i));
 }
+
+//sourcesList.findIndex(findTheIndex)
+//document.getElementById('single-title').innerHTML = sourcesList.findIndex(findTheIndex) + 1;
+/*
+function findIndex(el){
+  var i=1;
+  while(el.previousSibling){
+    el = el.previousSibling;
+    el = el.previousSibling;
+    if(el.nodeType === 1){
+      i++;
+    }
+  }
+  return i;
+}
+
+index = findIndex(currentBlockId);
 */
