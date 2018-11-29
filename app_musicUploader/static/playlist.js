@@ -32,7 +32,6 @@ preloadedSong = new Audio();
 testdurationSong = new Audio();
 
 for (i=0; i<songBlocks.length; i++){
-    document.getElementById("songtime-" + songBlocks[i].id).innerHTML = '0' + ':0' + '0';
     songBlocks[i].onclick = function(){
         var musicName = this.id;
         thisPlaybutton = document.getElementById("playbutton-" + musicName);

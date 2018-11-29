@@ -22,8 +22,26 @@ for (let i = 0; i < img_list.length; i++) {
         document.getElementById('song').innerHTML = singlename;
 
         preloadedSong.src = document.getElementById('music-'+ basename).getAttribute("value");
+        if(document.getElementById('mainAudio').play){
+            if(document.getElementById('mainAudio').src == preloadedSong.src){
+                document.getElementById('mainPlayButton').src = '../static/Pause.png';
+            }
+            else{
+                document.getElementById('mainPlayButton').src = '../static/Play.png';
+            }
+        }
+        else{
+            document.getElementById('mainPlayButton').src = '../static/Play.png';
+        }
     }
 }
+/* detect which  */
+
+
+
+
+
+
 
 // get <span> element to set close button
 var span = document.getElementById("modalclose");
@@ -178,9 +196,6 @@ function showAllPlayButton(){
     }
 }
 
-function isPlaying(){
-    var tester = document.getElementById()
-}
 
 for (let i = 0; i < uploadedMusics.length; i++) {
     playButtons[i].onclick = function () {
@@ -249,6 +264,12 @@ var interval = setInterval(function() {
     }
     else{
         document.getElementById('songTime').innerHTML = miniteShowing + ':' + secondShowing;
+    }
+    if(document.getElementById('mainAudio').paused){
+        document.getElementById('mainPlayButton').src = '../static/Play.png';
+    }
+    else{
+        document.getElementById('mainPlayButton').src = '../static/Play.png';
     }
 },1000);
 
