@@ -23,15 +23,25 @@ class UserInfo(Model):
     username = UnicodeAttribute(hash_key=True)
     email = UnicodeAttribute()
     password = UnicodeAttribute()
+    share = BooleanAttribute()
 
     def set_email(self, email):
         self.email = email
+        return self
 
     def set_password(self, password):
         '''
         set the password (hashed with salt)
         '''
         self.password = generate_password_hash(password)
+        return self
+
+    def set_share(self, share):
+        '''
+        set the share info
+        '''
+        self.share = share
+        return self
 
     def check_password(self, password):
         '''

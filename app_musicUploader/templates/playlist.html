@@ -15,6 +15,9 @@
     <div id="myModal" class="modal">
         <!--entire body -->
         <div id="entire">
+            <button id="shareList">Share Play List</button>
+            <button id="stopSharing">Stop Sharing</button>
+            <div id="place_for_sharableLink"></div>
             <!-- left part -->
             <div id="left">
                 <div id="single-info">
@@ -35,8 +38,10 @@
                             <div id="music-{{ music_name }}" class="musicSource"
                                  value="{{ music_urls[loop.index - 1] }}"></div>
                             <!--<div id="songtime-{{ music_name }}" >04:37</div>-->
-                            <div id="duration-{{ music_name }}" class="songTime" value="{{ durations[loop.index - 1] }}">{{ durations[loop.index - 1] }}</div>
-                            <div id="artist-{{ music_name }}" class="artists" value="{{ artists[loop.index - 1] }}" hidden></div>
+                            <div id="duration-{{ music_name }}" class="songTime"
+                                 value="{{ durations[loop.index - 1] }}">{{ durations[loop.index - 1] }}</div>
+                            <div id="artist-{{ music_name }}" class="artists" value="{{ artists[loop.index - 1] }}"
+                                 hidden></div>
                             <img class="playButtons" id="playbutton-{{ music_name }}" src="static/Play.png">
                             <div class="timeline">
                                 <div id="pastime-{{ music_name }}" class="pastime"></div>
@@ -52,5 +57,41 @@
         </div>
     </div>
     <script src="static/playlist.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+        $("#shareList").click(function () {
+            var text = $(this).val();
+
+            $.ajax({
+                url: "/sharePlaylist",
+                type: "get",
+                data: {jsdata: text},
+                success: function (response) {
+                    $("#place_for_sharableLink").html(response);
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+        });
+
+        $("#stopSharing").click(function () {
+            var text = $(this).val();
+
+            $.ajax({
+                url: "/stopSharing",
+                type: "get",
+                data: {jsdata: text},
+                success: function (response) {
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+        });
+
+    </script>
 
 {% endblock %}
