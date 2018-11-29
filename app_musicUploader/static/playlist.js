@@ -28,14 +28,14 @@ function showAllPlayButton(){
 var songBlocks = document.getElementsByClassName('song-info');
 clickedSong = new Audio();
 preloadedSong = new Audio();
-currentBlockId = '';
+var currentBlockEl = '';
 
 for (i=0; i<songBlocks.length; i++){
     songBlocks[i].onclick = function(){
         var musicName = this.id;
         thisPlaybutton = document.getElementById("playbutton-" + musicName);
         var pastimes = document.getElementsByClassName('pastime');
-        currentBlockId = this;
+        currentBlockEl = this;
         for (i=0; i<pastimes.length; i++){
             pastimes[i].style.display = 'none';
         }
@@ -76,33 +76,13 @@ for (i=0; i<songBlocks.length; i++){
     }
 }
 
-/* auto play */
-function findTheIndex(src){
-    return src == clickedSong.src;
-}
-
 var songsList = document.getElementsByClassName('musicSource');
-var sourcesList = [];
 var nextIndex = 0;
 var arr = [];
-for(i=0; i<songsList.length; i++){
-    arr[i] = (function(para){return function(){sourcesList.push(songsList[i].getAttribute('value'));}}(i));
-}
 
-//sourcesList.findIndex(findTheIndex)
-//document.getElementById('single-title').innerHTML = sourcesList.findIndex(findTheIndex) + 1;
-/*
-function findIndex(el){
-  var i=1;
-  while(el.previousSibling){
-    el = el.previousSibling;
-    el = el.previousSibling;
-    if(el.nodeType === 1){
-      i++;
-    }
-  }
-  return i;
-}
 
-index = findIndex(currentBlockId);
-*/
+clickedSong.onended = function(){
+    if((currentBlockEl.nextSibling).nextSibling){
+            (currentBlockEl.nextSibling).nextSibling.click();
+        }
+}
