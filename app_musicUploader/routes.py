@@ -105,6 +105,8 @@ def home():
 
         minSec = str(int(seconds / 60)) + ":" + second
         artist = tag.artist
+        if artist == None:
+            artist = "None"
 
         # Create thumbanil related to uploaded image.
         thumbnail_bucket = create_thumbnail(imagename, username)
