@@ -227,17 +227,18 @@ def wipe_out_data():
     return redirect(url_for('home'))
 
 
-@app_musicUploader.route('/addToList/<musicname>', methods=['Get', 'POST'])
-def addToList(musicname):
+@app_musicUploader.route('/addToList', methods=['Get', 'POST'])
+def addToList():
     '''
     add the music into play list
     '''
     user = load_user(request.cookies.get("username"))
+    musicname = request.args.get('jsdata')
     item = MusicList(user.username)
     musicInfo = MusicInfo.get(user.username, musicname)
     item.set_musicname(musicname).set_duration(musicInfo.duration).set_artist(musicInfo.artist).set_imagename(
         musicInfo.imagename).save()
-    return redirect(url_for('home'))
+    return ""
 
 
 @app_musicUploader.route('/removeFromList/<musicname>', methods=['Get', 'Post'])
