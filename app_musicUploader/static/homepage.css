@@ -2,17 +2,25 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+#backgroundImg{
+    z-index:-1;
+    background-image: url(album-black.png);
+    position:fixed;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    width:100%;
+    height:100%;
+    top:0;
+
+}
 /* background photo of first picture */
 #firstblock {
-    background-image: url(music-studio.png);
-    background-repeat: no-repeat;
     width: 100%;
-    background-size: auto 600px;
     min-width: 400px;
-    background-color: black;
     text-align: center;
-    height: 600px;
-    background-position: center center;
+    height: 100%;
+    display: block;
+    vertical-align: middle;
 }
 
 /* set up a transparent layer class to set the background color inside the block*/
@@ -24,16 +32,23 @@ body {
 .homePage_banner {
     overflow: hidden;
     display:inline-block;
+    top: 30%;
+    position:relative;
 }
 
 /* greeting block */
 .greetings {
     color: white;
-    font-size: 24px;
+    font-size: 32px;
     text-align: center;
     width: 100%;
-    line-height: 36px;
     display:inline-block;
+}
+
+#hello{
+    margin-top: 50px;
+    margin-bottom: 0px;
+    font-size:90px;
 }
 
 .intro-text {
@@ -109,25 +124,28 @@ input[type=file] {
 
 #viewImage, #upload-button, #viewMusic{
     width: 9.0rem;
-    padding: 19px 20px; /*previous 8px*/
+    padding: 19px;
     display: inline-block;
     box-sizing: border-box;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    text-align: center;
-    border: white;
-    color: white;
+    color: black;
     float:left;
     margin-left:5px;
     margin-right:5px;
-    background-color: rgb(35, 35, 35);
+    background-color: rgba(0,0,0,0);
     font-weight:bold;
+    border: 1.5px solid;
 }
 
+#viewImage:hover, #upload-button:hover, #viewMusic:hover{
+    opacity:0.7;
+}
+
+
 #upload-button{
-    background-color: rgb(159, 159, 159);
-    transition: all 0.4s linear;
+
 }
 
 #widgets{
@@ -141,7 +159,7 @@ input[type=file] {
 
 /* thumbnails block */
 .thumbnails-block {
-    background-color: #f8f9fa !important;
+    background-color: white;
     padding-top: 3rem !important;
     padding-bottom: 3rem !important;
     --breakpoint-xs: 0;

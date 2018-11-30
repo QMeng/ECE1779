@@ -6,6 +6,7 @@ function showFirstPic(){
         document.getElementById('pic01').src = '';
         document.getElementById('pic01').src = pics[0].getAttribute('value');
         document.getElementById('single-artist').innerHTML = artists[0].getAttribute('value');
+
     }
     else{
         document.getElementById('right').style.display = 'none';

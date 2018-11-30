@@ -57,10 +57,8 @@ html {
 
 /* set buttons' position */
 .buttons {
-    margin-left: auto;
-    margin-right: auto;
     width: 9.3rem;
-    max-width: 99%;
+    display:inline-block;
 
 }
 
@@ -108,6 +106,8 @@ button, .button {
     border: none;
     cursor: pointer;
     border-radius: 8px;
+    display: inline-block;
+    width: 100%;
 }
 
 button:hover {
@@ -157,7 +157,7 @@ span.psw {
     background-color: #fefefe;
     margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
     border: 1px solid #888;
-    width: 50%; /* Could be more or less, depending on screen size */
+    width: 500px; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button (x) */

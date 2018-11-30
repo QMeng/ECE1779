@@ -12,6 +12,8 @@ function showFirstPic(){
         document.getElementById('single-info').style.textAlign = 'center';
         document.getElementById('single-title').innerHTML = 'No music here.'
         document.getElementById('single-artist').innerHTML = 'Unknown';
+        document.getElementById('shareList').style.display = 'none';
+        document.getElementById('stopSharing').style.display = 'none';
     }
 }
 showFirstPic();

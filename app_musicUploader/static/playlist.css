@@ -4,7 +4,6 @@ body {
 /* modal background settings */
 .modal {
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
 }
 
 /* pictures */
@@ -255,7 +254,6 @@ audio::-webkit-media-controls-overlay-play-button {
 }
 
 #single-title{
-    color:white;
     font-size:30px;
     font-weight:bolder;
     min-width:120px;
@@ -263,7 +261,6 @@ audio::-webkit-media-controls-overlay-play-button {
 }
 
 #single-artist{
-    color:white;
     font-size:16px;
     margin-top: 30px;
     margin-bottom: 30px;

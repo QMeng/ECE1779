@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block links %}
     <ul>
         <li><a class="active" href="/home">Home</a></li>
@@ -9,13 +10,14 @@
 {% endblock %}
 
 {% block content %}
-    <head>
+<head>
         <link rel="stylesheet" type="text/css" href="static/homepage.css">
-    </head>
+</head>
+    <div id="backgroundImg"></div>
     <div id="firstblock" class="transparentLayer">
         <div class="homePage_banner transparentLayer">
             <div class="greetings">
-                <h1 style="margin-top: 50px;margin-bottom: 0px;">Hi, {{ username }}!</h1>
+                <h1 id="hello">Hi, {{ username }}!</h1>
                 <div class="intro-text">
                     <p>Upload music and create the best album.
                         <br>
@@ -23,7 +25,14 @@
                     </p>
                 </div>
             </div>
-            <form id="upload-form" action="" method="POST" enctype="multipart/form-data">
+        </div>
+    </div>
+    <!-- thumbnails showing part -->
+    <div class="thumbnails-block">
+        <div id="singles-intro">
+
+        </div>
+        <form id="upload-form" action="" method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <div class="upload-widgets" style="width:100%">
                     <div id="widgets">
@@ -35,11 +44,6 @@
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- thumbnails showing part -->
-    <div class="thumbnails-block">
         <div class="thumbnail-container">
             <div class="row" id="box">
                 {% for music_name in musics %}
