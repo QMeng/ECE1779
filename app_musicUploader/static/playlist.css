@@ -477,3 +477,10 @@ audio::-webkit-media-controls-overlay-play-button {
 #share_link{
     color:white;
 }
+
+.avg-color {
+  display: inline-block;
+  width: 100px;
+  height: 140px;
+  margin-left: 10px;
+}

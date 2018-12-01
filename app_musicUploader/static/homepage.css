@@ -671,3 +671,12 @@ audio:hover{
     top: 18px;
     visibility:hidden;
 }
+
+#upload-related{
+    background-color:white;
+}
+
+#upload-guide{
+    background-color:rgba(0,0,0,0);
+}
+
