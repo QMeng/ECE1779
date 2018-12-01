@@ -46,10 +46,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="add_to_list-{{ music_name }}" class="addList"
-                                  action="{{ url_for('addToList', musicname=music_name) }}">
-                                <input type="submit" value="+" id="add_to_list" title="add to PlayList">
-                            </form>
+                            <button class="addToList" value="{{ music_name }}">Add To List</button>
                             <audio class="uploadedMusics" controls>
                                 <source src="{{ music_urls[loop.index - 1] }}">
                             </audio>
@@ -129,5 +126,25 @@
     {% endfor %}
 
     <script src="static/homepage.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+        $(".addToList").click(function () {
+            var text = $(this).attr('value');
+
+            $.ajax({
+                url: "/addToList",
+                type: "get",
+                data: {jsdata: text},
+                success: function (response) {
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+        });
+
+    </script>
 
 {% endblock %}
