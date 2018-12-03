@@ -13,7 +13,9 @@
 <head>
         <link rel="stylesheet" type="text/css" href="static/homepage.css">
 </head>
-    <div id="backgroundImg"></div>
+    <div id="backgroundImg">
+        <div id="backgroundOverlay"></div>
+    </div>
     <div id="firstblock" class="transparentLayer">
         <div class="homePage_banner transparentLayer">
             <div class="greetings">
@@ -24,7 +26,7 @@
                         Your personal music station starts here.
                     </p>
                 </div>
-                <button id="upload-guide" value="Update >" onclick="function(){ window.location.hash = '#single-intro_block';}">
+                <a href="#upload-related" id="upload-guide">Update now ></a>
             </div>
         </div>
     </div>
@@ -46,7 +48,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="addToList" value="{{ music_name }}">Add To List</button>
+                            <button class="addToList" value="{{ music_name }}">+</button>
                             <audio class="uploadedMusics" controls>
                                 <source src="{{ music_urls[loop.index - 1] }}">
                             </audio>
@@ -70,7 +72,7 @@
         <div id="single-intro_block">
             <div id="singles-intro">
                     <p style="font-size: 50px;font-weight: bold;margin: 30px 0;">Need more songs?</p>
-                    <p style="font-size: 20px;margin: 30px 0;">Start updating your favorate musics.</p>
+                    <p style="font-size: 20px;margin: 30px 0;">Start updating your favorite musics.</p>
             </div>
         </div>
         <form id="upload-form" action="" method="POST" enctype="multipart/form-data">                {{ form.hidden_tag() }}
@@ -144,7 +146,11 @@
                 }
             });
         });
-
     </script>
+    <!--<script>
+        $('audio').on('play',function(){
+        $('audio').not(this).each(function(){
+            $(this)[0].pause();        $(this)[0].currentTime = 0.0;    });});
+    </script>-->
 
 {% endblock %}
