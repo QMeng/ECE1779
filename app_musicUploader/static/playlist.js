@@ -10,7 +10,7 @@ function showFirstPic(){
     else{
         document.getElementById('right').style.display = 'none';
         document.getElementById('single-info').style.textAlign = 'center';
-        document.getElementById('single-title').innerHTML = 'No music here.'
+        document.getElementById('single-title').innerHTML = 'No music here.';
         document.getElementById('single-artist').innerHTML = 'Unknown';
         document.getElementById('shareList').style.display = 'none';
         document.getElementById('stopSharing').style.display = 'none';
@@ -88,10 +88,10 @@ clickedSong.onended = function(){
             (currentBlockEl.nextSibling).nextSibling.click();
         }
 }
-/*
-getAverageRGBFromImgsrc('https://ece1779-images-remi.s3.amazonaws.com/2.jpeg?AWSAccessKeyId=AKIAJXRND7TNNOWKC4MA&Signature=kpShF9m9BkMUisfQ%2BsOZkrdAKb8%3D&Expires=1543694216').then(function(rgb){
+
+getAverageRGBFromImgsrc('https://ece1779-images-remi.s3.amazonaws.com/2.jpeg?AWSAccessKeyId=AKIAJXRND7TNNOWKC4MA&Signature=%2FjTZCWgFI6v8xxwo3DXd6IkxgwI%3D&Expires=1543889213').then(function(rgb){
   console.log(rgb);
-  document.querySelector('.avg-color').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
+  document.getElementById('mytest').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
 });
 
 
@@ -108,10 +108,7 @@ function getAverageRGBFromImgsrc(imgSrc){
     imgEl.src = imgSrc;
   });
 }
-*/
 
-/*算法相同：https://codepen.io/anjia/pen/vJeZbR*/
-/*
 function getAverageRGB(imgEl) {
 
   var blockSize = 5, // only visit every 5 pixels
@@ -155,4 +152,8 @@ function getAverageRGB(imgEl) {
 
   return rgb;
 }
-*/
+
+
+document.getElementById('close_button').onclick = function(){
+    document.getElementById('wrap').style.display = 'none';
+}

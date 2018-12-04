@@ -44,12 +44,12 @@
                             <div class="playButton">
                                 <div id="play-border">
                                     <div id="triangle">
-                                        <img class="playButtons" src="static/Play.png">
+                                        <img class="playButtons" id="playbutton-{{ music_name }}" src="static/Play.png">
                                     </div>
                                 </div>
                             </div>
                             <button class="addToList" value="{{ music_name }}">+</button>
-                            <audio class="uploadedMusics" controls>
+                            <audio class="uploadedMusics" id="audio-{{ music_name }}" controls>
                                 <source src="{{ music_urls[loop.index - 1] }}">
                             </audio>
                         </div>
@@ -147,10 +147,15 @@
             });
         });
     </script>
-    <!--<script>
+    <script>
         $('audio').on('play',function(){
-        $('audio').not(this).each(function(){
-            $(this)[0].pause();        $(this)[0].currentTime = 0.0;    });});
-    </script>-->
+            $('audio').not(this).each(function(){
+                $(this)[0].pause();
+                $(this)[0].currentTime = 0.0;
+                $(#('playbutton-'+ $(this).attr('id').slice(6))).attr("src", "../static/Play.png");
+            });
+            $(#('playbutton-'+ $(this).attr('id').slice(6))).attr("src", "../static/Pause.png");
+        });
+    </script>
 
 {% endblock %}

@@ -99,26 +99,40 @@ body {
 }
 
 #wrap {
-    bottom: 24px;
-    right: 24px;
+    bottom: 0px;
+    left: 0px;
     position: fixed;
     text-align: center;
-    height: 105px;
-    display: none;
+    height: 180px;
+   display: none;
     opacity: 0;
     transition: all 0.4s linear;
-    background-color: white;
-    width: 270px;
+    background-image: linear-gradient(rgba(54, 54, 54, 0.3), rgb(0, 0, 0));
+    width: 100%;
+    border:0px;
+}
+
+.upload_title{
+    display: inline-block;
+    width: 100%;
+    height: 54px;
+}
+#place_for_sharableLink{
+    display: inline-block;
+    width: 100%;
+    height: 53px;
+    color:white;
+
 }
 
 #close_button {
-    top: 7px;
+    display:inline-block;
     font-size: 36px;
-    right: 24px;
     transition: 0.3s;
     font-weight: normal;
-    position: absolute;
     color: #f1f1f1;
+    position:relative;
+    top:10px;
 }
 
 #close_button:focus {
@@ -128,6 +142,15 @@ body {
 #close_button:hover {
     opacity: 0.7;
     cursor: pointer;
+}
+
+#uploadTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color:white;
+    display:inline-block;
+    position: relative;
+    top: 3px;
 }
 
 /* audio styling */
@@ -169,12 +192,6 @@ audio{
 audio:hover{
     visibility: visible;
     opacity: 1;
-}
-
-.overlay {
-    width:0%;
-    height:0%;
-    pointer-events:none;
 }
 
 .thumbnail-block:hover > .overlay{
@@ -254,7 +271,7 @@ audio::-webkit-media-controls-overlay-play-button {
 }
 
 #single-title{
-    font-size:30px;
+    font-size:34px;
     font-weight:bolder;
     min-width:120px;
 
@@ -338,7 +355,9 @@ audio::-webkit-media-controls-overlay-play-button {
 
 #myModal{
     width:100%;
-    height:100%;
+    /*height:100%;*/
+    min-height: 960px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.298039), rgb(54, 54, 54));
 }
 
 #back-img{
@@ -475,7 +494,7 @@ audio::-webkit-media-controls-overlay-play-button {
 }
 
 #share_link{
-    color:white;
+    margin: 10px;
 }
 
 .avg-color {
@@ -484,3 +503,43 @@ audio::-webkit-media-controls-overlay-play-button {
   height: 140px;
   margin-left: 10px;
 }
+
+#sharePlaylistArea{
+    text-align:center;
+    background-color:rgb(54, 54, 54);
+}
+
+#sharingBlock{
+    position:relative;
+    top:20%;
+}
+
+#sharingTextArea{
+    display:inline-block;
+}
+
+#sharingTextArea-title{
+    font-size:48px;
+    font-weight:bold;
+    color:white;
+}
+
+#sharingTextArea-body{
+    color:white;
+    font-size:20px;
+}
+
+#shareList, #stopSharing{
+    padding:19px;
+    border:2px solid white;
+    color:white;
+    background-color:rgba(0,0,0,0);
+    font-size:14px;
+    border-radius: 10px;
+    margin: 30px;
+}
+
+#shareList:hover, #stopSharing:hover{
+    cursor:pointer;
+}
+

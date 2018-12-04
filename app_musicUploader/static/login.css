@@ -4,7 +4,7 @@ body {
 
 /* background */
 html {
-    background: url(background-home02.jpeg) no-repeat center fixed;
+    background: url(background-home.jpg) no-repeat center fixed;
     background-size: cover;
 }
 
@@ -21,7 +21,6 @@ html {
 #welcome-text {
     color: whitesmoke;
     font-size: 21px;
-    opacity: 0.90;
 }
 
 @media screen and (min-width: 500px) {
@@ -99,7 +98,7 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button, .button {
-    background-color: #153441; /*#4CAF50 */
+    background-color: #00a507; /*#4CAF50 */
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
