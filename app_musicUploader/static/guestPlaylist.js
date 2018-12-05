@@ -6,13 +6,14 @@ function showFirstPic(){
         document.getElementById('pic01').src = '';
         document.getElementById('pic01').src = pics[0].getAttribute('value');
         document.getElementById('single-artist').innerHTML = artists[0].getAttribute('value');
-
     }
     else{
         document.getElementById('right').style.display = 'none';
         document.getElementById('single-info').style.textAlign = 'center';
-        document.getElementById('single-title').innerHTML = 'No music here.'
+        document.getElementById('single-title').innerHTML = 'No music here.';
         document.getElementById('single-artist').innerHTML = 'Unknown';
+        document.getElementById('shareList').style.display = 'none';
+        document.getElementById('stopSharing').style.display = 'none';
     }
 }
 showFirstPic();
@@ -45,6 +46,14 @@ for (i=0; i<songBlocks.length; i++){
         document.getElementById('single-artist').innerHTML = document.getElementById("artist-" + musicName).getAttribute('value');
         var pastime = document.getElementById("pastime-" + musicName);
         showAllPlayButton();
+
+        var backColorSrc = document.getElementById('pic01').src;
+        getAverageRGBFromImgsrc(backColorSrc).then(function(rgb){
+          console.log(rgb);
+          document.getElementById('myModal').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
+        });
+
+
         if (clickedSong.paused){
             if(preloadedSong.src == clickedSong.src){
                 clickedSong.play();
@@ -86,4 +95,71 @@ clickedSong.onended = function(){
     if((currentBlockEl.nextSibling).nextSibling){
             (currentBlockEl.nextSibling).nextSibling.click();
         }
+}
+
+
+
+var backColorSrc = document.getElementById('pic01').src;
+getAverageRGBFromImgsrc(backColorSrc).then(function(rgb){
+  console.log(rgb);
+  document.getElementById('myModal').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
+});
+
+
+function getAverageRGBFromImgsrc(imgSrc){
+  return new Promise(function(resolve, reject){
+    var imgEl = document.createElement('img');
+    imgEl.onload = function(e) {
+      // context.drawImage(imgEl, 0, 0, canvas.width, canvas.height);
+      // var url = canvas.toDataURL(); // Read succeeds, canvas won't be dirty.
+      var rgb = getAverageRGB(imgEl);
+      resolve(rgb);
+    };
+    imgEl.crossOrigin = '';
+    imgEl.src = imgSrc;
+  });
+}
+
+function getAverageRGB(imgEl) {
+
+  var blockSize = 5, // only visit every 5 pixels
+      defaultRGB = {r:255,g:255,b:255}, // for non-supporting envs
+      canvas = document.createElement('canvas'),
+      context = canvas.getContext && canvas.getContext('2d'),
+      data, width, height,
+      i = -4,
+      length,
+      rgb = {r:0,g:0,b:0},
+      count = 0;
+
+  if (!context) {
+    return defaultRGB;
+  }
+
+  height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+  width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+  context.drawImage(imgEl, 0, 0);
+
+  try {
+    data = context.getImageData(0, 0, width, height);
+  } catch(e) {
+    return defaultRGB;
+  }
+
+  length = data.data.length;
+
+  while ( (i += blockSize * 4) < length ) {
+    ++count;
+    rgb.r += data.data[i];
+    rgb.g += data.data[i+1];
+    rgb.b += data.data[i+2];
+  }
+
+  // ~~ used to floor values
+  rgb.r = ~~(rgb.r/count);
+  rgb.g = ~~(rgb.g/count);
+  rgb.b = ~~(rgb.b/count);
+
+  return rgb;
 }

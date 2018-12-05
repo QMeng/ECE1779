@@ -455,7 +455,6 @@ audio:hover {
     min-width: 230px;
     display: block;
     vertical-align: top;
-    margin: 0 1.6rem;
 }
 
 #single-title {
@@ -482,7 +481,7 @@ audio:hover {
     display: inline-block;
     margin-bottom: 48px;
     margin-top: 120px;
-    width: 80%;
+    width: 100%;
     text-align: left;
     max-width: 900px;
 }
@@ -504,7 +503,7 @@ audio:hover {
 #song{
     padding:28px;
     margin:0;
-    font-size:20px;
+    font-size:18px;
     color:white;
 }
 
