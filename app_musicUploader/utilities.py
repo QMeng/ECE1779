@@ -97,6 +97,7 @@ def uploadIntoS3(username, filePath, fileName, type):
 
     if not checkBucketExist(bucketName):
         s3_resource.create_bucket(Bucket=bucketName)
+        s3_client.put_bucket_cors(Bucket=bucketName, CORSConfiguration=cors_configuration)
     s3_resource.Bucket(bucketName).upload_file(Filename=filePath, Key=fileName)
 
     return bucketName
