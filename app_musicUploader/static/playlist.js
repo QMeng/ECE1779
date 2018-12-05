@@ -46,6 +46,14 @@ for (i=0; i<songBlocks.length; i++){
         document.getElementById('single-artist').innerHTML = document.getElementById("artist-" + musicName).getAttribute('value');
         var pastime = document.getElementById("pastime-" + musicName);
         showAllPlayButton();
+
+        var backColorSrc = document.getElementById('pic01').src;
+        getAverageRGBFromImgsrc(backColorSrc).then(function(rgb){
+          console.log(rgb);
+          document.getElementById('myModal').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
+        });
+
+
         if (clickedSong.paused){
             if(preloadedSong.src == clickedSong.src){
                 clickedSong.play();
@@ -89,9 +97,12 @@ clickedSong.onended = function(){
         }
 }
 
-getAverageRGBFromImgsrc('https://ece1779-images-remi.s3.amazonaws.com/2.jpeg?AWSAccessKeyId=AKIAJXRND7TNNOWKC4MA&Signature=%2FjTZCWgFI6v8xxwo3DXd6IkxgwI%3D&Expires=1543889213').then(function(rgb){
+
+
+var backColorSrc = document.getElementById('pic01').src;
+getAverageRGBFromImgsrc(backColorSrc).then(function(rgb){
   console.log(rgb);
-  document.getElementById('mytest').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
+  document.getElementById('myModal').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
 });
 
 

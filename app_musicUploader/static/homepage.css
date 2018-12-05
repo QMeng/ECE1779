@@ -443,7 +443,6 @@ audio:hover {
 .thumbnail-block:hover > .overlay {
     background-color:rgba(0,0,0,0.6);
 }
-}
 
 #left {
     width: 280px;
@@ -547,6 +546,9 @@ audio:hover {
     display:inline-block;
     color:rgba(255,255,255,0.5);
     text-align: right;
+    position: absolute;
+    top: 31px;
+    right: 70px;
 }
 
 #song-info {
