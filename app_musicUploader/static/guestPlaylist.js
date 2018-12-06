@@ -163,8 +163,3 @@ function getAverageRGB(imgEl) {
 
   return rgb;
 }
-
-
-document.getElementById('close_button').onclick = function(){
-    document.getElementById('wrap').style.display = 'none';
-}

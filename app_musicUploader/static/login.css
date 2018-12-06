@@ -4,7 +4,7 @@ body {
 
 /* background */
 html {
-    background: url(background-home02.jpeg) no-repeat center fixed;
+    background: url(background-home.jpg) no-repeat center fixed;
     background-size: cover;
 }
 
@@ -13,7 +13,6 @@ html {
     position: absolute;
     top: 32%;
     width: 99%;
-    vertical-align: center;
     text-align: center;
 }
 
@@ -21,7 +20,6 @@ html {
 #welcome-text {
     color: whitesmoke;
     font-size: 21px;
-    opacity: 0.90;
 }
 
 @media screen and (min-width: 500px) {
@@ -57,10 +55,8 @@ html {
 
 /* set buttons' position */
 .buttons {
-    margin-left: auto;
-    margin-right: auto;
     width: 9.3rem;
-    max-width: 99%;
+    display:inline-block;
 
 }
 
@@ -69,7 +65,6 @@ button[class="home-button"] {
     border-radius: 8px;
     border: 3px solid white; /* white */
     background-color: rgba(0, 0, 0, 0);
-    opacity: 0.90;
     font-size: 14px;
     margin-top: 30px;
 }
@@ -101,13 +96,15 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button, .button {
-    background-color: #153441; /*#4CAF50 */
+    background-color: #00a507; /*#4CAF50 */
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
     border-radius: 8px;
+    display: inline-block;
+    width: 100%;
 }
 
 button:hover {
@@ -141,13 +138,11 @@ span.psw {
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
     padding-top: 60px;
 }
@@ -157,7 +152,7 @@ span.psw {
     background-color: #fefefe;
     margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
     border: 1px solid #888;
-    width: 50%; /* Could be more or less, depending on screen size */
+    width: 320px; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button (x) */
@@ -225,4 +220,10 @@ span.psw {
     display: inline;
     width: 100%;
     margin-top: 60px;
+}
+
+@media screen and (min-width:520px){
+    .modal-content{
+        width:500px;
+    }
 }

@@ -1,15 +1,8 @@
 {% extends "base.html" %}
-
-{% block links %}
-    <a hidden href="/signup" style="color:white;">New user? Sign up here!</a>
-{% endblock %}
-
 {% block content %}
     <head>
         <link rel="stylesheet" type="text/css" href="static/login.css">
     </head>
-
-
     <div class="welcome-block">
         <h1 id="welcome-text">Welcome to Music Uploader</h1>
         <div class="buttons">
@@ -44,7 +37,6 @@
             {% endfor %}
         </div>
     </div>
-
 
     <div id="loginModal" class="modal">
         <form class="modal-content animate" action="" method="post">

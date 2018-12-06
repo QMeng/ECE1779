@@ -116,15 +116,12 @@ function remind_selectfile() {
     }
     else if ((document.getElementById('music').value === '')) {
         //change the words in the title
-        //setTimeout(function(){music_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
         document.getElementById("uploadTitle").innerHTML = "No music Selected";
         //change the words in text
         document.getElementById("upload-filename").innerHTML = "Please select a music before you upload";
         showing();
     }
     else{
-        //setTimeout(function(){music_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
-        //setTimeout(function(){upload_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
     }
 }
 
@@ -175,7 +172,7 @@ upload_close.onclick = function () {
 /* ban click event of select music (currently not used) */
 function checkUploadButton(){
      if (document.getElementById('image').value != "" && document.getElementById('music').value != ""){
-        setTimeout(function(){upload_button.style.backgroundColor = 'rgba(60, 114, 242, 80)';},10);
+        setTimeout(function(){upload_button.style.backgroundColor = 'rgba(123, 123, 123, 0.8)'; upload_button.style.borderColor = 'rgba(123, 123, 123, 0.8)'; upload_button.style.color = 'white';},10);
      }
 }
 

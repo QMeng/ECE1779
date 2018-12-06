@@ -11,13 +11,12 @@
     <head>
         <link rel="stylesheet" type="text/css" href="static/playlist.css">
     </head>
+    <!--<img src="https://ece1779-images-remi.s3.amazonaws.com/2.jpeg?AWSAccessKeyId=AKIAJXRND7TNNOWKC4MA&Signature=60aqEqJdYzhD87pbNldLCP0gXVw%3D&Expires=1543693324" alt="" width="100" height="140" hidden>
+    <span class="avg-color" hidden></span>-->
     <!-- modals -->
     <div id="myModal" class="modal">
         <!--entire body -->
         <div id="entire">
-            <button id="shareList">Share Play List</button>
-            <button id="stopSharing">Stop Sharing</button>
-            <div id="place_for_sharableLink"></div>
             <!-- left part -->
             <div id="left">
                 <div id="single-info">
@@ -56,6 +55,25 @@
             </div>
         </div>
     </div>
+    <div id="sharePlaylistArea" style="width: 100%;height: 600px;">
+        <div id="sharingBlock">
+          <div id="sharingTextArea">
+            <p id="sharingTextArea-title">Share your playlist.</p>
+            <p id="sharingTextArea-body">Sharing musics means enjoying them 100% more.</p>
+          </div>
+          <div id="functionalButtons">
+            <button id="shareList">Share Play List</button>
+            <button id="stopSharing">Stop Sharing</button>
+          </div>
+        </div>
+    </div>
+    <div id='wrap' class="upload_block">
+        <span id="close_button">&times;</span>
+            <div class="upload_title">
+                <p id="uploadTitle"></p>
+            </div>
+            <div id="place_for_sharableLink"></div>
+        </div>
     <script src="static/playlist.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -63,6 +81,10 @@
     <script>
         $("#shareList").click(function () {
             var text = $(this).val();
+
+            $('#wrap').css('display','block');
+            $('#wrap').css('opacity','1.0');
+            $('#uploadTitle').html('Sharelink Generated');
 
             $.ajax({
                 url: "/sharePlaylist",
@@ -79,6 +101,9 @@
 
         $("#stopSharing").click(function () {
             var text = $(this).val();
+            $('#wrap').css('display','block');
+            $('#wrap').css('opacity','1.0');
+            $('#uploadTitle').html('Sharelink closed');
 
             $.ajax({
                 url: "/stopSharing",
@@ -91,7 +116,6 @@
                 }
             });
         });
-
     </script>
 
 {% endblock %}
