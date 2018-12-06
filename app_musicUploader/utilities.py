@@ -97,6 +97,7 @@ def uploadIntoS3(username, filePath, fileName, type):
 
     if not checkBucketExist(bucketName):
         s3_resource.create_bucket(Bucket=bucketName)
+        s3_client.put_bucket_cors(Bucket=bucketName, CORSConfiguration=cors_configuration)
     s3_resource.Bucket(bucketName).upload_file(Filename=filePath, Key=fileName)
 
     return bucketName
@@ -228,6 +229,26 @@ def checkUserAuth(username, password):
         return False
     except DoesNotExist:
         return False
+
+
+def encode(key, string):
+    encoded_chars = []
+    for i in range(len(string)):
+        key_c = key[i % len(key)]
+        encoded_c = chr(ord(string[i]) + ord(key_c) % 256)
+        encoded_chars.append(encoded_c)
+    encoded_string = ''.join(encoded_chars)
+    return encoded_string
+
+
+def decode(key, string):
+    encoded_chars = []
+    for i in range(len(string)):
+        key_c = key[i % len(key)]
+        encoded_c = chr((ord(string[i]) - ord(key_c) + 256) % 256)
+        encoded_chars.append(encoded_c)
+    encoded_string = ''.join(encoded_chars)
+    return encoded_string
 
 
 def checkUserExists(username):

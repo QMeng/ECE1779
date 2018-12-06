@@ -32,7 +32,7 @@ class SignUpForm(FlaskForm):
 
 class FileUploadForm(FlaskForm):
     '''File form, this form is used in upload page'''
-    image = FileField('image', validators=[FileRequired(),
+    image = FileField("Image", validators=[FileRequired(),
                                            FileAllowed(['jpg', 'jpeg', 'png', 'tiff', 'exif', 'gif'], 'Images only!')])
-    music = FileField('music', validators=[FileRequired(),
+    music = FileField('Music', validators=[FileRequired(),
                                           FileAllowed(['wav', 'aiff', 'mp3', 'aac', 'wma', 'flac', 'aac'], 'Musics only!')])

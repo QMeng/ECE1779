@@ -40,9 +40,7 @@ def login():
         if not checkUserExists(signupForm.username.data):
             # new user, proceed with register into database
             user = UserInfo(signupForm.username.data)
-            user.set_email(signupForm.email.data)
-            user.set_password(signupForm.password.data)
-            user.save()
+            user.set_email(signupForm.email.data).set_password(signupForm.password.data).set_share(False).save()
             return redirect(url_for('login'))
         else:
             # existing user, flash the message
@@ -105,6 +103,8 @@ def home():
 
         minSec = str(int(seconds / 60)) + ":" + second
         artist = tag.artist
+        if artist == None:
+            artist = "None"
 
         # Create thumbanil related to uploaded image.
         thumbnail_bucket = create_thumbnail(imagename, username)
@@ -117,8 +117,6 @@ def home():
 
         wipeOutContent(username)
         return redirect(url_for('home'))
-    else:
-        flash('File type not supported', "uploadError")
 
     return render_template('homePage.html', username=user.username, form=fileform, thumbnail_urls=thumbnail_urls,
                            image_urls=image_urls, music_urls=music_urls, durations=durations, artists=artists,
@@ -140,6 +138,26 @@ def playlist():
     music_urls = getPresignedUrl(user.username, musics, 3)
 
     return render_template('playlist.html', images=images, musics=musics, durations=durations, artists=artists,
+                           thumbnail_urls=thumbnail_urls, image_urls=image_urls, music_urls=music_urls)
+
+
+@app_musicUploader.route('/guestplaylist/<username>')
+def displayGuestPlaylist(username):
+    username = decode(Config.SECRET_KEY, username)
+    user = load_user(username)
+
+    if not user.share:
+        return render_template("playlistNotAvailable.html")
+
+    images = getUserImages(username, 2)
+    musics = getUserMusics(username, 2)
+    durations = getMusicDurations(username, 2)
+    artists = getMusicArtists(username, 2)
+    thumbnail_urls = getPresignedUrl(username, images, 2)
+    image_urls = getPresignedUrl(username, images, 1)
+    music_urls = getPresignedUrl(username, musics, 3)
+
+    return render_template('guestPlaylist.html', images=images, musics=musics, durations=durations, artists=artists,
                            thumbnail_urls=thumbnail_urls, image_urls=image_urls, music_urls=music_urls)
 
 
@@ -209,17 +227,18 @@ def wipe_out_data():
     return redirect(url_for('home'))
 
 
-@app_musicUploader.route('/addToList/<musicname>', methods=['Get', 'POST'])
-def addToList(musicname):
+@app_musicUploader.route('/addToList', methods=['Get', 'POST'])
+def addToList():
     '''
     add the music into play list
     '''
     user = load_user(request.cookies.get("username"))
+    musicname = request.args.get('jsdata')
     item = MusicList(user.username)
     musicInfo = MusicInfo.get(user.username, musicname)
     item.set_musicname(musicname).set_duration(musicInfo.duration).set_artist(musicInfo.artist).set_imagename(
         musicInfo.imagename).save()
-    return redirect(url_for('home'))
+    return ""
 
 
 @app_musicUploader.route('/removeFromList/<musicname>', methods=['Get', 'Post'])
@@ -232,6 +251,27 @@ def removeFromList(musicname):
         tobeDeleted = MusicList.get(user.username, musicname)
         tobeDeleted.delete()
     return redirect(url_for('playlist'))
+
+
+@app_musicUploader.route('/sharePlaylist', methods=['Get', 'Post'])
+def sharePlaylist():
+    '''
+    share the play list
+    '''
+    user = load_user(request.cookies.get("username"))
+    user.set_share(True).save()
+    url = "https://musicuploader.damonqingsongmeng.com/guestplaylist/" + encode(Config.SECRET_KEY, user.username)
+    return render_template('shareLink.html', link=url)
+
+
+@app_musicUploader.route('/stopSharing', methods=['Get', 'Post'])
+def stopSharing():
+    '''
+    stop sharing the playlist
+    '''
+    user = load_user(request.cookies.get("username"))
+    user.set_share(False).save()
+    return ""
 
 
 @app_musicUploader.errorhandler(InvalidUsage)
