@@ -47,7 +47,7 @@ for (i=0; i<songBlocks.length; i++){
         var pastime = document.getElementById("pastime-" + musicName);
         showAllPlayButton();
 
-        var backColorSrc = document.getElementById('pic01').src;
+        var backColorSrc = document.getElementById("thumbnail-" + musicName).getAttribute('value');
         getAverageRGBFromImgsrc(backColorSrc).then(function(rgb){
           console.log(rgb);
           document.getElementById('myModal').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
@@ -96,15 +96,6 @@ clickedSong.onended = function(){
             (currentBlockEl.nextSibling).nextSibling.click();
         }
 }
-
-
-
-var backColorSrc = document.getElementById('pic01').src;
-getAverageRGBFromImgsrc(backColorSrc).then(function(rgb){
-  console.log(rgb);
-  document.getElementById('myModal').style.backgroundColor = 'rgb('+rgb.r+','+rgb.g+','+rgb.b+')';
-});
-
 
 function getAverageRGBFromImgsrc(imgSrc){
   return new Promise(function(resolve, reject){
