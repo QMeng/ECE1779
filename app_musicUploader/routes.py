@@ -26,7 +26,7 @@ def login():
     if loginForm.validate_on_submit() and loginForm.submitLoginInfo.data:
         if not checkUserAuth(loginForm.username.data, loginForm.password.data):
             # invalid auth, flash message
-            flash('Invalid username or password')
+            flash('Invalid username or password', category='loginError')
             return redirect(url_for('login'))
 
         user = UserInfo.get(loginForm.username.data)
@@ -44,7 +44,7 @@ def login():
             return redirect(url_for('login'))
         else:
             # existing user, flash the message
-            flash("User already signed up!")
+            flash("User already signed up!", category='loginError')
             return redirect(url_for('login'))
     return render_template('login.html', title='Sign In', loginForm=loginForm, signupForm=signupForm)
 
