@@ -10,9 +10,9 @@
 {% endblock %}
 
 {% block content %}
-<head>
+    <head>
         <link rel="stylesheet" type="text/css" href="static/homepage.css">
-</head>
+    </head>
     <div id="backgroundImg">
         <div id="backgroundOverlay"></div>
     </div>
@@ -71,21 +71,23 @@
     <div id="upload-related">
         <div id="single-intro_block">
             <div id="singles-intro">
-                    <p style="font-size: 50px;font-weight: bold;margin: 30px 0;">Need more songs?</p>
-                    <p style="font-size: 20px;margin: 30px 0;">Start updating your favorite musics.</p>
+                <p style="font-size: 50px;font-weight: bold;margin: 30px 0;">Need more songs?</p>
+                <p style="font-size: 20px;margin: 30px 0;">Start updating your favorite musics.</p>
             </div>
         </div>
-        <form id="upload-form" action="" method="POST" enctype="multipart/form-data">                {{ form.hidden_tag() }}
-                <div class="upload-widgets" style="width:100%">
-                    <div id="widgets">
-                        {{ form.image.label(id="viewImage") }}
-                        {{ form.image() }}
-                        {{ form.music.label(id="viewMusic") }}
-                        {{ form.music() }}
-                        <input type="submit" value="Upload" id="upload-button">
-                    </div>
+        <form id="upload-form" action="" method="POST"
+              enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="upload-widgets" style="width:100%">
+                <div id="widgets">
+                    {{ form.image.label(id="viewImage") }}
+                    {{ form.image() }}
+                    {{ form.music.label(id="viewMusic") }}
+                    {{ form.music() }}
+                    <input type="submit" value="Upload" id="upload-button">
                 </div>
-            </form>
+            </div>
+        </form>
     </div>
     <!-- modals -->
     <div id="myModal" class="modal">
@@ -148,13 +150,13 @@
         });
     </script>
     <script>
-        $('audio').on('play',function(){
-            $('audio').not(this).each(function(){
+        $('audio').on('play', function () {
+            $('audio').not(this).each(function () {
                 $(this)[0].pause();
                 $(this)[0].currentTime = 0.0;
-                $(#('playbutton-'+ $(this).attr('id').slice(6))).attr("src", "../static/Play.png");
+                $(#('playbutton-' + $(this).attr('id').slice(6))).attr("src", "../static/Play.png");
             });
-            $(#('playbutton-'+ $(this).attr('id').slice(6))).attr("src", "../static/Pause.png");
+            $(#('playbutton-' + $(this).attr('id').slice(6))).attr("src", "../static/Pause.png");
         });
     </script>
 

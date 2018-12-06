@@ -41,7 +41,8 @@
                                  value="{{ durations[loop.index - 1] }}">{{ durations[loop.index - 1] }}</div>
                             <div id="artist-{{ music_name }}" class="artists" value="{{ artists[loop.index - 1] }}"
                                  hidden></div>
-                            <div id="thumbnail-{{ music_name }}" class="thumbnails" value="{{ thumbnail_urls[loop.index - 1] }}"
+                            <div id="thumbnail-{{ music_name }}" class="thumbnails"
+                                 value="{{ thumbnail_urls[loop.index - 1] }}"
                                  hidden></div>
                             <img class="playButtons" id="playbutton-{{ music_name }}" src="static/Play.png">
                             <div class="timeline">
@@ -59,23 +60,23 @@
     </div>
     <div id="sharePlaylistArea" style="width: 100%;height: 600px;">
         <div id="sharingBlock">
-          <div id="sharingTextArea">
-            <p id="sharingTextArea-title">Share your playlist.</p>
-            <p id="sharingTextArea-body">Sharing musics means enjoying them 100% more.</p>
-          </div>
-          <div id="functionalButtons">
-            <button id="shareList">Share Play List</button>
-            <button id="stopSharing">Stop Sharing</button>
-          </div>
+            <div id="sharingTextArea">
+                <p id="sharingTextArea-title">Share your playlist.</p>
+                <p id="sharingTextArea-body">Sharing musics means enjoying them 100% more.</p>
+            </div>
+            <div id="functionalButtons">
+                <button id="shareList">Share Play List</button>
+                <button id="stopSharing">Stop Sharing</button>
+            </div>
         </div>
     </div>
     <div id='wrap' class="upload_block">
         <span id="close_button">&times;</span>
-            <div class="upload_title">
-                <p id="uploadTitle"></p>
-            </div>
-            <div id="place_for_sharableLink"></div>
+        <div class="upload_title">
+            <p id="uploadTitle"></p>
         </div>
+        <div id="place_for_sharableLink"></div>
+    </div>
     <script src="static/playlist.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -84,8 +85,8 @@
         $("#shareList").click(function () {
             var text = $(this).val();
 
-            $('#wrap').css('display','block');
-            $('#wrap').css('opacity','1.0');
+            $('#wrap').css('display', 'block');
+            $('#wrap').css('opacity', '1.0');
             $('#uploadTitle').html('Sharelink Generated');
 
             $.ajax({
@@ -103,8 +104,8 @@
 
         $("#stopSharing").click(function () {
             var text = $(this).val();
-            $('#wrap').css('display','block');
-            $('#wrap').css('opacity','1.0');
+            $('#wrap').css('display', 'block');
+            $('#wrap').css('opacity', '1.0');
             $('#uploadTitle').html('Sharelink closed');
 
             $.ajax({
