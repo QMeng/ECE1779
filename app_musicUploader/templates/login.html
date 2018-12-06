@@ -15,7 +15,7 @@
             <!-- sign in errors -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <ul style="background-color: rgba(0,0,0,0)">
+                    <ul style="background-color: rgba(0,0,0,0); position:relative">
                         {% for message in messages %}
                             <li id="errorMessage">{{ message }}</li>
                         {% endfor %}
