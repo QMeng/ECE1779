@@ -117,6 +117,8 @@ def home():
 
         wipeOutContent(username)
         return redirect(url_for('home'))
+    else:
+        flash("Please upload files with correct type", category='uploadError')
 
     return render_template('homePage.html', username=user.username, form=fileform, thumbnail_urls=thumbnail_urls,
                            image_urls=image_urls, music_urls=music_urls, durations=durations, artists=artists,
